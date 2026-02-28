@@ -110,6 +110,11 @@ body.on-puzzle-match .side-character-img {
     display: none !important;
 }
 
+/* 詰将棋モードでは後手の駒台を非表示にする */
+body.on-puzzle-match #opponent-hand {
+    display: none !important;
+}
+
 body.on-normal-match .col-coords,
 body.on-normal-match .row-coords,
 body.on-puzzle-match .col-coords,

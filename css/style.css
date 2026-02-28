@@ -740,13 +740,13 @@ header p {
 @media screen and (max-width: 768px) {
     body {
         /* スマホ向けに背景画像と表示位置を少し調整（タイトル以外のデフォルト） */
-        background-image: url('../img/ねこ将棋スマホ用背景20260228.jpg');
+        background-image: url('../img/background_image_smartphone.jpg');
         background-position: center center;
     }
 
     body.on-home-screen {
         /* スマホ向けホーム画面背景 */
-        background-image: url('../img/ねこ将棋スマホ用タイトル20260228.jpg');
+        background-image: url('../img/title_image_smarthone.jpg');
     }
 
     header {

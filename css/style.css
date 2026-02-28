@@ -101,8 +101,8 @@ body.on-puzzle-match #shogi-board {
 
 /* メニュー画面(難易度・問題選択)でも背景を透けさせる */
 body.on-puzzle-menu #game-container {
-    background: rgba(250, 245, 240, 0.6);
-    backdrop-filter: blur(8px);
+    background: rgba(250, 245, 240, 0.1);
+    /* ぼかしがなくなった分、少し背景を濃くして文字を見やすくします */
 }
 
 body.on-normal-match .side-character-img,

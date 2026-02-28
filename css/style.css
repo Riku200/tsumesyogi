@@ -156,9 +156,36 @@ header p {
     font-weight: bold;
 }
 
+#game-layout-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+}
+
+#puzzle-explanation-area {
+    width: 280px;
+    height: 400px;
+    background: rgba(250, 245, 240, 0.95);
+    border: 4px solid var(--board-line);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 0 rgba(74, 46, 21, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    overflow-y: auto;
+}
+
+#puzzle-explanation-area.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 #main-area {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -673,71 +700,7 @@ header p {
     }
 }
 
-/* -----------------------
-   吹き出し (Speech Bubble)
------------------------ */
-.speech-bubble {
-    position: fixed;
-    bottom: 150px;
-    left: 160px;
-    background: #fffcf2;
-    border: 4px solid var(--primary-color);
-    border-radius: 20px;
-    padding: 15px 25px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--text-color);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
-    /* モーダルより手前 */
-    max-width: 250px;
-    pointer-events: none;
-    line-height: 1.4;
-}
 
-.speech-bubble::before {
-    content: '';
-    position: absolute;
-    bottom: -16px;
-    left: 20px;
-    border-width: 16px 16px 0;
-    border-style: solid;
-    border-color: var(--primary-color) transparent transparent;
-    display: block;
-    width: 0;
-}
-
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 25px;
-    border-width: 11px 11px 0;
-    border-style: solid;
-    border-color: #fffcf2 transparent transparent;
-    display: block;
-    width: 0;
-}
-
-.speech-bubble.pop-in {
-    animation: popInBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-.speech-bubble.fade-out {
-    animation: fadeOut 0.5s ease-out forwards;
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    to {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-}
 
 /* -----------------------
    スマホ向けレスポンシブ対応 (Mobile Responsive)
@@ -779,19 +742,38 @@ header p {
         padding-bottom: 20px;
     }
 
+    #game-layout-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    #puzzle-explanation-area {
+        width: 100%;
+        height: 120px;
+        /* あらかじめ解答解説分の空白として高さを確保 */
+        order: 2;
+        /* スマホでは盤面の下に配置 */
+        margin-top: 10px;
+    }
+
     #main-area {
         /* 横並びから縦並びに変更（相手の駒台 -> 盤面 -> 自分の駒台） */
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
+        /* 少し間隔を詰める */
         width: 100%;
+        order: 1;
+        /* スマホでは盤面が上 */
     }
 
     .piece-stand {
         width: 90vw;
         max-width: none;
         height: auto;
-        min-height: 80px;
-        padding: 10px;
+        min-height: 70px;
+        /* 持駒の欄を少し小さくする */
+        padding: 5px 10px;
         /* 横長のレイアウトに変更 */
         display: flex;
         align-items: center;
@@ -803,8 +785,8 @@ header p {
         margin-bottom: 0;
         writing-mode: vertical-rl;
         /* 縦書きにしてスペース節約 */
-        padding: 10px 5px;
-        font-size: 1rem;
+        padding: 5px 2px;
+        font-size: 0.9rem;
     }
 
     .pieces-container {
@@ -923,13 +905,6 @@ header p {
         left: 10px;
     }
 
-    /* 吹き出しのサイズと位置調整 */
-    .speech-bubble {
-        bottom: 120px;
-        left: 10px;
-        max-width: calc(100vw - 20px);
-        font-size: 1rem;
-    }
 
     /* モーダルのサイズ調整 */
     .modal-content {

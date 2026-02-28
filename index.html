@@ -51,41 +51,47 @@
 
         <!-- 対局・パズルプレイ画面 -->
         <div id="game-screen" class="screen hidden">
-            <header>
-                <h2 id="game-title">通常対局</h2>
-            </header>
-
-            <div id="main-area">
-                <!-- 相手の駒台 -->
-                <div id="opponent-hand" class="piece-stand">
-                    <h3 id="opponent-hand-title">後手</h3>
-                    <div class="pieces-container"></div>
+            <div id="game-layout-wrapper">
+                <!-- 解説文表示エリア -->
+                <div id="puzzle-explanation-area">
+                    <h3 style="margin-top:0; border-bottom: 2px solid var(--board-line); padding-bottom: 5px;">解答解説</h3>
+                    <p id="puzzle-explanation-text" style="line-height: 1.6; font-size: 1.1rem;"></p>
                 </div>
 
-                <!-- 将棋盤と座標 -->
-                <div id="board-container">
-                    <div class="col-coords">
-                        <span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                <div id="main-area">
+                    <!-- 相手の駒台 -->
+                    <div id="opponent-hand" class="piece-stand">
+                        <h3 id="opponent-hand-title">後手</h3>
+                        <div class="pieces-container"></div>
                     </div>
-                    <div class="board-with-rows">
-                        <div id="shogi-board">
-                            <!-- 盤のマス目はJavaScriptで生成します -->
-                        </div>
-                        <div class="row-coords">
-                            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>七</span><span>八</span><span>九</span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 自分の駒台 -->
-                <div id="player-hand" class="piece-stand">
-                    <h3 id="player-hand-title">先手</h3>
-                    <div class="pieces-container"></div>
+                    <!-- 将棋盤と座標 -->
+                    <div id="board-container">
+                        <div class="col-coords">
+                            <span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                        <div class="board-with-rows">
+                            <div id="shogi-board">
+                                <!-- 盤のマス目はJavaScriptで生成します -->
+                            </div>
+                            <div class="row-coords">
+                                <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>七</span><span>八</span><span>九</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 自分の駒台 -->
+                    <div id="player-hand" class="piece-stand">
+                        <h3 id="player-hand-title">先手</h3>
+                        <div class="pieces-container"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-controls"
-                style="margin-top: 20px; flex-direction: row; justify-content: center; gap: 15px; width: 100%;">
+                style="margin-top: 20px; flex-direction: row; justify-content: center; align-items: center; gap: 15px; width: 100%;">
+                <h2 id="game-title"
+                    style="margin: 0; font-size: 1.3rem; white-space: nowrap; color: var(--text-color);">通常対局</h2>
                 <button id="btn-show-hint" class="btn hidden"
                     style="background-color: #ffd166; color: #333; font-size: 1rem; padding: 10px 15px; flex: 1; max-width: 150px; border: 3px solid #f39c12; box-shadow: 0 4px 0 #f39c12; white-space: nowrap;">解答解説</button>
                 <button id="btn-back-to-menu" class="btn back-btn"
@@ -158,7 +164,7 @@
                 },
                 isShapePuzzle: true,
                 solution: { row: 1, col: 2, piece: 'kin' }, // 3二 金
-                explanation: "【正解の手順】▲3二金まで<br>【玉頭に金打ち】<br>玉の上から打つ▲3二金までで、頭金と呼ばれている形になって詰みニャ。玉頭の金、頭金は実戦でもっとも現れる詰み形と言っていいニャ！"
+                explanation: "【正解の手順】▲3二金まで<br>【玉頭に金打ち】<br>玉の上から打つ▲3二金までで、頭金と呼ばれている形になって詰みです。玉頭の金、頭金は実戦でもっとも現れる詰み形と言っていいでしょう！"
             },
             {
                 id: 2,
@@ -174,7 +180,7 @@
                 },
                 isShapePuzzle: true,
                 solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
-                explanation: "【正解の手順】▲2二金まで<br>【コビンに金打ち】<br>玉のナナメ、コビンに打つ▲2二金が正解ニャ。前、横すべてに利いている金は、頭金や本問のように上から押さえる場合にうってつけの駒ニャ！"
+                explanation: "【正解の手順】▲2二金まで<br>【コビンに金打ち】<br>玉のナナメ、コビンに打つ▲2二金が正解です。前、横すべてに利いている金は、頭金や本問のように上から押さえる場合にうってつけの駒です！"
             },
             {
                 id: 3,
@@ -191,7 +197,7 @@
                 },
                 isShapePuzzle: true,
                 solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
-                explanation: "【正解の手順】▲2二金まで<br>【横からの金打ち】<br>玉の横から打つ▲2二金までで、腹金と呼ばれている形で詰みニャ。頭金やコビンへの金打ちと同じく、腹金もよく見かける詰み形ニャ！"
+                explanation: "【正解の手順】▲2二金まで<br>【横からの金打ち】<br>玉の横から打つ▲2二金までで、腹金と呼ばれている形で詰みです。頭金やコビンへの金打ちと同じく、腹金もよく見かける詰み形です！"
             },
             {
                 id: 4,
@@ -210,7 +216,7 @@
                 },
                 isShapePuzzle: true,
                 solution: { row: 0, col: 0, piece: 'kin' }, // 1一 金
-                explanation: "【正解の手順】▲1一金打まで<br>【下からの金打ち】<br>▲1一金打まで、下からの金打ちで詰め上がるニャ。一段目の金はあまり働きがよくないニャが、本問のように玉頭がふさがっているときには有効な手段になるニャ！"
+                explanation: "【正解の手順】▲1一金打まで<br>【下からの金打ち】<br>▲1一金打まで、下からの金打ちで詰め上がります。一段目の金はあまり働きがよくないですが、本問のように玉頭がふさがっているときには有効な手段になります！"
             }
         ];
 
@@ -233,7 +239,7 @@
                     { isDrop: false, fromRow: 1, fromCol: 3, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // ☖3一玉
                     { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ☗3二金打 (3二へは盤上の金引きもあるが打つのが正解)
                 ],
-                explanation: "【正解の手順】☗４三金 ☖３一玉 ☗３二金打まで<br>【玉頭への金打ち】<br>玉頭に打つ初手☗４三金が頭金と呼ばれる一手で、どこへ逃げても再度の頭金で詰みとなるニャ。金は前、横５カ所に利いており、上から押さえるには最適の駒と言えるニャ！"
+                explanation: "【正解の手順】☗４三金 ☖３一玉 ☗３二金打まで<br>【玉頭への金打ち】<br>玉頭に打つ初手☗４三金が頭金と呼ばれる一手で、どこへ逃げても再度の頭金で詰みとなります。金は前、横５カ所に利いており、上から押さえるには最適の駒と言えます！"
             },
             {
                 id: 102,
@@ -257,7 +263,7 @@
                     { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 0, player: PLAYER.GOTE }, // ☖1一玉
                     { isDrop: true, piece: 'kin', toRow: 0, toCol: 1, player: PLAYER.SENTE } // ☗2一金打
                 ],
-                explanation: "【正解の手順】☗３二金打 ☖１一玉 ☗２一金打まで<br>【横からの金打ち】<br>前問は頭金の連打。本問は玉の横から打つ腹金二回が正解手順ニャ。なお、初手☗３二金打に☖２三玉は☗３三金寄（引）までの駒余りとなるため、正しい逃げ方ではないニャ。"
+                explanation: "【正解の手順】☗３二金打 ☖１一玉 ☗２一金打まで<br>【横からの金打ち】<br>前問は頭金の連打。本問は玉の横から打つ腹金二回が正解手順です。なお、初手☗３二金打に☖２三玉は☗３三金寄（引）までの駒余りとなるため、正しい逃げ方ではありません。"
             },
             {
                 id: 103,
@@ -280,7 +286,7 @@
                     { isDrop: false, fromRow: 1, fromCol: 1, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // ☖1二玉
                     { isDrop: true, piece: 'kin', toRow: 0, toCol: 0, player: PLAYER.SENTE } // ☗1一金打
                 ],
-                explanation: "【正解の手順】☗２一金 ☖１二玉 ☗１一金打まで<br>【下からの金打ち】<br>初手☗３二金は☖１二玉で詰まないニャ。本問は☗２一金、☗１一金打と玉の下から打つ金を続けて詰め上がるニャ。効率の悪い一段目の金が急所になることもあるニャ！"
+                explanation: "【正解の手順】☗２一金 ☖１二玉 ☗１一金打まで<br>【下からの金打ち】<br>初手☗３二金は☖１二玉で詰みません。本問は☗２一金、☗１一金打と玉の下から打つ金を続けて詰め上がります。効率の悪い一段目の金が急所になることもあります！"
             },
             {
                 id: 104,
@@ -302,7 +308,7 @@
                     { isDrop: false, fromRow: 1, fromCol: 0, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // ☖2一玉
                     { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ☗3二金打
                 ],
-                explanation: "【正解の手順】☗２三金 ☖２一玉 ☗３二金打まで<br>【コビンへの金打ち】<br>初手☗１三金の頭金は☖２一玉で続かないニャ。以下☗２二金打は☖同銀と取られてしまうニャ。持駒金二枚の４問目は玉のナナメから、コビンへの金連打だったニャ！"
+                explanation: "【正解の手順】☗２三金 ☖２一玉 ☗３二金打まで<br>【コビンへの金打ち】<br>初手☗１三金の頭金は☖２一玉で続きません。以下☗２二金打は☖同銀と取られてしまいます。持駒金二枚の４問目は玉のナナメから、コビンへの金連打でした！"
             }
         ];
 
@@ -737,9 +743,11 @@
             if (btnShowHint) {
                 btnShowHint.addEventListener('click', () => {
                     if (isPuzzleMode && currentPuzzle) {
-                        hasViewedHint = true; // 解答を見たフラグだけ立てる（以降正解してもクリア扱いにならない）
+                        hasViewedHint = true; // 解答を見たフラグだけ立てる
                         const explText = currentPuzzle.explanation ? currentPuzzle.explanation : "";
-                        showCatSpeech('success', explText);
+                        // 新しい解説エリアに表示
+                        document.getElementById('puzzle-explanation-text').innerHTML = explText;
+                        document.getElementById('puzzle-explanation-area').classList.add('is-visible');
                     }
                 });
             }
@@ -800,14 +808,22 @@
             }
         }
 
+        let resultModalTimeout = null;
+
         /**
          * 結果モーダルを表示する
+         * @param {boolean} autoHide - trueの場合はボタンが無くても5秒で自動消去する
          */
-        function showResultModal(message, buttonsData, explanation = "") {
+        function showResultModal(message, buttonsData, explanation = "", autoHide = true) {
             const modal = document.getElementById('result-modal');
             const messageEl = document.getElementById('result-message');
             const explanationEl = document.getElementById('result-explanation');
             const buttonsContainer = document.getElementById('modal-buttons');
+
+            if (resultModalTimeout) {
+                clearTimeout(resultModalTimeout);
+                resultModalTimeout = null;
+            }
 
             messageEl.textContent = message;
 
@@ -824,12 +840,12 @@
 
             buttonsContainer.innerHTML = '';
 
-            // ボタンの指定がなければデフォルトの閉じるボタンを作成せず、5秒後に自動消去
-            if (!buttonsData || !Array.isArray(buttonsData) || buttonsData.length === 0) {
-                setTimeout(() => {
+            // autoHideがtrue かつ ボタンの指定がなければ5秒後に自動消去
+            if (autoHide && (!buttonsData || !Array.isArray(buttonsData) || buttonsData.length === 0)) {
+                resultModalTimeout = setTimeout(() => {
                     modal.classList.add('hidden');
                 }, 5000);
-            } else {
+            } else if (buttonsData && Array.isArray(buttonsData)) {
                 buttonsData.forEach(btnInfo => {
                     const btn = document.createElement('button');
                     btn.className = 'btn';
@@ -849,67 +865,6 @@
             }
         }
 
-        const CAT_SUCCESS_MESSAGES = [
-            "ニャイス！完璧な寄せだニャ！",
-            "お見事ニャ！玉も逃げ場なしニャ。",
-            "その一手、鋭すぎるニャ〜！",
-            "天才棋士現る！？ニャンとも素晴らしい読みニャ！",
-            "詰みニャ！ボクの計算通り（？）だニャ！",
-            "気持ちいいニャ！パズルが解けた瞬間の快感ニャ。",
-            "正解ニャ！これでまた一歩、名人への道が近づいたニャ。",
-            "読みが深いニャ〜。感服したニャ！",
-            "ニャンだこの一手は！カッコよすぎるニャ！",
-            "大正解ニャ！次もこの調子でガンガンいくニャ！"
-        ];
-
-        const CAT_FAILURE_MESSAGES = [
-            "惜しいニャ！もう一回考えてみるニャ。",
-            "ニャ！？そこは王様が逃げちゃうニャ。",
-            "失敗も経験のうちニャ。次はきっといけるニャ！",
-            "うーん、別の手がある気がするニャ...。",
-            "ニャンてこった！でも諦めたらそこで終わりだニャ。",
-            "落ち着いて盤面を見るニャ。ヒントは隠れてるニャ！",
-            "王手はかかってるけど、詰みには届かないニャ〜。",
-            "ニャハハ、今のなし！もう一回チャレンジニャ！",
-            "難しい問題だけど、キミなら解けるはずだニャ！",
-            "その手も面白いけど、正解はもっとド派手だニャ！"
-        ];
-
-        let speechBubbleTimeout = null;
-
-        /**
-         * キャラクターの吹き出しを表示する
-         */
-        function showCatSpeech(type, explanation = "") {
-            const bubble = document.getElementById('cat-speech-bubble');
-            if (!bubble) return;
-
-            const messages = type === 'success' ? CAT_SUCCESS_MESSAGES : CAT_FAILURE_MESSAGES;
-            const randomPraise = messages[Math.floor(Math.random() * messages.length)];
-
-            // 正解時はランダム褒め言葉＋問題ごとの解説をつなげる
-            let text = randomPraise;
-            if (type === 'success' && explanation) {
-                text += "<br><br>" + explanation; // 吹き出し内で改行して解説を追加
-            }
-
-            bubble.innerHTML = text; // DOMとして挿入
-            bubble.classList.remove('hidden', 'fade-out');
-            bubble.classList.add('pop-in');
-
-            if (speechBubbleTimeout) clearTimeout(speechBubbleTimeout);
-
-            // 失敗時は5秒で消す、正解時（解説あり）はずっと表示したままにする
-            if (type !== 'success') {
-                speechBubbleTimeout = setTimeout(() => {
-                    bubble.classList.remove('pop-in');
-                    bubble.classList.add('fade-out');
-                    setTimeout(() => {
-                        bubble.classList.add('hidden');
-                    }, 500);
-                }, 5000);
-            }
-        }
 
         /**
          * 画面の切り替えを行う
@@ -920,12 +875,6 @@
             });
             document.getElementById(screenId).classList.remove('hidden');
 
-            const bubble = document.getElementById('cat-speech-bubble');
-            if (bubble) {
-                bubble.classList.add('hidden');
-                bubble.classList.remove('pop-in', 'fade-out');
-                if (speechBubbleTimeout) clearTimeout(speechBubbleTimeout);
-            }
 
             // タイトル画面の時は背面コンテナを透明化して画像を見せるため
             document.body.classList.remove('on-home-screen', 'on-normal-match', 'on-puzzle-menu', 'on-puzzle-match');
@@ -1109,8 +1058,14 @@
             hasViewedHint = false;
             clearSelection();
 
-            // 詰将棋モードでは自分の駒台のタイトルを「持ち駒」にする
-            document.getElementById('player-hand-title').textContent = "持ち駒";
+            // 詰将棋モードでは自分の駒台のタイトルを「持駒」にする
+            document.getElementById('player-hand-title').textContent = "持駒";
+
+            // ★ 解説エリアを非表示にリセットする
+            const explArea = document.getElementById('puzzle-explanation-area');
+            if (explArea) explArea.classList.remove('is-visible');
+            const explText = document.getElementById('puzzle-explanation-text');
+            if (explText) explText.innerHTML = "";
 
             renderBoard();
         }
@@ -1258,7 +1213,6 @@
 
                     if (!isPuzzleMode && gameBoard.isCheck(currentPlayer) && !checkPlayerHasEscapeMove(currentPlayer)) {
                         const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
-                        showCatSpeech('success');
                         setTimeout(() => showResultModal(`詰みです！\n${winner}の勝ち！`, [
                             { text: 'メニューに戻る', onClick: () => showScreen('home-screen'), className: 'primary-btn' }
                         ]), 300);
@@ -1330,7 +1284,6 @@
 
                 if (!isCorrectMove) {
                     setTimeout(() => {
-                        showCatSpeech('failure');
                         showResultModal("不正解！\n手順が違います。", [
                             { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
                         ]);
@@ -1371,7 +1324,6 @@
                     return handlePuzzleClear();
                 } else {
                     setTimeout(() => {
-                        showCatSpeech('failure');
                         showResultModal("不正解！", [
                             { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
                         ]);
@@ -1383,7 +1335,6 @@
             // 1. 王手がかかっているか？
             if (!gameBoard.isCheck(PLAYER.GOTE)) {
                 setTimeout(() => {
-                    showCatSpeech('failure');
                     showResultModal("失敗！\n王手をかけてください。", [
                         { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
                     ]);
@@ -1400,7 +1351,6 @@
 
             // 回避可能なら失敗
             setTimeout(() => {
-                showCatSpeech('failure');
                 showResultModal("玉に逃げ道があります\nやり直し", [
                     { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
                 ]);
@@ -1415,12 +1365,11 @@
 
             setTimeout(() => {
                 const explText = currentPuzzle && currentPuzzle.explanation ? currentPuzzle.explanation : "";
-                showCatSpeech('success', explText);
 
                 if (isPuzzleMode) {
-                    if (!hasViewedHint) {
-                        showResultModal("大正解！");
-                    }
+                    // 大正解ポップアップは出さず、解説エリアを表示
+                    document.getElementById('puzzle-explanation-text').innerHTML = explText;
+                    document.getElementById('puzzle-explanation-area').classList.add('is-visible');
                     // 自動で一覧へ戻るタイマーを削除し、プレイヤーが自発的に「メニューに戻る」を押すまで待機する
                 } else {
                     const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
@@ -1488,8 +1437,6 @@
         </div>
     </div>
 
-    <!-- キャラクター吹き出し用 -->
-    <div id="cat-speech-bubble" class="speech-bubble hidden"></div>
 </body>
 
 </html>

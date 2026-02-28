@@ -33,8 +33,6 @@
             <div class="menu-controls">
                 <button id="btn-back-to-home-from-diff" class="btn back-btn">メニューに戻る</button>
             </div>
-            <!-- 左下キャラクター表示用 -->
-            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
         </div>
 
         <!-- 詰将棋 問題リスト画面 -->
@@ -49,8 +47,6 @@
             <div class="menu-controls">
                 <button id="btn-back-to-home" class="btn back-btn">メニューに戻る</button>
             </div>
-            <!-- 左下キャラクター表示用 -->
-            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
         </div>
 
         <!-- 対局・パズルプレイ画面 -->
@@ -62,7 +58,7 @@
             <div id="main-area">
                 <!-- 相手の駒台 -->
                 <div id="opponent-hand" class="piece-stand">
-                    <h3>後手</h3>
+                    <h3 id="opponent-hand-title">後手</h3>
                     <div class="pieces-container"></div>
                 </div>
 
@@ -83,7 +79,7 @@
 
                 <!-- 自分の駒台 -->
                 <div id="player-hand" class="piece-stand">
-                    <h3>先手</h3>
+                    <h3 id="player-hand-title">先手</h3>
                     <div class="pieces-container"></div>
                 </div>
             </div>
@@ -96,8 +92,6 @@
                     style="margin-top: 0; padding: 10px 15px; font-size: 1rem; flex: 1; max-width: 150px;">戻る</button>
             </div>
 
-            <!-- 左下キャラクター表示用 -->
-            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
         </div>
     </div>
 
@@ -1100,18 +1094,24 @@
             currentPlayer = PLAYER.SENTE;
             lastMovedCell = null;
             clearSelection();
+
+            // 駒台のタイトルを通常対局用に戻す
+            document.getElementById('player-hand-title').textContent = "先手";
+            document.getElementById('opponent-hand-title').textContent = "後手";
+
             renderBoard();
         }
 
-        /**
-         * 詰将棋を初期化する
-         */
         function initPuzzle(puzzle) {
             gameBoard.loadPuzzle(puzzle);
             currentPlayer = PLAYER.SENTE;
             lastMovedCell = null;
             hasViewedHint = false;
             clearSelection();
+
+            // 詰将棋モードでは自分の駒台のタイトルを「持ち駒」にする
+            document.getElementById('player-hand-title').textContent = "持ち駒";
+
             renderBoard();
         }
 

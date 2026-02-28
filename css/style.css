@@ -1,0 +1,726 @@
+:root {
+    /* 桜と和風の街並みをイメージしたカラーパレット */
+    --bg-color: #f7e6e8;
+    /* ほんのり桜色がかった背景色 */
+    --board-color: #e0ac69;
+    /* 深みのある木の色（将棋盤） */
+    --board-line: #4a2e15;
+    /* 濃い茶色（盤面の線や文字） */
+    --text-color: #3e2723;
+    /* 黒に近い焦茶色（全体のテキスト） */
+    --primary-color: #d1495b;
+    /* 落ち着いた紅色・朱色（アクセント） */
+    --secondary-color: #edae49;
+    /* 夕暮れ・提灯の明かりのようなゴールド */
+    --highlight-color: rgba(209, 73, 91, 0.4);
+    /* 紅色のハイライト */
+    --panel-bg: rgba(250, 245, 240, 0.85);
+    /* 半透明の薄い和紙のような色（ガラス風） */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    /* 画面全体に画像を敷き詰める */
+    background-image: url('../img/world-bg.jpg');
+    background-size: cover;
+    background-position: center bottom;
+    background-attachment: fixed;
+    color: var(--text-color);
+    font-family: 'Sawarabi Mincho', "Yu Mincho", "MS Mincho", serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#game-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    background: var(--panel-bg);
+    border-radius: 20px;
+    /* 障子や木の枠をイメージした縁取り */
+    border: 4px solid var(--board-line);
+    box-shadow: 0 8px 0 rgba(74, 46, 21, 0.6), 0 15px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    transition: background 0.3s, border 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
+}
+
+/* ホーム画面専用のスタイル：背景画像をなるべく隠さないように透明にする */
+body.on-home-screen {
+    background-image: url('../img/title-bg.png');
+}
+
+body.on-home-screen #game-container {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    height: 100vh;
+    justify-content: flex-end;
+    padding-bottom: 50px;
+}
+
+/* 通常対局専用のスタイル：街並み背景と同化させる */
+body.on-normal-match {
+    background-image: url('../img/normal-match-bg.png');
+}
+
+body.on-normal-match #game-container {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+body.on-normal-match header {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+body.on-normal-match .piece-stand {
+    background: rgba(232, 208, 179, 0.85);
+    /* slightly transparent wood */
+    backdrop-filter: blur(3px);
+}
+
+body.on-normal-match #shogi-board {
+    background-color: rgba(224, 172, 105, 0.95);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+body.on-normal-match .side-character-img {
+    display: none !important;
+}
+
+body.on-normal-match .col-coords,
+body.on-normal-match .row-coords {
+    color: #fff;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9), -1px -1px 4px rgba(0, 0, 0, 0.9);
+}
+
+
+
+header {
+    text-align: center;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px 40px;
+    border-radius: 10px;
+    border: 3px double var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 3.5rem;
+    color: var(--text-color);
+    /* 白い縁取りで文字を目立たせる */
+    text-shadow:
+        -2px -2px 0 #fff,
+        2px -2px 0 #fff,
+        -2px 2px 0 #fff,
+        2px 2px 0 #fff,
+        0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+header p {
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#main-area {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.piece-stand {
+    width: 15vw;
+    max-width: 160px;
+    min-width: 120px;
+    height: 400px;
+    background: #e8d0b3;
+    /* 明るい木の色に変更 */
+    border: 4px solid var(--board-line);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 0 rgba(74, 46, 21, 0.4), inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.piece-stand h3 {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    padding: 5px;
+    border: 2px solid var(--board-line);
+}
+
+#board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* 右寄せにして1-9の座標と合わせる */
+}
+
+.col-coords {
+    display: flex;
+    width: calc(45px * 9 + 12px);
+    /* 盤の幅 45px*9 + border 6px*2 */
+    justify-content: space-around;
+    padding-right: 30px;
+    /* 右側の漢数字の余白分を空ける */
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.col-coords span {
+    width: 45px;
+    text-align: center;
+}
+
+.board-with-rows {
+    display: flex;
+    align-items: center;
+}
+
+.row-coords {
+    display: flex;
+    flex-direction: column;
+    height: calc(45px * 9 + 12px);
+    justify-content: space-around;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-left: 10px;
+}
+
+.row-coords span {
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+#shogi-board {
+    display: grid;
+    grid-template-columns: repeat(9, 45px);
+    grid-template-rows: repeat(9, 45px);
+    background-color: var(--board-color);
+    border: 6px solid var(--board-line);
+    border-radius: 8px;
+    /* 盤そのものも少し丸く */
+    padding: 2px;
+    box-shadow: 0 8px 0 rgba(160, 120, 80, 0.3), 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cell {
+    border: 1px solid var(--board-line);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.2s, transform 0.1s;
+    user-select: none;
+    /* 木目を意識した微かな内側シャドウ */
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.3), inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.cell:hover {
+    background-color: #fffbdf;
+}
+
+.cell:active {
+    transform: scale(0.95);
+    background-color: var(--primary-color);
+}
+
+/* 駒の形（五角形）と立体感 */
+.piece-shape {
+    width: 38px;
+    height: 42px;
+    /* 木の質感（微妙なグラデーションで立体感と木目を表現） */
+    background: linear-gradient(135deg, #fce0a2 0%, #e6c27a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* より実際の将棋の駒に近い形状（上部が少し細く、下が広がっている） */
+    clip-path: polygon(50% 0%, 85% 15%, 100% 100%, 0% 100%, 15% 15%);
+    box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.7),
+        /* 上部の強いハイライト */
+        inset -2px -4px 6px rgba(120, 70, 20, 0.5);
+    /* 下部の強いシャドウ */
+    transition: transform 0.1s, filter 0.2s;
+}
+
+/* clip-pathの外側に影を落とすためのラッパー調整 (.cellに適用) */
+.cell>.piece-shape {
+    filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.3));
+}
+
+.piece-shape span {
+    margin-top: 4px;
+    /* 五角形の上部に余白を持たせるための調整 */
+}
+
+/* 駒の向きのスタイル */
+.sente-piece {
+    /* デフォルトの文字色・向き */
+    font-weight: bold;
+    color: var(--text-color);
+    /* 明示的に色を指定 */
+}
+
+.gote-piece {
+    /* 後手の駒は180度回転して表示 */
+    transform: rotate(180deg);
+    font-weight: bold;
+    color: var(--text-color);
+    /* 明示的に色を指定 */
+}
+
+/* 選択と移動可能範囲のハイライト */
+.cell.selected {
+    background-color: var(--primary-color);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.cell.selected .sente-piece {
+    color: white;
+    filter: brightness(1.1);
+}
+
+.cell.selected .gote-piece {
+    color: white;
+    filter: brightness(1.1);
+    /* .gote-piece は回転しているので色だけ変える */
+}
+
+/* 最後に動かした駒のハイライト */
+.cell.last-moved {
+    background-color: rgba(136, 212, 170, 0.6);
+    /* --secondary-color の半透明 */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.cell.valid-move {
+    background-color: var(--highlight-color);
+    position: relative;
+}
+
+/* 移動可能範囲の中心に小さな点を表示（どうぶつの森風の可愛いインジケーター） */
+.cell.valid-move::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+/* 持ち駒のスタイル */
+.pieces-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.hand-piece-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.hand-piece {
+    width: 50px;
+    height: 55px;
+    background: linear-gradient(135deg, #fce0a2 0%, #e6c27a 100%);
+    /* 木の質感 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 盤上の駒と同じ比率のポリゴン */
+    clip-path: polygon(50% 0%, 85% 15%, 100% 100%, 0% 100%, 15% 15%);
+    box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.7),
+        inset -2px -4px 6px rgba(120, 70, 20, 0.5);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s, filter 0.2s;
+}
+
+.piece-count {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.hand-piece span {
+    margin-top: 4px;
+}
+
+.hand-piece:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 transparent;
+}
+
+.hand-piece.selected {
+    color: white;
+    transform: scale(1.1);
+    filter: brightness(1.1) drop-shadow(0 0 8px var(--primary-color));
+}
+
+/* 後手の持ち駒の文字反転 */
+.hand-piece.gote-piece {
+    transform: rotate(180deg);
+}
+
+.hand-piece.gote-piece.selected {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.menu-controls {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+
+#controls {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+    /* 影の色を同系色の濃い色に変更 */
+    box-shadow: 0 6px 0 #b38336, 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:nth-child(2),
+.primary-btn {
+    background: var(--primary-color);
+    box-shadow: 0 6px 0 #9c3643, 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 4px 0 #b38336, 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn:nth-child(2):hover,
+.primary-btn:hover {
+    box-shadow: 0 4px 0 #9c3643, 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0 0 transparent;
+}
+
+/* SPA スクリーン切り替え */
+.screen {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.puzzle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.puzzle-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid var(--board-line);
+    border-radius: 10px;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 4px 0 var(--board-line);
+    text-align: left;
+}
+
+.puzzle-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--board-line);
+}
+
+.puzzle-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 transparent;
+}
+
+.clear-badge {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 10px;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(255, 154, 118, 0.4);
+}
+
+/* -----------------------
+   結果モーダル (Flashy Overlay)
+----------------------- */
+.modal {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    pointer-events: none;
+    /* ボードの操作を妨げないようにする */
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background: rgba(255, 252, 242, 0.95);
+    border: 5px solid #ff9a76;
+    border-radius: 50px;
+    padding: 30px 60px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(255, 154, 118, 0.6), inset 0 0 20px rgba(255, 154, 118, 0.3);
+    animation: popInBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    pointer-events: auto;
+    /* ボタン部分は操作可能に戻す */
+}
+
+.result-text {
+    font-size: 3.5rem;
+    color: #ff5722;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(255, 87, 34, 0.3);
+    font-weight: 900;
+    letter-spacing: 2px;
+    animation: pulse 1.5s infinite;
+}
+
+.result-explanation {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px 20px;
+    border-radius: 15px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-content.small-banner {
+    padding: 10px 40px;
+    border-radius: 30px;
+    box-shadow: 0 5px 20px rgba(255, 154, 118, 0.4);
+}
+
+.puzzle-banner-text {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+/* Animations */
+@keyframes popInBounce {
+    0% {
+        transform: translateY(-150%) scale(0.8);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translateY(10%) scale(1.05);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(-5%) scale(0.98);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.main-character-img {
+    width: 280px;
+    height: auto;
+    border-radius: 20px;
+    margin: 15px auto 5px;
+    display: block;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border: 5px solid var(--primary-color);
+    animation: bounceInLogo 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.side-character-img {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 150px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid var(--primary-color);
+    z-index: 50;
+    pointer-events: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes bounceInLogo {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* -----------------------
+   吹き出し (Speech Bubble)
+----------------------- */
+.speech-bubble {
+    position: fixed;
+    bottom: 150px;
+    left: 160px;
+    background: #fffcf2;
+    border: 4px solid var(--primary-color);
+    border-radius: 20px;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    /* モーダルより手前 */
+    max-width: 250px;
+    pointer-events: none;
+    line-height: 1.4;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 20px;
+    border-width: 16px 16px 0;
+    border-style: solid;
+    border-color: var(--primary-color) transparent transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 25px;
+    border-width: 11px 11px 0;
+    border-style: solid;
+    border-color: #fffcf2 transparent transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble.pop-in {
+    animation: popInBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.speech-bubble.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}

@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ねこ将棋</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap"
+            rel="stylesheet">
+    </head>
+
+<body>
+    <div id="game-container">
+        <!-- ホーム画面（メニュー） -->
+        <div id="home-screen" class="screen">
+            <div id="controls" class="menu-controls">
+                <button id="btn-start" class="btn">通常対局</button>
+                <button id="btn-puzzle-menu" class="btn">詰将棋道場</button>
+            </div>
+        </div>
+
+        <!-- 難易度選択画面 -->
+        <div id="puzzle-difficulty-screen" class="screen hidden">
+            <header>
+                <h2>詰将棋道場</h2>
+                <p>難易度を選ぼう！</p>
+            </header>
+            <div class="menu-controls"
+                style="flex-direction: column; align-items: center; gap: 20px; width: 100%; margin: 30px 0;">
+                <button id="btn-diff-1" class="btn puzzle-btn" style="width: 80%; text-align: center;">1手詰め</button>
+                <button id="btn-diff-3" class="btn puzzle-btn" style="width: 80%; text-align: center;">3手詰め</button>
+            </div>
+            <div class="menu-controls">
+                <button id="btn-back-to-home-from-diff" class="btn back-btn">メニューに戻る</button>
+            </div>
+            <!-- 左下キャラクター表示用 -->
+            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
+        </div>
+
+        <!-- 詰将棋 問題リスト画面 -->
+        <div id="puzzle-select-screen" class="screen hidden">
+            <header>
+                <h2>詰将棋道場</h2>
+                <p>問題を選んで挑戦しよう！</p>
+            </header>
+            <div id="puzzle-list" class="puzzle-list">
+                <!-- JavaScriptでパズルボタンを生成します -->
+            </div>
+            <div class="menu-controls">
+                <button id="btn-back-to-home" class="btn back-btn">メニューに戻る</button>
+            </div>
+            <!-- 左下キャラクター表示用 -->
+            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
+        </div>
+
+        <!-- 対局・パズルプレイ画面 -->
+        <div id="game-screen" class="screen hidden">
+            <header>
+                <h2 id="game-title">通常対局</h2>
+            </header>
+
+            <div id="main-area">
+                <!-- 相手の駒台 -->
+                <div id="opponent-hand" class="piece-stand">
+                    <h3>後手</h3>
+                    <div class="pieces-container"></div>
+                </div>
+
+                <!-- 将棋盤と座標 -->
+                <div id="board-container">
+                    <div class="col-coords">
+                        <span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                    </div>
+                    <div class="board-with-rows">
+                        <div id="shogi-board">
+                            <!-- 盤のマス目はJavaScriptで生成します -->
+                        </div>
+                        <div class="row-coords">
+                            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>七</span><span>八</span><span>九</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 自分の駒台 -->
+                <div id="player-hand" class="piece-stand">
+                    <h3>先手</h3>
+                    <div class="pieces-container"></div>
+                </div>
+            </div>
+
+            <div class="menu-controls" style="margin-top: 20px; flex-direction: column; gap: 10px;">
+                <button id="btn-show-hint" class="btn hidden"
+                    style="background-color: #ffd166; color: #333; font-size: 1rem; padding: 10px 20px; width: 80%; border: 3px solid #f39c12; box-shadow: 0 4px 0 #f39c12; white-space: nowrap;">解答解説を見る</button>
+                <button id="btn-back-to-menu" class="btn back-btn" style="margin-top: 0;">メニューに戻る</button>
+            </div>
+
+            <!-- 左下キャラクター表示用 -->
+            <img src="img/neko-shogi.jpg" alt="将棋ネコ" class="side-character-img">
+        </div>
+    </div>
+
+    <script>
+        // --- pieces.js ---
+        // pieces.js - 駒の基本定義
+
+        // プレイヤーの定義
+        const PLAYER = {
+            SENTE: 1, // 先手（自分・下側）
+            GOTE: 2   // 後手（相手・上側）
+        };
+
+        // 駒の種類、表示名、移動ベクトル([row, col] の相対移動量, 先手(上方向マイナス)基準)の定義
+        // row: -1が上、+1が下 / col: -1が左(右筋)、+1が右(左筋)
+        const PIECE_TYPES = {
+            FU: { id: 'fu', name: '歩', promotedName: 'と', canPromote: true, moves: [[-1, 0]] },
+            KYOSHA: { id: 'kyosha', name: '香', promotedName: '杏', canPromote: true, moves: "forward_line" },
+            KEIMA: { id: 'keima', name: '桂', promotedName: '圭', canPromote: true, moves: [[-2, -1], [-2, 1]] },
+            GIN: { id: 'gin', name: '銀', promotedName: '全', canPromote: true, moves: [[-1, -1], [-1, 0], [-1, 1], [1, -1], [1, 1]] },
+            KIN: { id: 'kin', name: '金', canPromote: false, moves: [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0]] },
+            KAKU: { id: 'kaku', name: '角', promotedName: '馬', canPromote: true, moves: "diagonal_lines" },
+            HISHA: { id: 'hisha', name: '飛', promotedName: '竜', canPromote: true, moves: "straight_lines" },
+            GYOKU: { id: 'gyoku', name: '玉', canPromote: false, moves: [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]] },
+            OU: { id: 'ou', name: '王', canPromote: false, moves: [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]] }
+        };
+
+        // 成り駒の移動ベクトル（金と同じ動きになるもの）
+        const PROMOTED_KIN_MOVES = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0]];
+        PIECE_TYPES.FU.promotedMoves = PROMOTED_KIN_MOVES;
+        PIECE_TYPES.KYOSHA.promotedMoves = PROMOTED_KIN_MOVES;
+        PIECE_TYPES.KEIMA.promotedMoves = PROMOTED_KIN_MOVES;
+        PIECE_TYPES.GIN.promotedMoves = PROMOTED_KIN_MOVES;
+        PIECE_TYPES.HISHA.promotedMoves = "dragon";
+        PIECE_TYPES.KAKU.promotedMoves = "horse";
+        /**
+         * 駒オブジェクトを生成するファクトリ関数
+         */
+        function createPiece(type, owner, isPromoted = false) {
+            return {
+                type: type,
+                owner: owner,
+                isPromoted: isPromoted,
+
+                get displayName() {
+                    return this.isPromoted ? this.type.promotedName : this.type.name;
+                }
+            };
+        }
+
+
+        const PUZZLES_1 = [
+            {
+                id: 1,
+                title: "問題 1",
+                originalTitle: "No.1 玉頭に金打ち",
+                movesToMate: 1,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+                    { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 歩
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin']
+                },
+                isShapePuzzle: true,
+                solution: { row: 1, col: 2, piece: 'kin' }, // 3二 金
+                explanation: "【正解の手順】▲3二金まで<br>【玉頭に金打ち】<br>玉の上から打つ▲3二金までで、頭金と呼ばれている形になって詰みニャ。玉頭の金、頭金は実戦でもっとも現れる詰み形と言っていいニャ！"
+            },
+            {
+                id: 2,
+                title: "問題 2",
+                originalTitle: "No.2 コビンに金打ち",
+                movesToMate: 1,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+                    { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三 歩
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin']
+                },
+                isShapePuzzle: true,
+                solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
+                explanation: "【正解の手順】▲2二金まで<br>【コビンに金打ち】<br>玉のナナメ、コビンに打つ▲2二金が正解ニャ。前、横すべてに利いている金は、頭金や本問のように上から押さえる場合にうってつけの駒ニャ！"
+            },
+            {
+                id: 3,
+                title: "問題 3",
+                originalTitle: "No.3 横からの金打ち",
+                movesToMate: 1,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+                    { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三 歩
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin']
+                },
+                isShapePuzzle: true,
+                solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
+                explanation: "【正解の手順】▲2二金まで<br>【横からの金打ち】<br>玉の横から打つ▲2二金までで、腹金と呼ばれている形で詰みニャ。頭金やコビンへの金打ちと同じく、腹金もよく見かける詰み形ニャ！"
+            },
+            {
+                id: 4,
+                title: "問題 4",
+                originalTitle: "No.4 下からの金打ち",
+                movesToMate: 1,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+                    { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 1 }, // 2一 金 (攻め方)
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+                    { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 } // 3二 金 (玉方)
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin']
+                },
+                isShapePuzzle: true,
+                solution: { row: 0, col: 0, piece: 'kin' }, // 1一 金
+                explanation: "【正解の手順】▲1一金打まで<br>【下からの金打ち】<br>▲1一金打まで、下からの金打ちで詰め上がるニャ。一段目の金はあまり働きがよくないニャが、本問のように玉頭がふさがっているときには有効な手段になるニャ！"
+            }
+        ];
+
+        const PUZZLES_3 = [
+            {
+                id: 101,
+                title: "問題 1",
+                originalTitle: "No.1 玉頭への金打ち",
+                movesToMate: 3,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 玉
+                    { piece: 'gin', owner: PLAYER.SENTE, row: 3, col: 3 } // 4四 銀
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin', 'kin']
+                },
+                isShapePuzzle: false, // 3手詰めは手順で判定する
+                expectedMoves: [
+                    { isDrop: true, piece: 'kin', toRow: 2, toCol: 3, player: PLAYER.SENTE }, // ☗4三金
+                    { isDrop: false, fromRow: 1, fromCol: 3, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // ☖3一玉
+                    { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ☗3二金打 (3二へは盤上の金引きもあるが打つのが正解)
+                ],
+                explanation: "【正解の手順】☗４三金 ☖３一玉 ☗３二金打まで<br>【玉頭への金打ち】<br>玉頭に打つ初手☗４三金が頭金と呼ばれる一手で、どこへ逃げても再度の頭金で詰みとなるニャ。金は前、横５カ所に利いており、上から押さえるには最適の駒と言えるニャ！"
+            },
+            {
+                id: 102,
+                title: "問題 2",
+                originalTitle: "No.2 横からの金打ち",
+                movesToMate: 3,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+                    { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+                    { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 銀
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+                    { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 3 } // 4三 金
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin', 'kin']
+                },
+                isShapePuzzle: false,
+                expectedMoves: [
+                    { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ☗3二金打
+                    { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 0, player: PLAYER.GOTE }, // ☖1一玉
+                    { isDrop: true, piece: 'kin', toRow: 0, toCol: 1, player: PLAYER.SENTE } // ☗2一金打
+                ],
+                explanation: "【正解の手順】☗３二金打 ☖１一玉 ☗２一金打まで<br>【横からの金打ち】<br>前問は頭金の連打。本問は玉の横から打つ腹金二回が正解手順ニャ。なお、初手☗３二金打に☖２三玉は☗３三金寄（引）までの駒余りとなるため、正しい逃げ方ではないニャ。"
+            },
+            {
+                id: 103,
+                title: "問題 3",
+                originalTitle: "No.3 下からの金打ち",
+                movesToMate: 3,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+                    { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+                    { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 銀
+                    { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 3 } // 4三 角
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin', 'kin']
+                },
+                isShapePuzzle: false,
+                expectedMoves: [
+                    { isDrop: true, piece: 'kin', toRow: 0, toCol: 1, player: PLAYER.SENTE }, // ☗2一金
+                    { isDrop: false, fromRow: 1, fromCol: 1, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // ☖1二玉
+                    { isDrop: true, piece: 'kin', toRow: 0, toCol: 0, player: PLAYER.SENTE } // ☗1一金打
+                ],
+                explanation: "【正解の手順】☗２一金 ☖１二玉 ☗１一金打まで<br>【下からの金打ち】<br>初手☗３二金は☖１二玉で詰まないニャ。本問は☗２一金、☗１一金打と玉の下から打つ金を続けて詰め上がるニャ。効率の悪い一段目の金が急所になることもあるニャ！"
+            },
+            {
+                id: 104,
+                title: "問題 4",
+                originalTitle: "No.4 コビンへの金打ち",
+                movesToMate: 3,
+                board: [
+                    { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+                    { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+                    { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 銀
+                    { piece: 'gin', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 銀
+                ],
+                hand: {
+                    [PLAYER.SENTE]: ['kin', 'kin']
+                },
+                isShapePuzzle: false,
+                expectedMoves: [
+                    { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ☗2三金
+                    { isDrop: false, fromRow: 1, fromCol: 0, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // ☖2一玉
+                    { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ☗3二金打
+                ],
+                explanation: "【正解の手順】☗２三金 ☖２一玉 ☗３二金打まで<br>【コビンへの金打ち】<br>初手☗１三金の頭金は☖２一玉で続かないニャ。以下☗２二金打は☖同銀と取られてしまうニャ。持駒金二枚の４問目は玉のナナメから、コビンへの金連打だったニャ！"
+            }
+        ];
+
+
+        // --- board.js ---
+        // board.js - 将棋の盤面状態の管理
+
+        class Board {
+            constructor() {
+                // 9x9の二次元配列。nullで初期化。
+                // grid[row][col] でアクセス (0-indexed: row 0=一段目, col 0=一筋)
+                this.grid = Array(9).fill(null).map(() => Array(9).fill(null));
+                this.capturedPieces = {
+                    [PLAYER.SENTE]: [],
+                    [PLAYER.GOTE]: []
+                };
+            }
+
+            /**
+             * 平手の初期配置で盤面をセットアップする
+             */
+            setupInitialPosition() {
+                // まず盤面をクリア
+                this.grid = Array(9).fill(null).map(() => Array(9).fill(null));
+                this.capturedPieces = { [PLAYER.SENTE]: [], [PLAYER.GOTE]: [] };
+
+                // -------------------------
+                // 後手 (上側) の配置 - row: 0, 1, 2
+                // -------------------------
+                // 1段目: 香 桂 銀 金 王 金 銀 桂 香 (col: 0 -> 8)
+                const goteRow1 = [
+                    PIECE_TYPES.KYOSHA, PIECE_TYPES.KEIMA, PIECE_TYPES.GIN, PIECE_TYPES.KIN,
+                    PIECE_TYPES.OU, // ※後手は王将が一般的ですが玉でも可
+                    PIECE_TYPES.KIN, PIECE_TYPES.GIN, PIECE_TYPES.KEIMA, PIECE_TYPES.KYOSHA
+                ];
+                goteRow1.forEach((type, col) => {
+                    this.grid[0][col] = createPiece(type, PLAYER.GOTE);
+                });
+
+                // 2段目: 飛車と角の配置
+                // 後手視点では右側が自陣右翼、左側が自陣左翼となります。
+                // 盤面は先手視点で右から1筋(col:0)、左が9筋(col:8)となるため、
+                // 後手の飛車は8筋(col:7)、後手の角は2筋(col:1)に配置されます。
+                this.grid[1][7] = createPiece(PIECE_TYPES.HISHA, PLAYER.GOTE);
+                this.grid[1][1] = createPiece(PIECE_TYPES.KAKU, PLAYER.GOTE);
+
+                // 3段目: 歩 x 9
+                for (let col = 0; col < 9; col++) {
+                    this.grid[2][col] = createPiece(PIECE_TYPES.FU, PLAYER.GOTE);
+                }
+
+                // -------------------------
+                // 先手 (下側) の配置 - row: 6, 7, 8
+                // -------------------------
+                // 7段目: 歩 x 9
+                for (let col = 0; col < 9; col++) {
+                    this.grid[6][col] = createPiece(PIECE_TYPES.FU, PLAYER.SENTE);
+                }
+
+                // 8段目: 2筋(col:1)に飛車、8筋(col:7)に角
+                this.grid[7][1] = createPiece(PIECE_TYPES.HISHA, PLAYER.SENTE);
+                this.grid[7][7] = createPiece(PIECE_TYPES.KAKU, PLAYER.SENTE);
+
+                // 9段目: 香 桂 銀 金 玉 金 銀 桂 香 (col: 0 -> 8)
+                const senteRow9 = [
+                    PIECE_TYPES.KYOSHA, PIECE_TYPES.KEIMA, PIECE_TYPES.GIN, PIECE_TYPES.KIN,
+                    PIECE_TYPES.GYOKU,
+                    PIECE_TYPES.KIN, PIECE_TYPES.GIN, PIECE_TYPES.KEIMA, PIECE_TYPES.KYOSHA
+                ];
+                senteRow9.forEach((type, col) => {
+                    this.grid[8][col] = createPiece(type, PLAYER.SENTE);
+                });
+            }
+
+            /**
+             * 指定したマスの駒を取得
+             */
+            getPiece(row, col) {
+                if (row < 0 || row >= 9 || col < 0 || col >= 9) return null;
+                return this.grid[row][col];
+            }
+
+            /**
+             * 指定した座標が盤面内か判定
+             */
+            isValidPosition(row, col) {
+                return row >= 0 && row < 9 && col >= 0 && col < 9;
+            }
+
+            /**
+             * 駒の移動可能範囲を計算する（王手放置の考慮なし）
+             */
+            getPseudoLegalMoves(row, col) {
+                const piece = this.getPiece(row, col);
+                if (!piece) return [];
+
+                const validMoves = [];
+                const moves = piece.isPromoted && piece.type.promotedMoves ? piece.type.promotedMoves : piece.type.moves;
+
+                // 後手の場合は移動方向を反転させる (row方向に-1を掛ける)
+                const directionY = piece.owner === PLAYER.SENTE ? 1 : -1;
+
+                if (Array.isArray(moves)) {
+                    // 単発ジャンプ系の動き（歩、桂馬、銀、金、玉など）
+                    moves.forEach(m => {
+                        const targetRow = row + (m[0] * directionY);
+                        // colの反転は不要（将棋盤は左右対称の動きのため）ただし厳密には後手視点での左右が必要なゲームもあるが、将棋の銀や金などは左右対称なのでY方向の反転だけで対応可能
+                        const targetCol = col + m[1];
+
+                        if (this.isValidPosition(targetRow, targetCol)) {
+                            const targetPiece = this.getPiece(targetRow, targetCol);
+                            // 自分の駒がないマスなら移動可能
+                            if (!targetPiece || targetPiece.owner !== piece.owner) {
+                                validMoves.push({ row: targetRow, col: targetCol });
+                            }
+                        }
+                    });
+                } else if (typeof moves === 'string') {
+                    let directions = [];
+                    let singleJumps = [];
+
+                    if (moves === "forward_line") {
+                        directions = [[-1, 0]];
+                    } else if (moves === "straight_lines") {
+                        directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                    } else if (moves === "diagonal_lines") {
+                        directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+                    } else if (moves === "dragon") {
+                        directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                        singleJumps = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+                    } else if (moves === "horse") {
+                        directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+                        singleJumps = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                    }
+
+                    // 直線移動の処理
+                    directions.forEach(d => {
+                        let r = row;
+                        let c = col;
+                        while (true) {
+                            r += d[0] * directionY;
+                            c += d[1];
+
+                            if (!this.isValidPosition(r, c)) break;
+
+                            const targetPiece = this.getPiece(r, c);
+                            if (targetPiece) {
+                                if (targetPiece.owner !== piece.owner) {
+                                    validMoves.push({ row: r, col: c }); // Can take opponent piece
+                                }
+                                break; // Blocked by either own piece or opponent piece
+                            }
+                            validMoves.push({ row: r, col: c }); // Empty square
+                        }
+                    });
+
+                    // 1マスジャンプ（竜、馬の追加の動き）
+                    singleJumps.forEach(d => {
+                        let r = row + (d[0] * directionY);
+                        let c = col + d[1];
+                        if (this.isValidPosition(r, c)) {
+                            const targetPiece = this.getPiece(r, c);
+                            if (!targetPiece || targetPiece.owner !== piece.owner) {
+                                validMoves.push({ row: r, col: c });
+                            }
+                        }
+                    });
+                }
+
+                return validMoves;
+            }
+
+            /**
+             * 駒の移動可能範囲を計算する（王手放置を防止）
+             */
+            getValidMoves(row, col) {
+                const piece = this.getPiece(row, col);
+                if (!piece) return [];
+
+                const pseudoMoves = this.getPseudoLegalMoves(row, col);
+                const validMoves = [];
+
+                pseudoMoves.forEach(m => {
+                    // 仮移動
+                    const targetPiece = this.grid[m.row][m.col];
+                    this.grid[m.row][m.col] = piece;
+                    this.grid[row][col] = null;
+
+                    if (!this.isCheck(piece.owner)) {
+                        validMoves.push(m);
+                    }
+
+                    // 元に戻す
+                    this.grid[row][col] = piece;
+                    this.grid[m.row][m.col] = targetPiece;
+                });
+
+                return validMoves;
+            }
+
+            /**
+             * 王手が掛かっているか判定
+             */
+            isCheck(player) {
+                let kingRow = -1; let kingCol = -1;
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const p = this.grid[r][c];
+                        if (p && p.owner === player && (p.type.id === 'ou' || p.type.id === 'gyoku')) {
+                            kingRow = r; kingCol = c;
+                            break;
+                        }
+                    }
+                }
+                if (kingRow === -1) return false; // 王がいない場合は便宜上false
+
+                const opponent = player === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const p = this.grid[r][c];
+                        if (p && p.owner === opponent) {
+                            const moves = this.getPseudoLegalMoves(r, c);
+                            if (moves.some(m => m.row === kingRow && m.col === kingCol)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+
+            /**
+             * 盤上の駒を移動させる
+             */
+            movePiece(fromRow, fromCol, toRow, toCol) {
+                const piece = this.getPiece(fromRow, fromCol);
+                if (!piece) return false;
+
+                // 目標地点に駒がある場合は取る（持ち駒にする）
+                const targetPiece = this.getPiece(toRow, toCol);
+                if (targetPiece) {
+                    // 成っている場合は元の駒に戻す
+                    const captured = createPiece(targetPiece.type, piece.owner, false);
+                    this.capturedPieces[piece.owner].push(captured);
+                }
+
+                // 移動処理
+                this.grid[toRow][toCol] = piece;
+                this.grid[fromRow][fromCol] = null;
+
+                return true;
+            }
+
+            /**
+             * 指定した持ち駒を打てるマスのリストを返す
+             */
+            getValidDrops(player, pieceType) {
+                const validDrops = [];
+
+                // 二歩チェック用に、既に自分の未成の歩がある列を洗い出す
+                const pawnCols = new Set();
+                if (pieceType.id === PIECE_TYPES.FU.id) {
+                    for (let row = 0; row < 9; row++) {
+                        for (let col = 0; col < 9; col++) {
+                            const p = this.grid[row][col];
+                            if (p && p.owner === player && p.type.id === PIECE_TYPES.FU.id && !p.isPromoted) {
+                                pawnCols.add(col);
+                            }
+                        }
+                    }
+                }
+
+                for (let row = 0; row < 9; row++) {
+                    for (let col = 0; col < 9; col++) {
+                        if (this.grid[row][col] === null) {
+                            // 二歩のチェック
+                            if (pieceType.id === PIECE_TYPES.FU.id && pawnCols.has(col)) {
+                                continue;
+                            }
+
+                            // 行き所のない駒のチェック
+                            if (player === PLAYER.SENTE) {
+                                if ((pieceType.id === PIECE_TYPES.FU.id || pieceType.id === PIECE_TYPES.KYOSHA.id) && row === 0) continue;
+                                if (pieceType.id === PIECE_TYPES.KEIMA.id && row <= 1) continue;
+                            } else {
+                                if ((pieceType.id === PIECE_TYPES.FU.id || pieceType.id === PIECE_TYPES.KYOSHA.id) && row === 8) continue;
+                                if (pieceType.id === PIECE_TYPES.KEIMA.id && row >= 7) continue;
+                            }
+
+                            // 自玉の王手放置チェック
+                            // 仮配置して確認
+                            this.grid[row][col] = createPiece(pieceType, player, false);
+                            const isSafe = !this.isCheck(player);
+                            this.grid[row][col] = null; // 元に戻す
+
+                            if (isSafe) {
+                                // 打ち歩詰めの禁止判定はここに追加予定（今回は簡易版のため割愛）
+                                validDrops.push({ row, col });
+                            }
+                        }
+                    }
+                }
+
+                return validDrops;
+            }
+
+            /**
+             * 持ち駒を盤の指定の位置に打つ
+             */
+            dropPiece(player, pieceType, toRow, toCol) {
+                if (!this.isValidPosition(toRow, toCol) || this.grid[toRow][toCol] !== null) {
+                    return false;
+                }
+
+                const hand = this.capturedPieces[player];
+                const pieceIndex = hand.findIndex(p => p.type.id === pieceType.id);
+
+                if (pieceIndex === -1) {
+                    return false; // 持ち駒にない
+                }
+
+                // 持ち駒から削除
+                const piece = hand.splice(pieceIndex, 1)[0];
+
+                // 盤に配置
+                this.grid[toRow][toCol] = piece;
+
+                return true;
+            }
+
+            /**
+             * パズルをロードする
+             */
+            loadPuzzle(puzzle) {
+                this.grid = Array(9).fill(null).map(() => Array(9).fill(null));
+                this.capturedPieces = { [PLAYER.SENTE]: [], [PLAYER.GOTE]: [] };
+
+                // 盤面上の駒を配置
+                puzzle.board.forEach(p => {
+                    const type = PIECE_TYPES[p.piece.toUpperCase()];
+                    if (type) {
+                        this.grid[p.row][p.col] = createPiece(type, p.owner);
+                    }
+                });
+
+                // 持ち駒を配置
+                if (puzzle.hand) {
+                    for (const playerKey in puzzle.hand) {
+                        const player = parseInt(playerKey);
+                        puzzle.hand[playerKey].forEach(pieceId => {
+                            const type = PIECE_TYPES[pieceId.toUpperCase()];
+                            if (type) {
+                                this.capturedPieces[player].push(createPiece(type, player));
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+
+        // --- main.js ---
+        let gameBoard;
+        let selectedPieceCell = null;
+        let selectedCapturedPiece = null;
+        let lastMovedCell = null;
+        let currentPlayer = PLAYER.SENTE;
+        let isPuzzleMode = false;
+        let currentPuzzle = null;
+        let currentPuzzleStep = 0;
+        let hasViewedHint = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初期状態はホーム画面なのでクラスを付与
+            document.body.classList.add('on-home-screen');
+
+            // 盤面データを初期化
+            gameBoard = new Board();
+            gameBoard.setupInitialPosition();
+
+            // DOMへ描画
+            renderBoard();
+
+            // イベントリスナーの登録
+            document.getElementById('btn-start').addEventListener('click', () => {
+                isPuzzleMode = false;
+                currentPuzzle = null;
+                document.getElementById('game-title').textContent = "通常対局";
+
+                // ヒントボタンを隠す
+                const btnHint = document.getElementById('btn-show-hint');
+                if (btnHint) btnHint.classList.add('hidden');
+
+                initGame();
+                showScreen('game-screen');
+            });
+
+            const btnPuzzleMenu = document.getElementById('btn-puzzle-menu');
+            if (btnPuzzleMenu) {
+                btnPuzzleMenu.addEventListener('click', () => {
+                    showScreen('puzzle-difficulty-screen');
+                });
+            }
+
+            const btnDiff1 = document.getElementById('btn-diff-1');
+            if (btnDiff1) {
+                btnDiff1.addEventListener('click', () => {
+                    selectedDifficulty = 1;
+                    renderPuzzleList();
+                    showScreen('puzzle-select-screen');
+                });
+            }
+
+            const btnDiff3 = document.getElementById('btn-diff-3');
+            if (btnDiff3) {
+                btnDiff3.addEventListener('click', () => {
+                    selectedDifficulty = 3;
+                    renderPuzzleList();
+                    showScreen('puzzle-select-screen');
+                });
+            }
+
+            const btnBackToHomeFromDiff = document.getElementById('btn-back-to-home-from-diff');
+            if (btnBackToHomeFromDiff) {
+                btnBackToHomeFromDiff.addEventListener('click', () => {
+                    showScreen('home-screen');
+                });
+            }
+
+            // 解答解説を見るボタン
+            const btnShowHint = document.getElementById('btn-show-hint');
+            if (btnShowHint) {
+                btnShowHint.addEventListener('click', () => {
+                    if (isPuzzleMode && currentPuzzle) {
+                        hasViewedHint = true; // 解答を見たフラグだけ立てる（以降正解してもクリア扱いにならない）
+                        const explText = currentPuzzle.explanation ? currentPuzzle.explanation : "";
+                        showCatSpeech('success', explText);
+                    }
+                });
+            }
+
+            const btnBackToHome = document.getElementById('btn-back-to-home');
+            if (btnBackToHome) {
+                btnBackToHome.addEventListener('click', () => {
+                    showScreen('puzzle-difficulty-screen');
+                });
+            }
+
+            const btnBackToMenu = document.getElementById('btn-back-to-menu');
+            if (btnBackToMenu) {
+                btnBackToMenu.addEventListener('click', () => {
+                    if (isPuzzleMode) {
+                        renderPuzzleList(); // リストを再描画してクリア状況を反映
+                        showScreen('puzzle-select-screen');
+                    } else {
+                        showScreen('home-screen');
+                    }
+                });
+            }
+
+            // モーダル閉じるボタン
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            if (btnCloseModal) {
+                btnCloseModal.addEventListener('click', () => {
+                    document.getElementById('result-modal').classList.add('hidden');
+                });
+            }
+
+            // 初期状態はホーム画面を表示
+            showScreen('home-screen');
+        });
+
+        // --- セーブ機能 (localStorage) ---
+        const SAVE_KEY = 'tsumesyogi_cleared_puzzles';
+
+        function getClearedPuzzles() {
+            try {
+                const data = localStorage.getItem(SAVE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error("セーブデータの読み込みに失敗しました", e);
+                return [];
+            }
+        }
+
+        function saveClearedPuzzle(puzzleId) {
+            const cleared = getClearedPuzzles();
+            if (!cleared.includes(puzzleId)) {
+                cleared.push(puzzleId);
+                try {
+                    localStorage.setItem(SAVE_KEY, JSON.stringify(cleared));
+                } catch (e) {
+                    console.error("セーブデータの書き込みに失敗しました", e);
+                }
+            }
+        }
+
+        /**
+         * 結果モーダルを表示する
+         */
+        function showResultModal(message, buttonsData, explanation = "") {
+            const modal = document.getElementById('result-modal');
+            const messageEl = document.getElementById('result-message');
+            const explanationEl = document.getElementById('result-explanation');
+            const buttonsContainer = document.getElementById('modal-buttons');
+
+            messageEl.textContent = message;
+
+            if (explanationEl) {
+                if (explanation) {
+                    explanationEl.innerHTML = explanation;
+                    explanationEl.classList.remove('hidden');
+                } else {
+                    explanationEl.classList.add('hidden');
+                }
+            }
+
+            modal.classList.remove('hidden');
+
+            buttonsContainer.innerHTML = '';
+
+            // ボタンの指定がなければデフォルトの閉じるボタンを作成せず、5秒後に自動消去
+            if (!buttonsData || !Array.isArray(buttonsData) || buttonsData.length === 0) {
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 5000);
+            } else {
+                buttonsData.forEach(btnInfo => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    if (btnInfo.className) {
+                        btn.classList.add(btnInfo.className);
+                    }
+                    btn.textContent = btnInfo.text;
+
+                    btn.addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                        if (btnInfo.onClick) {
+                            btnInfo.onClick();
+                        }
+                    });
+                    buttonsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        const CAT_SUCCESS_MESSAGES = [
+            "ニャイス！完璧な寄せだニャ！",
+            "お見事ニャ！玉も逃げ場なしニャ。",
+            "その一手、鋭すぎるニャ〜！",
+            "天才棋士現る！？ニャンとも素晴らしい読みニャ！",
+            "詰みニャ！ボクの計算通り（？）だニャ！",
+            "気持ちいいニャ！パズルが解けた瞬間の快感ニャ。",
+            "正解ニャ！これでまた一歩、名人への道が近づいたニャ。",
+            "読みが深いニャ〜。感服したニャ！",
+            "ニャンだこの一手は！カッコよすぎるニャ！",
+            "大正解ニャ！次もこの調子でガンガンいくニャ！"
+        ];
+
+        const CAT_FAILURE_MESSAGES = [
+            "惜しいニャ！もう一回考えてみるニャ。",
+            "ニャ！？そこは王様が逃げちゃうニャ。",
+            "失敗も経験のうちニャ。次はきっといけるニャ！",
+            "うーん、別の手がある気がするニャ...。",
+            "ニャンてこった！でも諦めたらそこで終わりだニャ。",
+            "落ち着いて盤面を見るニャ。ヒントは隠れてるニャ！",
+            "王手はかかってるけど、詰みには届かないニャ〜。",
+            "ニャハハ、今のなし！もう一回チャレンジニャ！",
+            "難しい問題だけど、キミなら解けるはずだニャ！",
+            "その手も面白いけど、正解はもっとド派手だニャ！"
+        ];
+
+        let speechBubbleTimeout = null;
+
+        /**
+         * キャラクターの吹き出しを表示する
+         */
+        function showCatSpeech(type, explanation = "") {
+            const bubble = document.getElementById('cat-speech-bubble');
+            if (!bubble) return;
+
+            const messages = type === 'success' ? CAT_SUCCESS_MESSAGES : CAT_FAILURE_MESSAGES;
+            const randomPraise = messages[Math.floor(Math.random() * messages.length)];
+
+            // 正解時はランダム褒め言葉＋問題ごとの解説をつなげる
+            let text = randomPraise;
+            if (type === 'success' && explanation) {
+                text += "<br><br>" + explanation; // 吹き出し内で改行して解説を追加
+            }
+
+            bubble.innerHTML = text; // DOMとして挿入
+            bubble.classList.remove('hidden', 'fade-out');
+            bubble.classList.add('pop-in');
+
+            if (speechBubbleTimeout) clearTimeout(speechBubbleTimeout);
+
+            // 失敗時は5秒で消す、正解時（解説あり）はずっと表示したままにする
+            if (type !== 'success') {
+                speechBubbleTimeout = setTimeout(() => {
+                    bubble.classList.remove('pop-in');
+                    bubble.classList.add('fade-out');
+                    setTimeout(() => {
+                        bubble.classList.add('hidden');
+                    }, 500);
+                }, 5000);
+            }
+        }
+
+        /**
+         * 画面の切り替えを行う
+         */
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+
+            const bubble = document.getElementById('cat-speech-bubble');
+            if (bubble) {
+                bubble.classList.add('hidden');
+                bubble.classList.remove('pop-in', 'fade-out');
+                if (speechBubbleTimeout) clearTimeout(speechBubbleTimeout);
+            }
+
+            // タイトル画面の時は背面コンテナを透明化して画像を見せるため
+            document.body.classList.remove('on-home-screen', 'on-normal-match');
+            if (screenId === 'home-screen') {
+                document.body.classList.add('on-home-screen');
+            } else if (screenId === 'game-screen' && !isPuzzleMode) {
+                document.body.classList.add('on-normal-match');
+            }
+        }
+
+        /**
+         * 詰将棋のリストを描画する
+         */
+        function renderPuzzleList() {
+            const listContainer = document.getElementById('puzzle-list');
+            listContainer.innerHTML = '';
+
+            const clearedPuzzles = getClearedPuzzles();
+
+            const puzzlesToRender = selectedDifficulty === 3 ? PUZZLES_3 : PUZZLES_1;
+
+            puzzlesToRender.forEach(puzzle => {
+                const btn = document.createElement('button');
+                btn.classList.add('puzzle-btn');
+
+                const isCleared = clearedPuzzles.includes(puzzle.id);
+                const clearBadge = isCleared ? `<span class="clear-badge">★ クリア！</span>` : "";
+
+                // titleプロパティはヒント抜きの「問題 n」が入るように設定済み
+                btn.innerHTML = `<strong>${puzzle.title}</strong><br><small>${puzzle.movesToMate}手詰め</small>${clearBadge}`;
+
+                btn.addEventListener('click', () => {
+                    isPuzzleMode = true;
+                    currentPuzzle = puzzle;
+                    currentPuzzleStep = 0; // 3手詰め用のステップ初期化
+                    document.getElementById('game-title').textContent = puzzle.title; // ヘッダーもヒント抜き
+
+                    // パズルモード時はヒントボタンを表示
+                    const btnHint = document.getElementById('btn-show-hint');
+                    if (btnHint) btnHint.classList.remove('hidden');
+
+                    initPuzzle(puzzle);
+                    showScreen('game-screen');
+                });
+
+                listContainer.appendChild(btn);
+            });
+        }
+
+        /**
+         * 将棋盤のDOM要素を現在のgameBoardの状態で再描画する関数
+         */
+        function renderBoard() {
+            const boardElement = document.getElementById('shogi-board');
+            if (!boardElement) return;
+            boardElement.innerHTML = '';
+
+            // 9x9の盤面を描画 (右から1筋〜9筋とするため、colは8から0へ減らす方向で描画)
+            for (let row = 0; row < 9; row++) {
+                for (let col = 8; col >= 0; col--) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+
+                    // セルクリック時のイベントを追加
+                    cell.addEventListener('click', () => handleCellClick(row, col));
+
+                    const piece = gameBoard.getPiece(row, col);
+                    if (piece) {
+                        // 駒の形を作るための内部要素を作成
+                        const pieceShape = document.createElement('div');
+                        pieceShape.classList.add('piece-shape');
+
+                        const pieceText = document.createElement('span');
+                        pieceText.textContent = piece.displayName;
+                        pieceShape.appendChild(pieceText);
+
+                        // 持ち主によるスタイリング（後手は文字をひっくり返すなど）を追加
+                        if (piece.owner === PLAYER.GOTE) {
+                            pieceShape.classList.add('gote-piece');
+                        } else {
+                            pieceShape.classList.add('sente-piece');
+                        }
+
+                        cell.appendChild(pieceShape);
+                    }
+
+                    // 選択中のセルや移動可能範囲のハイライトを復元
+                    if (selectedPieceCell && selectedPieceCell.row === row && selectedPieceCell.col === col) {
+                        cell.classList.add('selected');
+                    }
+
+                    // 最後に動かした駒のハイライト
+                    if (lastMovedCell && lastMovedCell.row === row && lastMovedCell.col === col) {
+                        cell.classList.add('last-moved');
+                    }
+
+                    boardElement.appendChild(cell);
+                }
+            }
+
+            // 駒台の描画
+            renderHand(PLAYER.SENTE, 'player-hand');
+            renderHand(PLAYER.GOTE, 'opponent-hand');
+        }
+
+        function renderHand(player, elementId) {
+            const container = document.querySelector(`#${elementId} .pieces-container`);
+            container.innerHTML = '';
+
+            const hand = gameBoard.capturedPieces[player];
+            if (!hand || hand.length === 0) return;
+
+            // 駒の種類ごとにまとめる
+            const counts = {};
+            const piecesByType = {};
+            hand.forEach(p => {
+                if (!counts[p.type.id]) {
+                    counts[p.type.id] = 0;
+                    piecesByType[p.type.id] = p;
+                }
+                counts[p.type.id]++;
+            });
+
+            for (const typeId in counts) {
+                const p = piecesByType[typeId];
+
+                const wrapperEl = document.createElement('div');
+                wrapperEl.classList.add('hand-piece-wrapper');
+
+                const pieceEl = document.createElement('div');
+                pieceEl.classList.add('hand-piece');
+                pieceEl.textContent = p.displayName;
+
+                const countEl = document.createElement('span');
+                countEl.classList.add('piece-count');
+                countEl.textContent = `x${counts[typeId]}`;
+
+                // 後手の持ち駒は文字を反転させる
+                if (player === PLAYER.GOTE) {
+                    pieceEl.classList.add('gote-piece');
+                }
+
+                // 選択された持ち駒のハイライト復元
+                if (selectedCapturedPiece && selectedCapturedPiece.player === player && selectedCapturedPiece.pieceType.id === p.type.id) {
+                    pieceEl.classList.add('selected');
+                }
+
+                wrapperEl.appendChild(pieceEl);
+                wrapperEl.appendChild(countEl);
+                wrapperEl.addEventListener('click', () => handleHandPieceClick(player, p.type));
+
+                container.appendChild(wrapperEl);
+            }
+        }
+
+        function initGame() {
+            gameBoard.setupInitialPosition();
+            currentPlayer = PLAYER.SENTE;
+            lastMovedCell = null;
+            clearSelection();
+            renderBoard();
+        }
+
+        /**
+         * 詰将棋を初期化する
+         */
+        function initPuzzle(puzzle) {
+            gameBoard.loadPuzzle(puzzle);
+            currentPlayer = PLAYER.SENTE;
+            lastMovedCell = null;
+            hasViewedHint = false;
+            clearSelection();
+            renderBoard();
+        }
+
+        /**
+         * 持ち駒がクリックされたときの処理
+         */
+        function handleHandPieceClick(player, pieceType) {
+            if (player !== currentPlayer) return; // 相手の手番の持ち駒は選べない
+
+            clearSelection();
+            selectedCapturedPiece = { player, pieceType };
+
+            renderBoard();
+
+            // 盤面の打てる場所をハイライト
+            const validDrops = gameBoard.getValidDrops(player, pieceType);
+            validDrops.forEach(m => {
+                const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
+                if (moveElement) {
+                    moveElement.classList.add('valid-move');
+                }
+            });
+        }
+
+        /**
+         * 盤面のマスがクリックされたときの処理
+         */
+        function handleCellClick(row, col) {
+
+            // 持ち駒が選択されている場合 -> 打つ
+            if (selectedCapturedPiece) {
+                const { player, pieceType } = selectedCapturedPiece;
+
+                const validDrops = gameBoard.getValidDrops(player, pieceType);
+                const isValidDrop = validDrops.some(m => m.row === row && m.col === col);
+
+                if (isValidDrop) {
+                    gameBoard.dropPiece(player, pieceType, row, col);
+
+                    lastMovedCell = { row, col };
+                    clearSelection();
+
+                    // 詰将棋モードの判定を差し込む
+                    if (isPuzzleMode && player === PLAYER.SENTE) {
+                        const puzzleResult = checkPuzzleCondition(row, col, pieceType, true);
+                        if (!puzzleResult) {
+                            return; // 失敗してリセットされる場合はここで打ち切り
+                        } else if (puzzleResult === 'continue') {
+                            // 3手詰めの途中（CPUの手番へ）
+                        } else {
+                            // クリア
+                        }
+                    }
+
+                    // ターンの交代
+                    currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+
+                    if (!isPuzzleMode && gameBoard.isCheck(currentPlayer) && !checkPlayerHasEscapeMove(currentPlayer)) {
+                        const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                        setTimeout(() => alert(`詰みです！ ${winner}の勝ち！`), 300);
+                    }
+
+                    renderBoard();
+                    return;
+                } else {
+                    // 打てない場所がクリックされた場合は選択を解除し、マスの駒を選択し直すか判定
+                    clearSelection();
+                    const clickedPiece = gameBoard.getPiece(row, col);
+                    if (clickedPiece && clickedPiece.owner === currentPlayer) {
+                        selectPiece(row, col);
+                    }
+                    return;
+                }
+            }
+
+            // 既に盤面の駒が選択されている場合 -> 移動もしくは選択解除
+            if (selectedPieceCell) {
+                const { row: selRow, col: selCol } = selectedPieceCell;
+
+                // 同じマスをクリックした場合は選択解除
+                if (selRow === row && selCol === col) {
+                    clearSelection();
+                    return;
+                }
+
+                // 移動できるかどうかの判定
+                const validMoves = gameBoard.getValidMoves(selRow, selCol);
+                const isValidMove = validMoves.some(m => m.row === row && m.col === col);
+
+                if (isValidMove) {
+                    const movingPiece = gameBoard.getPiece(selRow, selCol);
+                    let promote = false;
+
+                    // 成りの判定 (相手陣地に入った、または相手陣地から出た)
+                    if (movingPiece.type.canPromote && !movingPiece.isPromoted) {
+                        const isEnterSenteEnemyZone = currentPlayer === PLAYER.SENTE && (row <= 2 || selRow <= 2);
+                        const isEnterGoteEnemyZone = currentPlayer === PLAYER.GOTE && (row >= 6 || selRow >= 6);
+
+                        if (isEnterSenteEnemyZone || isEnterGoteEnemyZone) {
+                            // 強制成りの判定（歩、香車の1段目、桂馬の1,2段目）
+                            let mustPromote = false;
+                            if (currentPlayer === PLAYER.SENTE) {
+                                if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 0) mustPromote = true;
+                                if (movingPiece.type.id === 'keima' && row <= 1) mustPromote = true;
+                            } else {
+                                if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 8) mustPromote = true;
+                                if (movingPiece.type.id === 'keima' && row >= 7) mustPromote = true;
+                            }
+
+                            if (mustPromote) {
+                                promote = true;
+                            } else {
+                                promote = confirm("成りますか？");
+                            }
+                        }
+                    }
+
+                    // 移動処理
+                    gameBoard.movePiece(selRow, selCol, row, col);
+
+                    // 成りを適用
+                    if (promote) {
+                        const movedPiece = gameBoard.getPiece(row, col);
+                        movedPiece.isPromoted = true;
+                    }
+
+                    lastMovedCell = { row, col };
+                    clearSelection();
+
+                    // 詰将棋モードの判定を差し込む
+                    if (isPuzzleMode && currentPlayer === PLAYER.SENTE) { // 移動前はcurrentPlayer
+                        const puzzleResult = checkPuzzleCondition(row, col, gameBoard.getPiece(row, col).type, false, selRow, selCol);
+                        if (!puzzleResult) {
+                            return;
+                        } else if (puzzleResult === 'continue') {
+                            // 3手詰めの途中
+                        } else {
+                            // クリア
+                        }
+                    }
+
+                    // ターンの交代
+                    currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+
+                    if (!isPuzzleMode && gameBoard.isCheck(currentPlayer) && !checkPlayerHasEscapeMove(currentPlayer)) {
+                        const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                        showCatSpeech('success');
+                        setTimeout(() => showResultModal(`詰みです！\n${winner}の勝ち！`, [
+                            { text: 'メニューに戻る', onClick: () => showScreen('home-screen'), className: 'primary-btn' }
+                        ]), 300);
+                    }
+
+                    renderBoard();
+                } else {
+                    // 移動できないマスがクリックされたが、それが自分の別の駒なら選択し直す
+                    const clickedPiece = gameBoard.getPiece(row, col);
+                    if (clickedPiece && clickedPiece.owner === currentPlayer) {
+                        selectPiece(row, col);
+                    } else {
+                        clearSelection();
+                    }
+                }
+            }
+            // 駒が選択されていない場合 -> 自分の駒なら選択
+            else {
+                const piece = gameBoard.getPiece(row, col);
+                if (piece && piece.owner === currentPlayer) {
+                    selectPiece(row, col);
+                }
+            }
+        }
+
+        /**
+         * 駒を選択状態にする
+         */
+        function selectPiece(row, col) {
+            clearSelection(); // 一旦既存の選択をクリア
+            selectedPieceCell = { row, col };
+
+            // 選択されたセルにハイライトを付与
+            const selectedElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
+            }
+
+            // 移動可能範囲をハイライト
+            const validMoves = gameBoard.getValidMoves(row, col);
+            validMoves.forEach(m => {
+                const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
+                if (moveElement) {
+                    moveElement.classList.add('valid-move');
+                }
+            });
+        }
+
+        /**
+         * 選択状態を解除する
+         */
+        /**
+         * 詰将棋のクリア・失敗判定（先手の手番終了直後に呼ばれる）
+         * Returns: true (クリア), false (失敗), 'continue' (3手詰めの途中)
+         */
+        function checkPuzzleCondition(toRow = -1, toCol = -1, pieceType = null, isDrop = false, fromRow = -1, fromCol = -1) {
+            // 3手詰めなど、手順が指定されている場合
+            if (currentPuzzle.expectedMoves) {
+                const expected = currentPuzzle.expectedMoves[currentPuzzleStep];
+                let isCorrectMove = false;
+
+                if (expected.isDrop === isDrop && expected.toRow === toRow && expected.toCol === toCol) {
+                    if (isDrop && expected.piece === pieceType.id) {
+                        isCorrectMove = true;
+                    } else if (!isDrop && expected.fromRow === fromRow && expected.fromCol === fromCol) {
+                        isCorrectMove = true;
+                    }
+                }
+
+                if (!isCorrectMove) {
+                    setTimeout(() => {
+                        showCatSpeech('failure');
+                        showResultModal("不正解！\n手順が違います。", [
+                            { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                        ]);
+                    }, 500);
+                    return false;
+                }
+
+                // 正解の手だった場合
+                if (currentPuzzleStep === 0) {
+                    // 1手目成功 -> CPUの応答手(2手目)を自動で指す
+                    currentPuzzleStep++;
+                    setTimeout(() => {
+                        const cpuMove = currentPuzzle.expectedMoves[currentPuzzleStep];
+                        if (cpuMove.isDrop) {
+                            // 持ち駒がないなどの特殊ケースは今回は省く（事前に正しく設定されている前提）
+                        } else {
+                            gameBoard.movePiece(cpuMove.fromRow, cpuMove.fromCol, cpuMove.toRow, cpuMove.toCol);
+                        }
+
+                        // 効果音等ならここで再生
+                        renderBoard();
+                        currentPuzzleStep++; // 次はプレイヤーの最終手(3手目)
+                        currentPlayer = PLAYER.SENTE; // 手番をプレイヤーに戻す
+                    }, 800);
+                    return 'continue';
+
+                } else if (currentPuzzleStep === 2) {
+                    // 3手目成功 -> 最終的なクリア処理へ
+                    return handlePuzzleClear();
+                }
+            }
+
+            // --- 従来の一手詰め処理 ---
+            if (currentPuzzle.isShapePuzzle) {
+                const sol = currentPuzzle.solution;
+                const p = gameBoard.getPiece(sol.row, sol.col);
+                if (p && p.type.id === sol.piece && p.owner === PLAYER.SENTE) {
+                    return handlePuzzleClear();
+                } else {
+                    setTimeout(() => {
+                        showCatSpeech('failure');
+                        showResultModal("不正解！", [
+                            { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                        ]);
+                    }, 500);
+                    return false;
+                }
+            }
+
+            // 1. 王手がかかっているか？
+            if (!gameBoard.isCheck(PLAYER.GOTE)) {
+                setTimeout(() => {
+                    showCatSpeech('failure');
+                    showResultModal("失敗！\n王手をかけてください。", [
+                        { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                    ]);
+                }, 300);
+                return false;
+            }
+
+            // 2. 玉方に合法手があるか？
+            const hasValidEscapeMove = checkPlayerHasEscapeMove(PLAYER.GOTE);
+
+            if (!hasValidEscapeMove) {
+                return handlePuzzleClear();
+            }
+
+            // 回避可能なら失敗
+            setTimeout(() => {
+                showCatSpeech('failure');
+                showResultModal("玉に逃げ道があります\nやり直し", [
+                    { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                ]);
+            }, 500);
+            return false;
+        }
+
+        function handlePuzzleClear() {
+            if (isPuzzleMode && currentPuzzle && !hasViewedHint) {
+                saveClearedPuzzle(currentPuzzle.id);
+            }
+
+            setTimeout(() => {
+                const explText = currentPuzzle && currentPuzzle.explanation ? currentPuzzle.explanation : "";
+                showCatSpeech('success', explText);
+
+                if (isPuzzleMode) {
+                    if (!hasViewedHint) {
+                        showResultModal("大正解！");
+                    }
+                    // 自動で一覧へ戻るタイマーを削除し、プレイヤーが自発的に「メニューに戻る」を押すまで待機する
+                } else {
+                    const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                    showResultModal(`詰みです！\n${winner}の勝ち！`, [
+                        { text: 'メニューに戻る', onClick: () => showScreen('home-screen'), className: 'primary-btn' }
+                    ]);
+                }
+            }, 300);
+            return true;
+        }
+
+        /**
+         * プレイヤー側の王を探し、王手を外す合法手が存在するかどうかを調べる
+         */
+        function checkPlayerHasEscapeMove(player) {
+            // 盤上の駒の移動による回避
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    const p = gameBoard.grid[r][c];
+                    if (p && p.owner === player) {
+                        const validMoves = gameBoard.getValidMoves(r, c);
+                        if (validMoves.length > 0) {
+                            return true; // 1つでも王手放置にならない手があれば回避可能
+                        }
+                    }
+                }
+            }
+
+            // 持ち駒を打つこと（合駒）による回避
+            const hand = gameBoard.capturedPieces[player];
+            if (hand.length > 0) {
+                // 全ての空きマスに対して、持ち駒を打つ合法手があるか確認
+                for (let i = 0; i < hand.length; i++) {
+                    const pieceType = hand[i].type;
+                    const validDrops = gameBoard.getValidDrops(player, pieceType);
+                    if (validDrops.length > 0) {
+                        return true; // 1つでも打てるマス（合駒で王手を防げるマス）があれば回避可能
+                    }
+                }
+            }
+
+            // 何も手がなければ詰み
+            return false;
+        }
+
+        function clearSelection() {
+            selectedPieceCell = null;
+            selectedCapturedPiece = null;
+            document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.cell.valid-move').forEach(el => el.classList.remove('valid-move'));
+            // 持ち駒の選択状態も解除
+            document.querySelectorAll('.hand-piece.selected').forEach(el => el.classList.remove('selected'));
+        }
+
+    </script>
+
+    <!-- 結果表示用モーダル（小さめのバナー） -->
+    <div id="result-modal" class="modal hidden">
+        <div class="modal-content small-banner">
+            <h2 id="result-message" class="result-text puzzle-banner-text">詰みです！</h2>
+            <p id="result-explanation" class="result-explanation hidden"></p>
+            <div id="modal-buttons" style="display:flex; gap:10px; justify-content:center;">
+                <!-- JSで動的に追加されます（正解時は追加されない） -->
+            </div>
+        </div>
+    </div>
+
+    <!-- キャラクター吹き出し用 -->
+    <div id="cat-speech-bubble" class="speech-bubble hidden"></div>
+</body>
+
+</html>

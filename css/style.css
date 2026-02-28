@@ -27,7 +27,7 @@
 body {
     background-color: var(--bg-color);
     /* デフォルトの背景画像（PC用、タイトル以外の画面） */
-    background-image: url('../img/ねこ将棋パソコン用背景_20260228.png');
+    background-image: url('../img/background_computer.jpg');
     background-size: cover;
     background-position: center bottom;
     background-attachment: fixed;
@@ -57,7 +57,7 @@ body {
 
 /* ホーム画面専用のスタイル：背景画像をなるべく隠さないように透明にする */
 body.on-home-screen {
-    background-image: url('../img/ねこ将棋パソコン用タイトル20260228.png');
+    background-image: url('../img/title_computer.jpg');
 }
 
 body.on-home-screen #game-container {
@@ -740,13 +740,13 @@ header p {
 @media screen and (max-width: 768px) {
     body {
         /* スマホ向けに背景画像と表示位置を少し調整（タイトル以外のデフォルト） */
-        background-image: url('../img/background_image_smartphone.jpg');
+        background-image: url('../img/background_smartphone.jpg');
         background-position: center center;
     }
 
     body.on-home-screen {
         /* スマホ向けホーム画面背景 */
-        background-image: url('../img/title_image_smarthone.jpg');
+        background-image: url('../img/title_smartphone.jpg');
     }
 
     header {

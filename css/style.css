@@ -115,6 +115,11 @@ body.on-puzzle-match #opponent-hand {
     display: none !important;
 }
 
+/* 通常対局モードでは解説エリアを非表示にする（スペースも消す） */
+body.on-normal-match #puzzle-explanation-area {
+    display: none !important;
+}
+
 body.on-normal-match .col-coords,
 body.on-normal-match .row-coords,
 body.on-puzzle-match .col-coords,

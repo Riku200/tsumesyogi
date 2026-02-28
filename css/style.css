@@ -26,8 +26,8 @@
 
 body {
     background-color: var(--bg-color);
-    /* 画面全体に画像を敷き詰める */
-    background-image: url('../img/world-bg.jpg');
+    /* デフォルトの背景画像（PC用、タイトル以外の画面） */
+    background-image: url('../img/ねこ将棋パソコン用背景_20260228.png');
     background-size: cover;
     background-position: center bottom;
     background-attachment: fixed;
@@ -57,7 +57,7 @@ body {
 
 /* ホーム画面専用のスタイル：背景画像をなるべく隠さないように透明にする */
 body.on-home-screen {
-    background-image: url('../img/title-bg.png');
+    background-image: url('../img/ねこ将棋パソコン用タイトル20260228.png');
 }
 
 body.on-home-screen #game-container {
@@ -70,41 +70,50 @@ body.on-home-screen #game-container {
     padding-bottom: 50px;
 }
 
-/* 通常対局専用のスタイル：街並み背景と同化させる */
-body.on-normal-match {
-    background-image: url('../img/normal-match-bg.png');
-}
-
-body.on-normal-match #game-container {
+/* 通常対局・詰将棋プレイ専用のスタイル：街並み背景と同化させる */
+body.on-normal-match #game-container,
+body.on-puzzle-match #game-container {
     background: transparent;
     border: none;
     box-shadow: none;
     backdrop-filter: none;
 }
 
-body.on-normal-match header {
+body.on-normal-match header,
+body.on-puzzle-match header {
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(3px);
 }
 
-body.on-normal-match .piece-stand {
+body.on-normal-match .piece-stand,
+body.on-puzzle-match .piece-stand {
     background: rgba(232, 208, 179, 0.85);
     /* slightly transparent wood */
     backdrop-filter: blur(3px);
 }
 
-body.on-normal-match #shogi-board {
+body.on-normal-match #shogi-board,
+body.on-puzzle-match #shogi-board {
     background-color: rgba(224, 172, 105, 0.95);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
 }
 
-body.on-normal-match .side-character-img {
+/* メニュー画面(難易度・問題選択)でも背景を透けさせる */
+body.on-puzzle-menu #game-container {
+    background: rgba(250, 245, 240, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+body.on-normal-match .side-character-img,
+body.on-puzzle-match .side-character-img {
     display: none !important;
 }
 
 body.on-normal-match .col-coords,
-body.on-normal-match .row-coords {
+body.on-normal-match .row-coords,
+body.on-puzzle-match .col-coords,
+body.on-puzzle-match .row-coords {
     color: #fff;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9), -1px -1px 4px rgba(0, 0, 0, 0.9);
 }
@@ -730,8 +739,14 @@ header p {
 ----------------------- */
 @media screen and (max-width: 768px) {
     body {
-        /* スマホ向けに背景の表示位置を少し調整 */
+        /* スマホ向けに背景画像と表示位置を少し調整（タイトル以外のデフォルト） */
+        background-image: url('../img/ねこ将棋スマホ用背景20260228.png');
         background-position: center center;
+    }
+
+    body.on-home-screen {
+        /* スマホ向けホーム画面背景 */
+        background-image: url('../img/ねこ将棋スマホ用イラスト.png');
     }
 
     header {
@@ -813,19 +828,22 @@ header p {
         /* 中央寄せに戻す（スマホは漢数字を下に配置するか、サイズを小さくする） */
     }
 
-    /* マス目のサイズをスマホ幅から計算 (padding考慮して約10vw) */
+    /* マス目のサイズをスマホ幅から計算 */
     #shogi-board {
-        grid-template-columns: repeat(9, 10vw);
-        grid-template-rows: repeat(9, 10vw);
-        max-width: 90vw;
-        max-height: 90vw;
+        width: 88vw;
+        height: 88vw;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+        max-width: none;
+        max-height: none;
         border-width: 3px;
+        padding: 2px;
     }
 
     .cell {
         width: 100%;
         height: 100%;
-        font-size: clamp(1rem, 4vw, 1.5rem);
+        font-size: clamp(0.8rem, 3.5vw, 1.2rem);
     }
 
     .piece-shape {
@@ -835,25 +853,38 @@ header p {
 
     /* 座標の表示調整 */
     .col-coords {
-        width: 90vw;
+        width: 88vw;
         padding-right: 0;
-        padding-left: 20px;
-        /* row-coordsの分をずらす */
+        padding-left: 0;
+        margin-right: 25px;
+        /* row-coords分をボードに合わせて右に寄せる */
+        display: flex;
     }
 
     .col-coords span {
-        width: 10vw;
+        flex: 1;
+        /* 1frで等分 */
+        width: auto;
         font-size: 0.8rem;
+        text-align: center;
     }
 
     .row-coords {
-        height: 90vw;
+        height: 88vw;
+        width: 20px;
         margin-left: 5px;
+        display: flex;
+        flex-direction: column;
     }
 
     .row-coords span {
-        height: 10vw;
+        flex: 1;
+        /* 1frで等分 */
+        height: auto;
         font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /* ボタン類の縮小 */

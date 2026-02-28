@@ -1367,7 +1367,16 @@
                 const explText = currentPuzzle && currentPuzzle.explanation ? currentPuzzle.explanation : "";
 
                 if (isPuzzleMode) {
-                    // 大正解ポップアップは出さず、解説エリアを表示
+                    if (!hasViewedHint) {
+                        // 3秒間大正解ポップアップを表示
+                        const successPopup = document.getElementById('success-popup');
+                        successPopup.classList.add('show');
+                        setTimeout(() => {
+                            successPopup.classList.remove('show');
+                        }, 3000);
+                    }
+
+                    // 解説エリアを表示
                     document.getElementById('puzzle-explanation-text').innerHTML = explText;
                     document.getElementById('puzzle-explanation-area').classList.add('is-visible');
                     // 自動で一覧へ戻るタイマーを削除し、プレイヤーが自発的に「メニューに戻る」を押すまで待機する
@@ -1435,6 +1444,11 @@
                 <!-- JSで動的に追加されます（正解時は追加されない） -->
             </div>
         </div>
+    </div>
+
+    <!-- 詰将棋正解時の3秒ポップアップ -->
+    <div id="success-popup" class="success-popup">
+        <h2>大正解！</h2>
     </div>
 
 </body>

@@ -756,11 +756,11 @@ header p {
 
     #puzzle-explanation-area {
         width: 100%;
-        height: 160px;
+        height: 200px;
         /* あらかじめ解答解説分の空白として高さを広く確保 */
         order: 2;
         /* スマホでは盤面の下に配置 */
-        margin-top: 5px;
+        margin-top: 2px;
         /* 上の間隔を詰める */
         padding: 10px;
         /* 内側の余白を減らして文字量を確保 */
@@ -775,7 +775,7 @@ header p {
     #main-area {
         /* 横並びから縦並びに変更（相手の駒台 -> 盤面 -> 自分の駒台） */
         flex-direction: column;
-        gap: 5px;
+        gap: 3px;
         /* スペース節約のため間隔を詰める */
         width: 100%;
         order: 1;
@@ -786,13 +786,13 @@ header p {
         width: 90vw;
         max-width: none;
         height: auto;
-        min-height: 50px;
+        min-height: 30px;
         /* 持駒の欄を極力細くする */
         padding: 3px 8px;
         /* 横長のレイアウトに変更 */
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 3px;
         border-width: 2px;
     }
 

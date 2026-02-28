@@ -763,6 +763,8 @@ header p {
 
     #game-container {
         padding: 15px;
+        padding-bottom: 100px;
+        /* スマホブラウザの下部メニュー・検索バーを避けるための十分な余白 */
         width: 100%;
         max-width: 100vw;
         border-radius: 10px;
@@ -771,7 +773,8 @@ header p {
 
     /* タイトル画面のボタン位置調整 */
     body.on-home-screen #game-container {
-        padding-bottom: 20px;
+        padding-bottom: 100px;
+        /* タイトル画面でも下部に余白を設ける */
     }
 
     #main-area {

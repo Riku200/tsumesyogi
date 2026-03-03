@@ -769,78 +769,78 @@ header p {
     #game-layout-wrapper {
         flex-direction: column;
         align-items: center;
-        gap: 8px;
-        /* スペース節約のため間隔を詰める */
+        gap: 4px;
+        /* ここを小さく */
     }
 
     #puzzle-explanation-area {
         width: 100%;
         height: 200px;
-        /* あらかじめ解答解説分の空白として高さを広く確保 */
+        /* ここを小さく */
         order: 2;
-        /* スマホでは盤面の下に配置 */
-        margin-top: 2px;
-        /* 上の間隔を詰める */
-        padding: 10px;
-        /* 内側の余白を減らして文字量を確保 */
-        font-size: 0.95rem;
-        /* スマホでは解説自体の文字を少し小さめに */
+        margin-top: 0;
+        /* マージンを0に */
+        padding: 6px;
+        /* パディングを小さく */
+        font-size: 0.9rem;
     }
 
     #puzzle-explanation-area h3 {
-        margin-bottom: 5px;
+        margin-bottom: 3px;
     }
 
     #main-area {
-        /* 横並びから縦並びに変更（相手の駒台 -> 盤面 -> 自分の駒台） */
         flex-direction: column;
-        gap: 3px;
-        /* スペース節約のため間隔を詰める */
+        gap: 2px;
+        /* ここを小さく */
         width: 100%;
         order: 1;
-        /* スマホでは盤面が上 */
     }
 
     .piece-stand {
         width: 90vw;
         max-width: none;
         height: auto;
-        min-height: 30px;
-        /* 持駒の欄を極力細くする */
-        padding: 3px 8px;
-        /* 横長のレイアウトに変更 */
+        min-height: 20px;
+        /* ここを小さく */
+        padding: 2px 4px;
+        /* パディングを劇的に小さく */
         display: flex;
         align-items: center;
-        gap: 3px;
+        gap: 2px;
+        /* ギャップも最小に */
         border-width: 2px;
     }
 
     .piece-stand h3 {
         margin-bottom: 0;
         writing-mode: vertical-rl;
-        /* 縦書きにしてスペース節約 */
-        padding: 2px 2px;
-        font-size: 0.8rem;
+        padding: 1px 1px;
+        font-size: 0.75rem;
+        /* ちょっとだけ小さく */
     }
 
     .pieces-container {
         flex: 1;
         justify-content: flex-start;
         overflow-x: auto;
-        /* 持ち駒が多い場合は横スクロール */
-        padding-bottom: 5px;
-        /* スクロールバー用の余白 */
+        padding-bottom: 2px;
+        /* パディングを小さく */
     }
 
     .hand-piece {
-        width: 35px;
-        height: 38px;
-        font-size: 0.95rem;
-        /* サイズ縮小に合わせて文字を少し小さく */
+        width: 8.5vw;
+        /* 盤面の駒と同じく比率換算にする（スマホではおおよそ width:88vw/9マス 程度） */
+        max-width: 38px;
+        height: 9.5vw;
+        max-height: 42px;
+        font-size: clamp(0.7rem, 3vw, 0.95rem);
+        /* テキストも流動的に */
     }
 
     .piece-count {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        /* 少し小さく */
     }
 
     /* 盤面全体のサイズ調整（スマホ画面幅に合わせる） */
@@ -911,14 +911,18 @@ header p {
 
     /* ボタン類の縮小 */
     .btn {
-        padding: 10px 20px;
-        font-size: 1rem;
+        padding: 8px 16px;
+        /* ちょっと小さく */
+        font-size: 0.95rem;
     }
 
     .menu-controls {
         flex-direction: column;
         width: 100%;
-        gap: 10px;
+        margin-top: 5px;
+        /* マージンを小さく */
+        gap: 8px;
+        /* ギャップも小さく */
     }
 
     .menu-controls .btn {

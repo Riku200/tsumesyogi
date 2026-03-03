@@ -227,5 +227,30 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金打
         ],
         explanation: "【正解の手順】▲３一銀 △同玉 ▲３二金打まで<br>No.9 危険地帯に誘え初手▲３二金打は△１二玉で続きません。正解の▲３一銀が、実戦でも現れやすい好手です。以下は△同玉なら▲３二金打、△１二玉も▲２二金まで。どちらも正解手順です。"
+    },
+    {
+        id: 3010,
+        title: "問題 10",
+        originalTitle: "No.10",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 銀
+            { piece: 'kin', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 2, fromCol: 1, toRow: 1, toCol: 0, isPromote: true, player: PLAYER.SENTE }, // ▲１二銀成 (isPromoteはプログラムの都合上不要かもですが本来は成る) - 正確には成りの指定が複雑な場合は、from/to のみでチェックされます
+            { isDrop: false, fromRow: 2, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金打
+        ],
+        explanation: "【正解の手順】▲１二銀成△同 玉 ▲２三金打まで<br>ジャマ駒消去２三銀を消してしまえば▲２三金打までですが、初手▲２二銀不成は△同玉でつかまりません。正解は▲１二銀成で、△同玉、△同香いずれも▲２三金打が実現します。"
     }
 ];

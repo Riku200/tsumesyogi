@@ -154,5 +154,78 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 4, toCol: 1, player: PLAYER.SENTE } // ▲2五金
         ],
         explanation: "【正解の手順】▲2二銀 △2四玉 ▲2五金まで<br>【上へと追い出す】<br>△2四玉のときに▲2五金で詰む形を目指したいところです。そこで、初手は金を残して▲2二銀。以下は△1二玉なら▲2一龍まででの駒余り。△2四玉には頭金が実現します。"
+    },
+    {
+        id: 3007,
+        title: "問題 7",
+        originalTitle: "No.7",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'gin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'kin', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 金 (※本来は3四ですが盤面に合わせてrow/colを設定)
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 3, player: PLAYER.SENTE }, // ▲４三銀打
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二玉
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金打
+        ],
+        explanation: "【正解の手順】▲４三銀 △２二玉 ▲２三金打まで<br>左辺へ逃がさない初手▲２三銀は△４二玉で、左辺が広くつかまりません。▲４三銀～▲２三金打が正解手順です。これを▲４三金打～▲２三銀としては△１三玉でいけません。"
+    },
+    {
+        id: 3008,
+        title: "問題 8",
+        originalTitle: "No.8",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 竜
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二金打
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △１三玉
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二銀打
+        ],
+        explanation: "【正解の手順】▲３二金 △１三玉 ▲２二銀まで<br>銀を残す前の３問は金を残して銀打ちからでしたが、本問は銀を残して▲３二金から入ります。これは△１三玉に▲２二銀と打つため。ナナメ後ろに利く駒が最後に必要だったのです。"
+    },
+    {
+        id: 3009,
+        title: "問題 9",
+        originalTitle: "No.9",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 3 } // 4三 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲３一銀打
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金打
+        ],
+        explanation: "【正解の手順】▲３一銀 △同玉 ▲３二金打まで<br>No.9 危険地帯に誘え初手▲３二金打は△１二玉で続きません。正解の▲３一銀が、実戦でも現れやすい好手です。以下は△同玉なら▲３二金打、△１二玉も▲２二金まで。どちらも正解手順です。"
     }
 ];

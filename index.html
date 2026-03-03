@@ -740,6 +740,12 @@
          * 画面の切り替えを行う
          */
         function showScreen(screenId) {
+            // 画面遷移時に正解ポップアップを非表示にする
+            const successPopup = document.getElementById('success-popup');
+            if (successPopup) {
+                successPopup.classList.remove('show');
+            }
+
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.add('hidden');
             });
@@ -927,6 +933,12 @@
         }
 
         function initPuzzle(puzzle) {
+            // パズル初期化時に正解ポップアップを非表示にする
+            const successPopup = document.getElementById('success-popup');
+            if (successPopup) {
+                successPopup.classList.remove('show');
+            }
+
             gameBoard.loadPuzzle(puzzle);
             currentPlayer = PLAYER.SENTE;
             lastMovedCell = null;

@@ -252,5 +252,50 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金打
         ],
         explanation: "【正解の手順】▲１二銀成△同 玉 ▲２三金打まで<br>ジャマ駒消去２三銀を消してしまえば▲２三金打までですが、初手▲２二銀不成は△同玉でつかまりません。正解は▲１二銀成で、△同玉、△同香いずれも▲２三金打が実現します。"
+    },
+    {
+        id: 3011,
+        title: "問題 11",
+        originalTitle: "No.11",
+        movesToMate: 3,
+        board: [
+            { piece: 'gin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二銀打
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 2, player: PLAYER.GOTE }, // △同銀
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
+        ],
+        explanation: "【正解の手順】▲３二銀 △同銀 ▲２二金打まで<br>守備駒を動かす初手▲３二銀が、守りの要３一銀を移動させる好手です。以下は△１二玉なら▲２三金までの駒余り。△３二同銀には▲２二金打で詰みとなります。"
+    },
+    {
+        id: 3012,
+        title: "問題 12",
+        originalTitle: "No.12",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 角
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 3, isPromoted: true } // 4三 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二銀打
+            { isDrop: false, fromRow: 0, fromCol: 3, toRow: 1, toCol: 2, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 3, player: PLAYER.SENTE } // ▲４一金打
+        ],
+        explanation: "【正解の手順】▲３二銀 △同金 ▲４一金まで<br>打ち場所をつくるための捨て駒がテーマです。初手▲３二銀が、４一金を移動させる好手。以下は△同金の一手に、空いたところへ打つ▲４一金で詰め上がります。"
     }
 ];

@@ -1186,7 +1186,8 @@
                     setTimeout(() => {
                         const cpuMove = currentPuzzle.expectedMoves[currentPuzzleStep];
                         if (cpuMove.isDrop) {
-                            // 持ち駒がないなどの特殊ケースは今回は省く（事前に正しく設定されている前提）
+                            const pType = PIECE_TYPES[cpuMove.piece.toUpperCase()];
+                            gameBoard.dropPiece(PLAYER.GOTE, pType, cpuMove.toRow, cpuMove.toCol);
                         } else {
                             gameBoard.movePiece(cpuMove.fromRow, cpuMove.fromCol, cpuMove.toRow, cpuMove.toCol);
                         }

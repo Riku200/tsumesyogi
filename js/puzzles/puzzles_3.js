@@ -393,5 +393,29 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２一角成
         ],
         explanation: "【正解の手順】▲２三銀 △同銀 ▲２一角成まで<br>２二をふさぐ。初手▲２一角成は△２三玉でつかまりません。正解の▲２三銀が「逃げ道に捨てよ」の好手です。以下は△同銀に▲２一角成までとなります。"
+    },
+    {
+        id: 3017,
+        title: "問題 17",
+        originalTitle: "No.17",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 と
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2, isPromoted: true } // 3四 龍
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin'],
+            [PLAYER.GOTE]: ['kin', 'gin', 'keima', 'kyosha', 'fu'] // 合駒（Ai）用
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 3, fromCol: 2, toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三龍
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二合
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
+        ],
+        explanation: "【正解の手順】▲２三龍 △２二合 ▲３二金まで<br>【上から迫る龍】<br>初手▲２三龍が急所の一手で、何を合駒しても▲３二金までとなります。詰め上がり図は金合いで受けた場合です。龍の威力で合駒の金が動けません。"
     }
 ];

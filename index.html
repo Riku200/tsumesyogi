@@ -89,13 +89,15 @@
             </div>
 
             <div class="menu-controls"
-                style="margin-top: 20px; flex-direction: row; justify-content: center; align-items: center; gap: 15px; width: 100%;">
+                style="margin-top: 20px; flex-direction: row; justify-content: center; align-items: center; gap: 10px; width: 100%;">
                 <h2 id="game-title"
-                    style="margin: 0; font-size: 1.3rem; white-space: nowrap; color: var(--text-color);">通常対局</h2>
+                    style="margin: 0; font-size: 1.1rem; white-space: nowrap; color: var(--text-color);">通常対局</h2>
                 <button id="btn-show-hint" class="btn hidden"
-                    style="background-color: #ffd166; color: #333; font-size: 1rem; padding: 10px 15px; flex: 1; max-width: 150px; border: 3px solid #f39c12; box-shadow: 0 4px 0 #f39c12; white-space: nowrap;">解答解説</button>
+                    style="background-color: #ffd166; color: #333; font-size: 0.9rem; padding: 8px 10px; flex: 1; max-width: 120px; border: 3px solid #f39c12; box-shadow: 0 4px 0 #f39c12; white-space: nowrap;">解答解説</button>
                 <button id="btn-back-to-menu" class="btn back-btn"
-                    style="margin-top: 0; padding: 10px 15px; font-size: 1rem; flex: 1; max-width: 150px;">戻る</button>
+                    style="margin-top: 0; padding: 8px 10px; font-size: 0.9rem; flex: 1; max-width: 120px;">戻る</button>
+                <button id="btn-next-puzzle" class="btn hidden"
+                    style="background-color: #4CAF50; color: white; font-size: 0.9rem; padding: 8px 10px; flex: 1; max-width: 120px; border: 3px solid #388E3C; box-shadow: 0 4px 0 #388E3C; white-space: nowrap;">次へ</button>
             </div>
 
         </div>
@@ -540,9 +542,11 @@
                 currentPuzzle = null;
                 document.getElementById('game-title').textContent = "通常対局";
 
-                // ヒントボタンを隠す
+                // ヒントボタンや次へボタンを隠す
                 const btnHint = document.getElementById('btn-show-hint');
                 if (btnHint) btnHint.classList.add('hidden');
+                const btnNext = document.getElementById('btn-next-puzzle');
+                if (btnNext) btnNext.classList.add('hidden');
 
                 initGame();
                 showScreen('game-screen');
@@ -590,6 +594,27 @@
                         // 新しい解説エリアに表示
                         document.getElementById('puzzle-explanation-text').innerHTML = explText;
                         document.getElementById('puzzle-explanation-area').classList.add('is-visible');
+                    }
+                });
+            }
+
+            // 次へボタン
+            const btnNextPuzzle = document.getElementById('btn-next-puzzle');
+            if (btnNextPuzzle) {
+                btnNextPuzzle.addEventListener('click', () => {
+                    if (isPuzzleMode && currentPuzzle) {
+                        const puzzleList = selectedDifficulty === 3 ? PUZZLES_3 : PUZZLES_1;
+                        puzzleList.sort((a, b) => a.id - b.id);
+                        const currentIndex = puzzleList.findIndex(p => p.id === currentPuzzle.id);
+                        if (currentIndex !== -1 && currentIndex < puzzleList.length - 1) {
+                            const nextPuzzle = puzzleList[currentIndex + 1];
+                            currentPuzzle = nextPuzzle;
+                            currentPuzzleStep = 0;
+                            document.getElementById('game-title').textContent = nextPuzzle.title;
+                            initPuzzle(nextPuzzle);
+                        } else {
+                            alert("最後の問題です！");
+                        }
                     }
                 });
             }
@@ -763,9 +788,11 @@
                     currentPuzzleStep = 0; // 3手詰め用のステップ初期化
                     document.getElementById('game-title').textContent = puzzle.title; // ヘッダーもヒント抜き
 
-                    // パズルモード時はヒントボタンを表示
+                    // パズルモード時はヒントボタンと次へボタンを表示
                     const btnHint = document.getElementById('btn-show-hint');
                     if (btnHint) btnHint.classList.remove('hidden');
+                    const btnNext = document.getElementById('btn-next-puzzle');
+                    if (btnNext) btnNext.classList.remove('hidden');
 
                     initPuzzle(puzzle);
                     showScreen('game-screen');

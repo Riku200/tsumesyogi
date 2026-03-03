@@ -321,5 +321,77 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
         ],
         explanation: "【正解の手順】▲１三銀 △同桂 ▲２二金まで<br>単に▲２二金は△１三玉から上部へ逃げられて詰みません。正解の▲１三銀が、代表的な詰手筋「逃げ道に捨てよ」の一手で、△同桂に▲２二金が実現します。"
+    },
+    {
+        id: 3014,
+        title: "問題 14",
+        originalTitle: "No.14",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true } // 3一 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 0, player: PLAYER.SENTE }, // ▲１三金打
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
+            { isDrop: true, piece: 'gin', toRow: 0, toCol: 1, player: PLAYER.SENTE } // ▲２一銀打
+        ],
+        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀まで<br>少しの違いに注意。前問とは銀の位置が違います。３三銀が２二に利いており、同様の順では届きません。本問では銀を残して▲１三金から入るのが良く、△同桂に▲２一銀で詰め上がります。"
+    },
+    {
+        id: 3015,
+        title: "問題 15",
+        originalTitle: "No.15",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 1 } // 2二 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 0, player: PLAYER.SENTE }, // ▲１三金打
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 1, isPromote: false, player: PLAYER.SENTE } // ▲２一銀不成 (※ isPromote:false の指定自体は省略でも動く仕様であれば不要だが、明示)
+        ],
+        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀不成まで<br>銀ナラズの前に一工夫。いきなり▲２一銀不成は△１三玉で続きません。本問も玉頭に捨てる▲１三金が急所の一手です。以下は△同桂に▲２二銀不成（から２一へ）で詰みとなります。"
+    },
+    {
+        id: 3016,
+        title: "問題 16",
+        originalTitle: "No.16",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true }, // 3一 と
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三銀打
+            { isDrop: false, fromRow: 3, fromCol: 2, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同銀
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２一角成
+        ],
+        explanation: "【正解の手順】▲２三銀 △同銀 ▲２一角成まで<br>２二をふさぐ。初手▲２一角成は△２三玉でつかまりません。正解の▲２三銀が「逃げ道に捨てよ」の好手です。以下は△同銀に▲２一角成までとなります。"
     }
 ];

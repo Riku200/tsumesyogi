@@ -297,5 +297,29 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 0, toCol: 3, player: PLAYER.SENTE } // ▲４一金打
         ],
         explanation: "【正解の手順】▲３二銀 △同金 ▲４一金まで<br>打ち場所をつくるための捨て駒がテーマです。初手▲３二銀が、４一金を移動させる好手。以下は△同金の一手に、空いたところへ打つ▲４一金で詰め上がります。"
+    },
+    {
+        id: 3013,
+        title: "問題 13",
+        originalTitle: "No.13",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 銀
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true } // 3一 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 0, player: PLAYER.SENTE }, // ▲１三銀打
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
+        ],
+        explanation: "【正解の手順】▲１三銀 △同桂 ▲２二金まで<br>単に▲２二金は△１三玉から上部へ逃げられて詰みません。正解の▲１三銀が、代表的な詰手筋「逃げ道に捨てよ」の一手で、△同桂に▲２二金が実現します。"
     }
 ];

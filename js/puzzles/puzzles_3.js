@@ -417,5 +417,29 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
         ],
         explanation: "【正解の手順】▲２三龍 △２二合 ▲３二金まで<br>【上から迫る龍】<br>初手▲２三龍が急所の一手で、何を合駒しても▲３二金までとなります。詰め上がり図は金合いで受けた場合です。龍の威力で合駒の金が動けません。"
+    },
+    {
+        id: 3018,
+        title: "問題 18",
+        originalTitle: "No.18",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 竜
+            { piece: 'fu', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin'],
+            [PLAYER.GOTE]: ['kin', 'gin', 'keima', 'kyosha', 'fu'] // 合駒用
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 0, fromCol: 3, toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二龍
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二合
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金
+        ],
+        explanation: "【正解の手順】▲３二龍 △２二合 ▲２三金まで<br>【横から迫る龍】<br>前問は上から迫る龍。本問は初手▲３二龍と横から迫ります。以下は△２二金合とはじかれても▲２三金で詰みとなります。詰め上がり図では前問同様、合駒の金が動けません。"
     }
 ];

@@ -177,7 +177,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 1, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二玉
             { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金打
         ],
-        explanation: "【正解の手順】▲４三銀 △２二玉 ▲２三金打まで<br>左辺へ逃がさない初手▲２三銀は△４二玉で、左辺が広くつかまりません。▲４三銀～▲２三金打が正解手順です。これを▲４三金打～▲２三銀としては△１三玉でいけません。"
+        explanation: "【正解の手順】▲４三銀 △２二玉 ▲２三金打まで<br>【左辺へ逃がさない】<br>初手▲２三銀は△４二玉で、左辺が広くつかまりません。▲４三銀～▲２三金打が正解手順です。これを▲４三金打～▲２三銀としては△１三玉でいけません。"
     },
     {
         id: 3008,
@@ -202,7 +202,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △１三玉
             { isDrop: true, piece: 'gin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二銀打
         ],
-        explanation: "【正解の手順】▲３二金 △１三玉 ▲２二銀まで<br>銀を残す前の３問は金を残して銀打ちからでしたが、本問は銀を残して▲３二金から入ります。これは△１三玉に▲２二銀と打つため。ナナメ後ろに利く駒が最後に必要だったのです。"
+        explanation: "【正解の手順】▲３二金 △１三玉 ▲２二銀まで<br>【銀を残す】<br>前の３問は金を残して銀打ちからでしたが、本問は銀を残して▲３二金から入ります。これは△１三玉に▲２二銀と打つため。ナナメ後ろに利く駒が最後に必要だったのです。"
     },
     {
         id: 3009,
@@ -226,7 +226,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金打
         ],
-        explanation: "【正解の手順】▲３一銀 △同玉 ▲３二金打まで<br>No.9 危険地帯に誘え初手▲３二金打は△１二玉で続きません。正解の▲３一銀が、実戦でも現れやすい好手です。以下は△同玉なら▲３二金打、△１二玉も▲２二金まで。どちらも正解手順です。"
+        explanation: "【正解の手順】▲３一銀 △同玉 ▲３二金打まで<br>【危険地帯に誘え】<br>初手▲３二金打は△１二玉で続きません。正解の▲３一銀が、実戦でも現れやすい好手です。以下は△同玉なら▲３二金打、△１二玉も▲２二金まで。どちらも正解手順です。"
     },
     {
         id: 3010,
@@ -251,7 +251,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 2, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △同玉
             { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金打
         ],
-        explanation: "【正解の手順】▲１二銀成△同 玉 ▲２三金打まで<br>ジャマ駒消去２三銀を消してしまえば▲２三金打までですが、初手▲２二銀不成は△同玉でつかまりません。正解は▲１二銀成で、△同玉、△同香いずれも▲２三金打が実現します。"
+        explanation: "【正解の手順】▲１二銀成△同 玉 ▲２三金打まで<br>【ジャマ駒消去】<br>２三銀を消してしまえば▲２三金打までですが、初手▲２二銀不成は△同玉でつかまりません。正解は▲１二銀成で、△同玉、△同香いずれも▲２三金打が実現します。"
     },
     {
         id: 3011,
@@ -273,7 +273,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 2, player: PLAYER.GOTE }, // △同銀
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
         ],
-        explanation: "【正解の手順】▲３二銀 △同銀 ▲２二金打まで<br>守備駒を動かす初手▲３二銀が、守りの要３一銀を移動させる好手です。以下は△１二玉なら▲２三金までの駒余り。△３二同銀には▲２二金打で詰みとなります。"
+        explanation: "【正解の手順】▲３二銀 △同銀 ▲２二金打まで<br>【守備駒を動かす】<br>初手▲３二銀が、守りの要３一銀を移動させる好手です。以下は△１二玉なら▲２三金までの駒余り。△３二同銀には▲２二金打で詰みとなります。"
     },
     {
         id: 3012,
@@ -296,7 +296,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 0, fromCol: 3, toRow: 1, toCol: 2, player: PLAYER.GOTE }, // △同金
             { isDrop: true, piece: 'kin', toRow: 0, toCol: 3, player: PLAYER.SENTE } // ▲４一金打
         ],
-        explanation: "【正解の手順】▲３二銀 △同金 ▲４一金まで<br>打ち場所をつくるための捨て駒がテーマです。初手▲３二銀が、４一金を移動させる好手。以下は△同金の一手に、空いたところへ打つ▲４一金で詰め上がります。"
+        explanation: "【正解の手順】▲３二銀 △同金 ▲４一金まで<br>【打ち場所をつくる】<br>本問のテーマは打ち場所をつくるための捨て駒。初手▲３二銀が、４一金を移動させる好手。以下は△同金の一手に、空いたところへ打つ▲４一金で詰め上がります。"
     },
     {
         id: 3013,
@@ -320,7 +320,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
         ],
-        explanation: "【正解の手順】▲１三銀 △同桂 ▲２二金まで<br>単に▲２二金は△１三玉から上部へ逃げられて詰みません。正解の▲１三銀が、代表的な詰手筋「逃げ道に捨てよ」の一手で、△同桂に▲２二金が実現します。"
+        explanation: "【正解の手順】▲１三銀 △同桂 ▲２二金まで<br>【逃げ道に捨てよ】<br>単に▲２二金は△１三玉から上部へ逃げられて詰みません。正解の▲１三銀が、代表的な詰手筋「逃げ道に捨てよ」の一手で、△同桂に▲２二金が実現します。"
     },
     {
         id: 3014,
@@ -344,7 +344,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
             { isDrop: true, piece: 'gin', toRow: 0, toCol: 1, player: PLAYER.SENTE } // ▲２一銀打
         ],
-        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀まで<br>少しの違いに注意。前問とは銀の位置が違います。３三銀が２二に利いており、同様の順では届きません。本問では銀を残して▲１三金から入るのが良く、△同桂に▲２一銀で詰め上がります。"
+        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀まで<br>【少しの違いに注意】<br>前問とは銀の位置が違います。３三銀が２二に利いており、同様の順では届きません。本問では銀を残して▲１三金から入るのが良く、△同桂に▲２一銀で詰め上がります。"
     },
     {
         id: 3015,
@@ -368,7 +368,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同桂
             { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 1, isPromote: false, player: PLAYER.SENTE } // ▲２一銀不成 (※ isPromote:false の指定自体は省略でも動く仕様であれば不要だが、明示)
         ],
-        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀不成まで<br>銀ナラズの前に一工夫。いきなり▲２一銀不成は△１三玉で続きません。本問も玉頭に捨てる▲１三金が急所の一手です。以下は△同桂に▲２二銀不成（から２一へ）で詰みとなります。"
+        explanation: "【正解の手順】▲１三金 △同桂 ▲２一銀不成まで<br>【銀ナラズの前に一工夫】<br>いきなり▲２一銀不成は△１三玉で続きません。本問も玉頭に捨てる▲１三金が急所の一手です。以下は△同桂に▲２二銀不成（から２一へ）で詰みとなります。"
     },
     {
         id: 3016,
@@ -392,7 +392,7 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 3, fromCol: 2, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同銀
             { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２一角成
         ],
-        explanation: "【正解の手順】▲２三銀 △同銀 ▲２一角成まで<br>２二をふさぐ。初手▲２一角成は△２三玉でつかまりません。正解の▲２三銀が「逃げ道に捨てよ」の好手です。以下は△同銀に▲２一角成までとなります。"
+        explanation: "【正解の手順】▲２三銀 △同銀 ▲２一角成まで<br>【２二をふさぐ】<br>初手▲２一角成は△２三玉でつかまりません。正解の▲２三銀が「逃げ道に捨てよ」の好手です。以下は△同銀に▲２一角成までとなります。"
     },
     {
         id: 3017,

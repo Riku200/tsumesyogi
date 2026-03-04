@@ -441,5 +441,147 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金
         ],
         explanation: "【正解の手順】▲３二龍 △２二合 ▲２三金まで<br>【横から迫る龍】<br>前問は上から迫る龍。本問は初手▲３二龍と横から迫ります。以下は△２二金合とはじかれても▲２三金で詰みとなります。詰め上がり図では前問同様、合駒の金が動けません。"
+    },
+    {
+        id: 3019,
+        title: "問題 19",
+        originalTitle: "No.19",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true }, // 3二 竜
+            { piece: 'fu', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 3, toCol: 1, player: PLAYER.SENTE }, // ▲2四桂
+            { isDrop: false, fromRow: 2, fromCol: 1, toRow: 3, toCol: 1, player: PLAYER.GOTE }, // △同歩
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲2三金
+        ],
+        explanation: "【正解の手順】▲２四桂 △同 歩 ▲２三金まで<br>【２三を空ける】<br>前問の金合いをした局面に似ていますが、本問は▲２三金と打てません。そこで、打ち場所をつくるために▲２四桂と捨てます。以下は△同歩に▲２三金が実現します。"
+    },
+    {
+        id: 3020,
+        title: "問題 20",
+        originalTitle: "No.20",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 金
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 竜
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 0, fromCol: 3, toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲3一龍
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同銀
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 1, player: PLAYER.SENTE } // ▲2一金
+        ],
+        explanation: "【正解の手順】▲３一龍 △同 銀 ▲２一金まで<br>【龍を切る】<br>対穴熊の終盤戦に現れそうな形です。金、銀どちらも取れますが、初手▲２二金は△同玉で続きません。正解は金の方を取る▲３一龍で、△同銀に▲２一金までとなります。"
+    },
+    {
+        id: 3021,
+        title: "問題 21",
+        originalTitle: "No.21 金頭の桂",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 3 } // 4三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 2, toCol: 2, player: PLAYER.SENTE }, // ▲３三桂打
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 2, toCol: 2, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 3, player: PLAYER.SENTE } // ▲４二金打
+        ],
+        explanation: "【正解の手順】▲３三桂 △同 金 ▲４二金まで<br>【テーマ】：金頭の桂<br>【解説】３二金の頭に打つ初手▲３三桂が「金頭の桂」と呼ばれる手筋です。以下は△３一玉なら▲２一金まで。△５一玉や△３三同金は頭金で詰みとなります。"
+    },
+    {
+        id: 3022,
+        title: "問題 22",
+        originalTitle: "No.22 金頭への桂跳ね",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 4 }, // 5二 金
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 1, isPromoted: true }, // 2二 龍
+            { piece: 'keima', owner: PLAYER.SENTE, row: 4, col: 3 } // 4五 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 4, fromCol: 3, toRow: 2, toCol: 4, isPromote: false, player: PLAYER.SENTE }, // ▲５三桂不成
+            { isDrop: false, fromRow: 1, fromCol: 4, toRow: 2, toCol: 4, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 3, player: PLAYER.SENTE } // ▲４二金打
+        ],
+        explanation: "【正解の手順】▲５三桂不成 △同 金 ▲４二金まで<br>【テーマ】：金頭への桂跳ね<br>【解説】初手▲５三桂不成が、桂跳ねによる「金頭の桂」です。以下は△５一玉なら▲６一金、△５三同金も頭金で詰め上がります。なお、初手▲３三桂不成は△５一玉で届きません。"
+    },
+    {
+        id: 3023,
+        title: "問題 23",
+        originalTitle: "No.23 一二に利かす桂打ち",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 2, isPromoted: true } // 3三 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三桂打
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金打
+        ],
+        explanation: "【正解の手順】 ▲２三桂 △同金 ▲３二金まで<br>【テーマ】：一二に利かす桂打ち<br>【解説】初手▲４三桂は △２一玉でつかまりません。正解は逆から打つ▲２三桂で、△2一玉なら▲１一馬までの駒余り。△４一玉には▲５一金、△２三同金も▲３二金までとなります。"
+    },
+    {
+        id: 3024,
+        title: "問題 24",
+        originalTitle: "No.24 飛び越えることができる桂馬",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 1, col: 3, isPromoted: true }, // 4二 と
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3 } // 4四 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 3, toCol: 2, player: PLAYER.SENTE }, // ▲３四桂打
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △１二玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
+        ],
+        explanation: "【正解の手順】▲３四桂 △１二玉 ▲２二金まで<br>【テーマ】：飛び越えることができる桂馬<br>【解説】初手▲３四桂が、駒を飛び越えて利く桂馬ならではの一手で、△１二玉に▲２二金までとなります。本問のような角と桂馬が協力する形は、美濃囲い攻略の代表的手筋です。"
     }
 ];

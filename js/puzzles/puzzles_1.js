@@ -66,5 +66,22 @@ const PUZZLES_1 = [
         isShapePuzzle: true,
         solution: { row: 0, col: 0, piece: 'kin' }, // 1一 金
         explanation: "【正解の手順】▲1一金打まで<br>【下からの金打ち】<br>▲1一金打まで、下からの金打ちで詰め上がります。一段目の金はあまり働きがよくないですが、本問のように玉頭がふさがっているときには有効な手段になります！"
+    },
+    {
+        id: 1005,
+        title: "問題 5",
+        originalTitle: "No.5 金をナナメに進める",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3 } // 4四 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: true,
+        solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
+        explanation: "【正解の手順】▲２二金まで<br>【金をナナメに進める】<br>▲２二金まで、金をナナメに進めて頭金の詰み形となります。金は囲いに欠かせない駒ですが、終盤戦では詰みの場面で大いに役立ちます。"
     }
 ];

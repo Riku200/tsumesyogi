@@ -524,12 +524,23 @@ header p {
     display: none !important;
 }
 
+#puzzle-select-screen {
+    height: 80vh;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+}
+
 .puzzle-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 100%;
-    margin: 20px 0;
+    margin: 10px 0;
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+    /* ボタンの影などが切れないようにパディングを追加 */
 }
 
 .puzzle-btn {

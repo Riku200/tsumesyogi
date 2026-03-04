@@ -83,5 +83,57 @@ const PUZZLES_1 = [
         isShapePuzzle: true,
         solution: { row: 1, col: 1, piece: 'kin' }, // 2二 金
         explanation: "【正解の手順】▲２二金まで<br>【金をナナメに進める】<br>▲２二金まで、金をナナメに進めて頭金の詰み形となります。金は囲いに欠かせない駒ですが、終盤戦では詰みの場面で大いに役立ちます。"
+    },
+    {
+        id: 1006,
+        title: "問題 6",
+        originalTitle: "No.6 金をまっすぐ進める",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        explanation: "【正解の手順】▲２二金直まで<br>【テーマ】：金をまっすぐ進める<br>【解説】▲２二金直まで、2三金をまっすぐ進めて詰上がります。もう１枚の金、３三金を進める▲２二金左は、△４二玉と逃げられてつかまりません。"
+    },
+    {
+        id: 1007,
+        title: "問題 7",
+        originalTitle: "No.7 金を寄る",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true }, // 3一 竜
+            { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 1 } // 2一 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        explanation: "【正解の手順】▲１一金まで<br>【テーマ】：金を寄る<br>【解説】▲３二竜は△２二歩合で詰みません。金を寄る▲１一金が正解です。本問のように竜や飛車の横利きを生かして金で迫るという形は実戦でもよくあります。"
+    },
+    {
+        id: 1008,
+        title: "問題 8",
+        originalTitle: "No.8 金を引く",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 1 }, // 2一 飛
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 1 } // 2二 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        explanation: "【正解の手順】▲２三金まで。<br>【テーマ】：金を引く<br>【解説】▲２三金まで、金を引いて腹金の詰み形となります。前問は竜の横利きで詰みましたが、本問では飛車がタテの利きでサポートしています。"
     }
 ];

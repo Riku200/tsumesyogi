@@ -1029,6 +1029,153 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 1, col: 3, piece: 'kaku', isPromoted: true }, // 4二 馬
         explanation: "【正解の手順】▲４二馬まで。<br>【テーマ】：玉のコビンに馬を進める<br>【解説】▲４二馬まで、玉のコビンに馬を進めて詰みとなります。馬がまっすぐ一マス前進。角にはできないことで、馬になっているからこその動きでした。"
+    },
+    {
+        id: 1057,
+        title: "問題 57",
+        originalTitle: "No.57 玉のコビンに馬寄り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3, isPromoted: true }, // 4四 馬
+            { piece: 'gin', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 2, piece: 'kaku', isPromoted: true }, // 3四 馬
+        explanation: "【正解の手順】▲３四馬まで。<br>【テーマ】：玉のコビンに馬寄り<br>【解説】▲３四馬まで、玉のコビンに馬を寄って詰みとなります。詰め上がり図では馬の利きがあり、△１二玉とは引けません。なお、▲４五馬は△３三玉で失敗です。"
+    },
+    {
+        id: 1058,
+        title: "問題 58",
+        originalTitle: "No.58 まっすぐに馬引き",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 1, isPromoted: true }, // 2一 馬
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kaku', isPromoted: true }, // 2二 馬
+        explanation: "【正解の手順】▲２二馬まで。<br>【テーマ】：まっすぐに馬引き<br>【解説】▲２二金は△３三玉でつかまりません。金ではなく馬をまっすぐ引く▲２二馬が正解となります。詰め上がり図では馬と金がしっかりと協力しており、玉は動けません。"
+    },
+    {
+        id: 1059,
+        title: "問題 59",
+        originalTitle: "No.59 一段目の馬で合い利かず",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 4, isPromoted: true }, // 5三 馬
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'kaku', isPromoted: true }, // 3一 馬
+        explanation: "【正解の手順】▲３一馬まで。<br>【テーマ】：一段目の馬で合い利かず<br>【解説】▲３五馬は△２四合駒で詰みません。一段目に馬を進める▲３一馬が正解です。詰め上がり図で△２二合駒は▲同馬までで詰み。合駒は無効となります。"
+    },
+    {
+        id: 1060,
+        title: "問題 60",
+        originalTitle: "No.60 龍と馬の協力で合い利かず",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 3, isPromoted: true }, // 4二 竜
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 2, isPromoted: true } // 3四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 3, piece: 'kaku', isPromoted: true }, // 4三 馬
+        explanation: "【正解の手順】▲４三馬まで。<br>【テーマ】：龍と馬の協力で合い利かず<br>【解説】▲４三馬まで、馬を一マス進めて詰みとなります。詰め上がり図以下、龍と馬の利きに打つ△３二合駒は▲同竜までの詰み。前問と同じく無駄合いです。"
+    },
+    {
+        id: 1061,
+        title: "問題 61",
+        originalTitle: "No.61 自陣で頭金",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 7, col: 0 }, // 1八 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 6, col: 0 }, // 1七 金
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 6, col: 2, isPromoted: true } // 3七 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        solution: { row: 8, col: 0, piece: 'kin' }, // 1九 金
+        explanation: "【正解の手順】▲１九金まで。<br>【テーマ】：自陣で頭金<br>【解説】玉が相手陣三段目より上に入る形（自陣に入れられる形）を入玉と言います。入玉の形も詰みの基本は変わりありません。本問は▲１九金まで、頭金の詰め上がりです。"
+    },
+    {
+        id: 1062,
+        title: "問題 62",
+        originalTitle: "No.62 玉のナナメ下に銀出",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 6, col: 0 }, // 1七 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 5, col: 0 }, // 1六 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 7, col: 1 }, // 2八 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 5, col: 2, isPromoted: true }, // 3六 馬
+            { piece: 'gin', owner: PLAYER.SENTE, row: 6, col: 2 } // 3七 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 5, col: 1, piece: 'gin' }, // 2六 銀
+        explanation: "【正解の手順】▲２六銀まで。<br>【テーマ】：玉のナナメ下に銀出<br>【解説】玉のナナメ下に銀を進めて詰みとなります。詰め上がり図では馬がよく利いており、これ以上玉が入ることはできません。"
+    },
+    {
+        id: 1063,
+        title: "問題 63",
+        originalTitle: "No.63 自陣で飛車成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 8, col: 0 }, // 1九 玉
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 飛
+            { piece: 'gin', owner: PLAYER.SENTE, row: 7, col: 2 } // 3八 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 8, col: 1, piece: 'hisha', isPromoted: true }, // 2九 飛成
+        explanation: "【正解の手順】▲２九飛成まで。<br>【テーマ】：自陣で飛車成り<br>【解説】▲２九飛成まで、相手陣にいた飛車を引いて成り、詰め上がります。飛車や角を相手陣から引くときは、成ることを忘れないようにしましょう。"
+    },
+    {
+        id: 1064,
+        title: "問題 64",
+        originalTitle: "No.64 自陣で角成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 8, col: 1 }, // 2九 玉
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 6 }, // 7三 角
+            { piece: 'gin', owner: PLAYER.SENTE, row: 6, col: 0 } // 1七 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 7, col: 1, piece: 'kaku', isPromoted: true }, // 2八 角成
+        explanation: "【正解の手順】▲２八角成まで。<br>【テーマ】：自陣で角成り<br>【解説】相手陣から角を引いて成り、詰みとなります。問題図では４カ所に動けた玉が、馬の力でつかまってしまいました。"
     }
 ];
-

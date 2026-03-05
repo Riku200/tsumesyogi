@@ -135,5 +135,21 @@ const PUZZLES_1 = [
         },
         isShapePuzzle: false,
         explanation: "【正解の手順】▲２三金まで。<br>【テーマ】：金を引く<br>【解説】▲２三金まで、金を引いて腹金の詰み形となります。前問は竜の横利きで詰みましたが、本問では飛車がタテの利きでサポートしています。"
+    },
+    {
+        id: 1009,
+        title: "問題 9",
+        originalTitle: "No.9 玉頭に銀打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'gin' }, // 3二 銀
+        explanation: "【正解の手順】▲３二銀まで。<br>【テーマ】：玉頭に銀打ち<br>【解説】▲３二銀まで、玉頭に銀を打って詰め上がります。横に利いていない銀で上から押さえるには他の駒との協力がポイント。本問では３三金が銀の横をカバーしています。"
     }
 ];

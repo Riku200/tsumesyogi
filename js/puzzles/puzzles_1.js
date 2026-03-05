@@ -430,5 +430,154 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 0, col: 0, piece: 'kyosha', isPromoted: true }, // 1一 香成
         explanation: "【正解の手順】▲１一香成まで。<br>【テーマ】：下段に香成り<br>【解説】▲１一香成まで、香車を下段に進めて成り、腹金の詰め形となります。飛車と協力して香車を成り込むのは、矢倉戦で現れやすいパターンです。"
+    },
+    {
+        id: 1025,
+        title: "問題 25",
+        originalTitle: "No.25 玉頭に歩突き",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 飛
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 }, // 2五 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 0 }, // 1五 歩
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 5, col: 0 } // 1六 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 0, piece: 'fu' }, // 1四 歩
+        explanation: "【正解の手順】▲１四歩まで。<br>【テーマ】：玉頭に歩突き<br>【解説】▲１四歩まで、歩を進めて詰みとなります。歩を打って詰ますのは『打ち歩詰め』の反則ですが、歩を突いて詰め上がる『突き歩詰め』は問題ありません。"
+    },
+    {
+        id: 1026,
+        title: "問題 26",
+        originalTitle: "No.26 飛車の協力で突き歩詰め",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 4, col: 1 }, // 2五 飛
+            { piece: 'fu', owner: PLAYER.SENTE, row: 5, col: 1 }, // 2六 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 5, col: 0 } // 1六 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 4, col: 0, piece: 'fu' }, // 1五 歩
+        explanation: "【正解の手順】▲１五歩まで。<br>【テーマ】：飛車の協力で突き歩詰め<br>【解説】前問と同じように本問も歩を突いて詰め上がります。▲１五歩ではなく▲１五飛は、△２四玉でつかまりません。"
+    },
+    {
+        id: 1027,
+        title: "問題 27",
+        originalTitle: "No.27 と金をつくる",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'fu', isPromoted: true }, // 2二 歩成
+        explanation: "【正解の手順】▲２二歩成まで。<br>【テーマ】：と金をつくる<br>【解説】▲２二歩成まで、歩を進めて成り、腹金の形で詰め上がります。歩は一マスしか動けませんが、と金になれば金と同じ動き。詰みにも大いに役立ちます。"
+    },
+    {
+        id: 1028,
+        title: "問題 28",
+        originalTitle: "No.28 コビンに歩成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'fu', isPromoted: true }, // 3一 歩成
+        explanation: "【正解の手順】▲３一歩成まで。<br>【テーマ】：コビンに歩成り<br>【解説】▲３一銀成は△１二玉で失敗します。３三歩のままでは、銀と協力しても詰みはありません。歩を成ってと金にすれば、金銀が協力する形になって詰め上がります。"
+    },
+    {
+        id: 1029,
+        title: "問題 29",
+        originalTitle: "No.29 下からの飛車打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 1 } // 2一 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 0, piece: 'hisha' }, // 1一 飛
+        explanation: "【正解の手順】▲１一飛まで。<br>【テーマ】：下からの飛車打ち<br>【解説】▲２二飛は△１三玉でつかまりません。玉の下から打つ▲１一飛が正解です。詰め上がり図では飛車の利きがあり、△１三玉と逃げることができません。"
+    },
+    {
+        id: 1030,
+        title: "問題 30",
+        originalTitle: "No.30 近づけて飛車打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 3 } // 4三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha' }, // 3二 飛
+        explanation: "【正解の手順】▲３二飛まで。<br>【テーマ】：近づけて飛車打ち<br>【解説】▲３二飛まで、玉の横に近づけて飛車を打ち、詰め上がります。同じようでも飛車を離して打つのは、△３三玉で詰みません。上に逃がさない飛車の打ち場所がポイントでした。"
+    },
+    {
+        id: 1031,
+        title: "問題 31",
+        originalTitle: "No.31 玉頭に飛車打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 0, piece: 'hisha' }, // 1四 飛
+        explanation: "【正解の手順】▲１四飛まで。<br>【テーマ】：玉頭に飛車打ち<br>【解説】▲１四飛まで、玉頭に飛車を打って詰みとなります。▲１五飛と一つでも離して打つのは、△２四玉でつかまりません。前問と同じく飛車を近づけて打つのが急所です。"
+    },
+    {
+        id: 1032,
+        title: "問題 32",
+        originalTitle: "No.32 離して飛車打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 角
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 2 } // 3一 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha' }, // 3二 飛
+        explanation: "【正解の手順】▲３二飛まで。<br>【テーマ】：離して飛車打ち<br>【解説】▲２二飛は△１三玉で詰みません。正解は離して打つ▲３二飛です。詰め上がり図以下△２二合駒は▲同飛成（▲同角成）までの詰め。合駒は無効となります。"
     }
 ];

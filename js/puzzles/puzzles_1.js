@@ -284,5 +284,151 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 3, col: 1, piece: 'gin', isPromoted: true }, // 2四 銀成
         explanation: "【正解の手順】▲２四銀成まで。<br>【テーマ】：四段目に銀引き成り<br>【解説】▲２四銀成まで、銀を引いて成り、詰めとなります。飛車、角、銀は三段目より上に入ったり、その中で動いた場合だけではなく、そこから出るときにも成ることができます。"
+    },
+    {
+        id: 1017,
+        title: "問題 17",
+        originalTitle: "No.17 独特な桂馬",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['keima']
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'keima' }, // 2三 桂
+        explanation: "【正解の手順】▲２三桂まで。<br>【テーマ】：独特な桂馬<br>【解説】▲２三桂と打って詰め上がります。３二金が２筋に利いており、玉は逃げられません。１筋の玉に対して２筋に打って王手。桂馬の動きは独特です。"
+    },
+    {
+        id: 1018,
+        title: "問題 18",
+        originalTitle: "No.18 飛び越える王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 1, col: 1 } // 2二 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['keima']
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'keima' }, // 2三 桂
+        explanation: "【正解の手順】▲2三桂まで。<br>【テーマ】：飛び越える王手<br>【解説】前問と同じく▲2三桂までとなります。桂馬は駒を飛び越えることができます。詰め上がり図のように3枚の駒が玉をガードしていても王手は解消されません。"
+    },
+    {
+        id: 1019,
+        title: "問題 19",
+        originalTitle: "No.19 ナラズで桂跳ね",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'keima', owner: PLAYER.SENTE, row: 4, col: 2 } // 3五 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'keima', isPromoted: false }, // 2三 桂不成
+        explanation: "【正解の手順】▲２三桂不成まで。<br>【テーマ】：ナラズで桂跳ね<br>【解説】▲２三桂不成まで、桂馬をナラズで跳ねて詰みとなります。桂馬は味方の駒も飛び越えることができるので、２二歩があっても問題ありません。"
+    },
+    {
+        id: 1020,
+        title: "問題 20",
+        originalTitle: "No.20 玉頭に桂なり",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2, isPromoted: true }, // 3四 竜
+            { piece: 'keima', owner: PLAYER.SENTE, row: 4, col: 2 } // 3五 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'keima', isPromoted: true }, // 2三 桂成
+        explanation: "【正解の手順】▲２三桂成まで。<br>【テーマ】：玉頭に桂なり<br>【解説】▲２三桂成まで、桂馬を成って詰め上がります。成桂は金と同じ動き。詰め上がり図は頭金の詰め形になっています。なお、▲２三竜は△３一玉で失敗です。"
+    },
+    {
+        id: 1021,
+        title: "問題 21",
+        originalTitle: "No.21 玉頭に香打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'fu', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kyosha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 0, piece: 'kyosha' }, // 1三 香
+        explanation: "【正解の手順】▲１三香まで。<br>【テーマ】：玉頭に香打ち<br>【解説】▲１三香まで、玉頭に香車を打って詰めとなります。香車は前方すべてに利いているので、△１一玉とは引けません。２筋も３二金がカバーしています。"
+    },
+    {
+        id: 1022,
+        title: "問題 22",
+        originalTitle: "No.22 離して香打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 3, isPromoted: true } // 4二 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kyosha']
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'kyosha' }, // 2三 香
+        explanation: "【正解の手順】▲２三香まで。<br>【テーマ】：離して香打ち<br>【解説】▲２二香は△１二玉で詰めません。離して打つ▲２三香が正解です。詰め上がり図以下△２二合駒としても▲同香成（▲同竜）までの詰め。合駒は無効となります。"
+    },
+    {
+        id: 1023,
+        title: "問題 23",
+        originalTitle: "No.23 二段目に香成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kyosha', isPromoted: true }, // 2二 香成
+        explanation: "【正解の手順】▲２二香成まで。<br>【テーマ】：二段目に香成り<br>【解説】▲２二香成まで、香車を二段目に進めて成るのが正解です。詰め上がり図では、金と同じ動きの成香と銀が協力しています。"
+    },
+    {
+        id: 1024,
+        title: "問題 24",
+        originalTitle: "No.24 下段に香成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 金
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 4, col: 0 }, // 1五 香
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 5, col: 0 } // 1六 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 0, piece: 'kyosha', isPromoted: true }, // 1一 香成
+        explanation: "【正解の手順】▲１一香成まで。<br>【テーマ】：下段に香成り<br>【解説】▲１一香成まで、香車を下段に進めて成り、腹金の詰め形となります。飛車と協力して香車を成り込むのは、矢倉戦で現れやすいパターンです。"
     }
 ];

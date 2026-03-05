@@ -881,6 +881,154 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 1, col: 2, piece: 'hisha', isPromoted: true }, // 3二 竜
         explanation: "【正解の手順】▲３二竜まで。<br>【テーマ】：二段目で横に動く竜<br>【解説】前問は竜を右に動かすのが正解でした。本問では竜を左に動かして詰みとなります。竜と銀が協力する詰め上がりは、No.45と同じような形です。"
+    },
+    {
+        id: 1049,
+        title: "問題 49",
+        originalTitle: "No.49 ナナメに進む竜",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 4, isPromoted: true }, // 5三 竜
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 3, piece: 'hisha', isPromoted: true }, // 4二 竜
+        explanation: "【正解の手順】▲４二竜まで。<br>【テーマ】：ナナメに進む竜<br>【解説】▲４二竜まで、竜をナナメに進めて詰みとなります。同じようでも▲５二竜は△３三玉でつかまりません。竜ের動きが１マス違うだけで結果は大きく変わります。"
+    },
+    {
+        id: 1050,
+        title: "問題 50",
+        originalTitle: "No.50 ナナメに引く竜",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 0 }, // 1五 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true }, // 3二 竜
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 1 } // 2二 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'hisha', isPromoted: true }, // 2三 竜
+        explanation: "【正解の手順】▲２三竜まで。<br>【テーマ】：ナナメに引く竜<br>【解説】▲３四竜は△２四合駒で詰みません。竜をナナメに引く▲２三竜が正解です。問題図で玉が動けるのは３カ所。詰め上がり図ではすべてのマスに竜が利いています。"
+    },
+    {
+        id: 1051,
+        title: "問題 51",
+        originalTitle: "No.51 竜と金の協力で合い利かず",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 1 }, // 2五 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true }, // 3二 竜
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 0, piece: 'hisha', isPromoted: true }, // 1二 竜
+        explanation: "【正解の手順】▲１二竜まで。<br>【テーマ】：竜と金の協力で合い利かず<br>【解説】▲３四竜は△１五玉でつかまりません。筋に竜を進める▲１二竜が正解です。詰め上がり図で△１三合駒は▲同竜まででの詰めみ。合駒は無効となります。"
+    },
+    {
+        id: 1052,
+        title: "問題 52",
+        originalTitle: "No.52 竜と角の協力で合い利かず",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 角
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 3, isPromoted: true } // 4四 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 3, piece: 'hisha', isPromoted: true }, // 4二 竜
+        explanation: "【正解の手順】▲４二竜まで。<br>【テーマ】：竜と角の協力で合い利かず<br>【解説】▲２四竜は△３一玉で失敗します。竜を二段目に進める▲４二竜です。詰め上がり図以下△３二合駒は▲同竜までの詰み。前回と同じく無駄合いとなります。"
+    },
+    {
+        id: 1053,
+        title: "問題 53",
+        originalTitle: "No.53 玉の横に馬を進める",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3, isPromoted: true } // 4四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kaku', isPromoted: true }, // 2二 馬
+        explanation: "【正解の手順】▲２二馬まで。<br>【テーマ】：玉の横に馬を進める<br>【解説】腹金の▲２二金は△１三玉で詰みません。金ではなく馬を進める▲２二馬が正解です。馬の利きは角プラステ横一マス。竜に負けないような強い駒と言っていいでしょう。"
+    },
+    {
+        id: 1054,
+        title: "問題 54",
+        originalTitle: "No.54 一段目に馬を進める",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 0, isPromoted: true } // 1三 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'kaku', isPromoted: true }, // 3一 馬
+        explanation: "【正解の手順】▲３一馬まで。<br>【テーマ】：一段目に馬を進める<br>【解説】玉の下に馬を進めて詰みとなります。問題図では離れていた馬と銀が、詰め上がり図ではしっかりと協力しています。"
+    },
+    {
+        id: 1055,
+        title: "問題 55",
+        originalTitle: "No.55 玉の下に馬引き",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 0, isPromoted: true }, // 1一 馬
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kaku', isPromoted: true }, // 2二 馬
+        explanation: "【正解の手順】▲２二馬まで。<br>【テーマ】：玉の下に馬引き<br>【解説】▲２二銀成は△３三玉と逃げられてつかまりません。銀ではなく馬を引く▲２二馬が正解です。前問とは玉の位置は違いますが、同じように馬と銀が協力して詰め上がります。"
+    },
+    {
+        id: 1056,
+        title: "問題 56",
+        originalTitle: "No.56 玉のコビンに馬を進める",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 3, isPromoted: true }, // 4三 馬
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 3, piece: 'kaku', isPromoted: true }, // 4二 馬
+        explanation: "【正解の手順】▲４二馬まで。<br>【テーマ】：玉のコビンに馬を進める<br>【解説】▲４二馬まで、玉のコビンに馬を進めて詰みとなります。馬がまっすぐ一マス前進。角にはできないことで、馬になっているからこその動きでした。"
     }
 ];
 

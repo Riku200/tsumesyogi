@@ -207,5 +207,82 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 0, col: 1, piece: 'gin', isPromoted: false }, // 2一 銀不成
         explanation: "【正解の手順】▲２一銀不成まで。<br>【テーマ】：直進して銀ナラズ<br>【解説】前問と同じく銀をまっすぐ進めます。ただし成ってはいけません。ナナメ下の利きが必要です。銀は成らない方がいいというケースも多くあります。"
+    },
+    {
+        id: 1013,
+        title: "問題 13",
+        originalTitle: "No.13 ナナメに進んで銀成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3 } // 4四 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'gin', isPromoted: true }, // 2二 銀成
+        explanation: "【正解の手順】▲２二銀成まで。<br>【テーマ】：ナナメに進んで銀成り<br>【解説】▲２二銀成まで、銀をナナメに進めて成り、詰めとなります。詰め上がりは腹金の形。２二には４四角が利いており、取ることができません。"
+    },
+    {
+        id: 1014,
+        title: "問題 14",
+        originalTitle: "No.14 ナナメに進んで銀ナラズ",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'gin', isPromoted: false }, // 2二 銀不成
+        explanation: "【正解の手順】▲２二銀不成まで。<br>【テーマ】：ナナメに進んで銀ナラズ<br>【解説】前問と同じように銀をナナメに進めますが、本問では成らないのが正解です。三段目の端玉に下から銀の王手。実戦でもよく現れるパターンと言えます。"
+    },
+    {
+        id: 1015,
+        title: "問題 15",
+        originalTitle: "No.15 ナラズで銀引き",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 1 }, // 2五 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 0 }, // 1五 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 0 }, // 1二 銀
+            { piece: 'kin', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'gin', isPromoted: false }, // 2三 銀不成
+        explanation: "【正解の手順】▲２三銀不成まで。<br>【テーマ】：ナラズで銀引き<br>【解説】銀をナラズで引き、前問と同じようにナナメ下からの王手で詰め上がります。ナナメが自由な銀には『銀は千鳥に使え』『銀はナラズに好手あり』といった格言があります。"
+    },
+    {
+        id: 1016,
+        title: "問題 16",
+        originalTitle: "No.16 四段目に銀引き成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 0 }, // 1五 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 1, piece: 'gin', isPromoted: true }, // 2四 銀成
+        explanation: "【正解の手順】▲２四銀成まで。<br>【テーマ】：四段目に銀引き成り<br>【解説】▲２四銀成まで、銀を引いて成り、詰めとなります。飛車、角、銀は三段目より上に入ったり、その中で動いた場合だけではなく、そこから出るときにも成ることができます。"
     }
 ];

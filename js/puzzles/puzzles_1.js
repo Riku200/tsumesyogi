@@ -579,5 +579,308 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 1, col: 2, piece: 'hisha' }, // 3二 飛
         explanation: "【正解の手順】▲３二飛まで。<br>【テーマ】：離して飛車打ち<br>【解説】▲２二飛は△１三玉で詰みません。正解は離して打つ▲３二飛です。詰め上がり図以下△２二合駒は▲同飛成（▲同角成）までの詰め。合駒は無効となります。"
+    },
+    {
+        id: 1033,
+        title: "問題 33",
+        originalTitle: "No.33 前に進む飛車",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 1 }, // 2五 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 0 }, // 1五 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 5, col: 2 } // 3六 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 2, piece: 'hisha' }, // 3四 飛
+        explanation: "【正解の手順】▲３四飛まで。<br>【テーマ】：前に進む飛車<br>【解説】▲３四金は△１四玉で詰めません。飛車を使う▲３四飛が正解です。詰め上がり図では飛車の横利きがあるので、△１四玉とはできません。"
+    },
+    {
+        id: 1034,
+        title: "問題 34",
+        originalTitle: "No.34 コビンに飛車成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha', isPromoted: true }, // 3二 飛成
+        explanation: "【正解の手順】☗３二飛成まで。<br>【テーマ】：コビンに飛車成り<br>【解説】☗３二飛成まで、飛車を二段目まで進めて成り、詰めとなります。飛車からナナメ一マスにも利く竜になったことで、王手がかかりました。"
+    },
+    {
+        id: 1035,
+        title: "問題 35",
+        originalTitle: "No.35 玉の下に飛車成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 1 }, // 2一 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 0, piece: 'hisha', isPromoted: true }, // 1二 飛成
+        explanation: "【正解の手順】▲１二飛成まで。<br>【テーマ】：玉の下に飛車成り<br>【解説】▲１二飛成まで、飛車を１筋まで進めて成り、詰め上がります。前問同様竜になった効果は大きく、上だけではなく△２三玉と逃げることもできません。"
+    },
+    {
+        id: 1036,
+        title: "問題 36",
+        originalTitle: "No.36 四段目に飛車引き成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 飛
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 1, piece: 'hisha', isPromoted: true }, // 2四 飛成
+        explanation: "【正解の手順】▲２四飛成まで。<br>【テーマ】：四段目に飛車引き成り<br>【解説】▲２四飛成までで、玉の横まで飛車を引いて成り、詰みとなります。飛車、角、銀は相手陣三段目以内から引いて出るときも成ることができます。"
+    },
+    {
+        id: 1037,
+        title: "問題 37",
+        originalTitle: "No.37 ナナメ下からの角打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku']
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kaku' }, // 2二 角
+        explanation: "【正解の手順】▲２二角まで。<br>【テーマ】：ナナメ下からの角打ち<br>【解説】ナナメに強い角と銀が協力して詰め上がります。実戦でもナナメ下からの王手で角を使うことはよくあります。"
+    },
+    {
+        id: 1038,
+        title: "問題 38",
+        originalTitle: "No.38 １筋もにらむ角打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku']
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'kaku' }, // 3一 角
+        explanation: "【正解の手順】▲３一角まで。<br>【テーマ】：１筋もにらむ角打ち<br>【解説】前問と同じく、本問もナナメ下からの角打ちで詰めとなります。詰め上がり図では角の利きがあり、△１三玉と逃げることができません。実戦でもよく見る形です。"
+    },
+    {
+        id: 1039,
+        title: "問題 39",
+        originalTitle: "No.39 コビンに角打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'keima', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 0 } // 1一 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku']
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 0, piece: 'kaku' }, // 1四 角
+        explanation: "【正解の手順】▲１四角まで。<br>【テーマ】：コビンに角打ち<br>【解説】下からの王手▲４一角は△３二合駒で詰めません。玉のコビンに打つ▲１四角が正解となります。詰め上がり図では角の利きがあり、△３二玉とは引けません。"
+    },
+    {
+        id: 1040,
+        title: "問題 40",
+        originalTitle: "No.40 離して角打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'kin', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 1 } // 2一 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku']
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'kaku' }, // 3一 角
+        explanation: "【正解の手順】▲３一角まで。<br>【テーマ】：離して角打ち<br>【解説】▲２二角は△２四玉でつかまりません。飛車筋を通しておく▲３一角が正解です。詰め上がり図で△２二合駒は▲同飛成までの詰め。合駒は無効となります。"
+    },
+    {
+        id: 1041,
+        title: "問題 41",
+        originalTitle: "No.41 コビンに角出",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 4 }, // 5三 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 0 }, // 1四 飛
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 5, col: 1 } // 2六 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 3, piece: 'kaku' }, // 4四 角
+        explanation: "【正解の手順】▲４四角まで。<br>【テーマ】：コビンに角出<br>【解説】▲４四角まで、玉のコビンに角を出て詰め上がります。１四飛が角を取らせないだけではなく、玉を上に逃がさない役割も果たしています。"
+    },
+    {
+        id: 1042,
+        title: "問題 42",
+        originalTitle: "No.42 玉の横に角成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三角
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'kaku', isPromoted: true }, // 2二角成
+        explanation: "【正解の手順】▲２二角成まで。<br>【テーマ】：玉の横に角成り<br>【解説】▲２二歩成は△１三玉で詰みません。歩ではなく角を成る▲２二角成が正解です。角からタテ横一マスにも利く馬になったことで、王手がかかりました。"
+    },
+    {
+        id: 1043,
+        title: "問題 43",
+        originalTitle: "No.43 馬と銀が協力",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 4, col: 0 } // 1五 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 3, piece: 'kaku', isPromoted: true }, // 4二 角成
+        explanation: "【正解の手順】▲４二角成まで。<br>【テーマ】：馬と銀が協力<br>【解説】前問では一マス動いて角が馬に。本問の角はもう少し動いて詰めとなります。詰め上がり図では、左右のナナメ下に利いている銀が大いに役立っています。"
+    },
+    {
+        id: 1044,
+        title: "問題 44",
+        originalTitle: "No.44 四段目に角引き成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 角
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 1, piece: 'kaku', isPromoted: true }, // 2四 角成
+        explanation: "【正解の手順】▲２四角成まで。<br>【テーマ】：四段目に角引き成り<br>【解説】▲２四角成まで、角を四段目に引いて成り、詰め上がります。角も飛車、銀と同じく、三段目以内から引いて出るときも成ることができます。"
+    },
+    {
+        id: 1045,
+        title: "問題 45",
+        originalTitle: "No.45 前に進む竜",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2, isPromoted: true } // 3四 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha', isPromoted: true }, // 3二 竜
+        explanation: "【正解の手順】▲３二竜まで。<br>【テーマ】：前に進む竜<br>【解説】▲３二銀成は△１二玉で詰めません。竜を使う▲３二竜が正解です。竜の利きは飛車プラスナナメ一マス。最強の駒と言ってもいいでしょう。"
+    },
+    {
+        id: 1046,
+        title: "問題 46",
+        originalTitle: "No.46 四段目に竜引き",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true }, // 3一 竜
+            { piece: 'gin', owner: PLAYER.SENTE, row: 4, col: 2 } // 3五 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 3, col: 2, piece: 'hisha', isPromoted: true }, // 3四 竜
+        explanation: "【正解の手順】▲３四竜まで。<br>【テーマ】：四段目に竜引き<br>【解説】▲３四竜まで、竜を四段目に引いて詰めとなります。詰め上がり図では、竜がタテ、横、ナナメとよく利いており、玉は動けません。"
+    },
+    {
+        id: 1047,
+        title: "問題 47",
+        originalTitle: "No.47 一段目で横に動く竜",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 4, isPromoted: true }, // 5一 竜
+            { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 1 } // 2一 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'hisha', isPromoted: true }, // 3一 竜
+        explanation: "【正解の手順】▲３一竜まで。<br>【テーマ】：一段目で横に動く竜<br>【解説】竜を玉の下に進めて詰め上がります。一段目で竜と金が協力して二段目の玉をつかまえる。実戦で現れやすいパターンの一つです。"
+    },
+    {
+        id: 1048,
+        title: "問題 48",
+        originalTitle: "No.48 二段目で横に動く竜",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 3 }, // 4四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 0, isPromoted: true } // 1二 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha', isPromoted: true }, // 3二 竜
+        explanation: "【正解の手順】▲３二竜まで。<br>【テーマ】：二段目で横に動く竜<br>【解説】前問は竜を右に動かすのが正解でした。本問では竜を左に動かして詰みとなります。竜と銀が協力する詰め上がりは、No.45と同じような形です。"
     }
 ];
+

@@ -151,5 +151,61 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 1, col: 2, piece: 'gin' }, // 3二 銀
         explanation: "【正解の手順】▲３二銀まで。<br>【テーマ】：玉頭に銀打ち<br>【解説】▲３二銀まで、玉頭に銀を打って詰め上がります。横に利いていない銀で上から押さえるには他の駒との協力がポイント。本問では３三金が銀の横をカバーしています。"
+    },
+    {
+        id: 1010,
+        title: "問題 10",
+        originalTitle: "No.10 ナナメ下からの銀打ち",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 2 } // 3一 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 1, piece: 'gin', isPromoted: false }, // 2一 銀
+        explanation: "【正解の手順】▲２一銀まで。<br>【テーマ】：ナナメ下からの銀打ち<br>【解説】▲２一銀まで、玉のナナメ下からの王手で詰めとなります。銀が金より優れている点は、ナナメ下に利いていること。本問で持駒が金なら王手もかかりません。"
+    },
+    {
+        id: 1011,
+        title: "問題 11",
+        originalTitle: "No.11 直進して銀成り",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 銀
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'gin', isPromoted: true }, // 2二 銀成
+        explanation: "【正解の手順】▲２二銀成まで。<br>【テーマ】：直進して銀成り<br>【解説】銀をまっすぐ進めて成る▲２二銀成が正解です。銀を成らないと△１二玉で詰めません。銀が金と同様の成銀になって詰め上がることはよくあります。"
+    },
+    {
+        id: 1012,
+        title: "問題 12",
+        originalTitle: "No.12 直進して銀ナラズ",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 1, piece: 'gin', isPromoted: false }, // 2一 銀不成
+        explanation: "【正解の手順】▲２一銀不成まで。<br>【テーマ】：直進して銀ナラズ<br>【解説】前問と同じく銀をまっすぐ進めます。ただし成ってはいけません。ナナメ下の利きが必要です。銀は成らない方がいいというケースも多くあります。"
     }
 ];

@@ -1177,5 +1177,142 @@ const PUZZLES_1 = [
         isShapePuzzle: false,
         solution: { row: 7, col: 1, piece: 'kaku', isPromoted: true }, // 2八 角成
         explanation: "【正解の手順】▲２八角成まで。<br>【テーマ】：自陣で角成り<br>【解説】相手陣から角を引いて成り、詰みとなります。問題図では４カ所に動けた玉が、馬の力でつかまってしまいました。"
+    },
+    {
+        id: 1066,
+        title: "問題 66",
+        originalTitle: "No.66 歩が成って馬の王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 4, col: 3, isPromoted: true } // 4五 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 2, piece: 'fu', isPromoted: true }, // 3三 歩成
+        explanation: "【正解の手順】▲３三歩成まで<br>【テーマ】：歩が成って馬の王手<br>【解説】前問と同じく歩が成って開き王手の詰みとなります。本問は馬の王手。詰め上がり図では３四や２三に合駒を打てますが、いずれも同馬で無効です。"
+    },
+    {
+        id: 1067,
+        title: "問題 67",
+        originalTitle: "No.67 銀ナラズで飛車の王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 0 }, // 1一 飛
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 0 }, // 1二 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 1, piece: 'gin', isPromoted: false }, // 2一 銀不成
+        explanation: "【正解の手順】▲２一銀不成まで<br>【テーマ】：銀ナラズで飛車の王手<br>【解説】▲２一銀不成まで、銀をナラズで進める開き王手が正解です。詰め上がり図以下△１二合駒は▲同飛成で無駄合い。このために銀をナラズで１二に利かせています。"
+    },
+    {
+        id: 1068,
+        title: "問題 68",
+        originalTitle: "No.68 角を成って香車の王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 0 }, // 1三角
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 4, col: 0 } // 1五 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 0, col: 2, piece: 'kaku', isPromoted: true }, // 3一 角成
+        explanation: "【正解の手順】▲３一角成<br>【テーマ】：角を成って香車の王手<br>【解説】▲３一角成まで、角を一段目に成り、香車の王手で詰みとなります。詰め上がり図で△１三合駒は▲同香不成まででの詰み。合駒は無効です。"
+    },
+    {
+        id: 1069,
+        title: "問題 69",
+        originalTitle: "No.69 龍と角の両王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 2, col: 4 }, // 5三 飛
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 2 }, // 3四 飛
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 4, col: 3 } // 4五 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 2, piece: 'hisha', isPromoted: true }, // 3二 飛成
+        explanation: "【正解の手順】▲３二飛成まで<br>【テーマ】：龍と角の両王手<br>【解説】▲３二飛成まで、竜と角の王手がかかって詰みとなります。本問のように、２枚の駒で同時にかかる王手のことを、両王手と言います。"
+    },
+    {
+        id: 1070,
+        title: "問題 70",
+        originalTitle: "No.70 龍と馬の両王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'gin', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 銀
+            { piece: 'ou', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 4, col: 1 }, // 2五 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 馬
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true } // 3二 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 0, piece: 'hisha', isPromoted: true }, // 1二 龍
+        explanation: "【正解の手順】▲１二龍まで<br>【テーマ】：龍と馬の両王手<br>【解説】▲３四龍や▲２二龍の開き王手は△１五玉でつかまりません。両王手の▲１二龍が正解です。詰め上がり図では龍と馬の王手に対し一度に合駒が打てず、受けはありません。"
+    },
+    {
+        id: 1071,
+        title: "問題 71",
+        originalTitle: "No.71 と金と角の両王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'gin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 1, col: 1, piece: 'fu', isPromoted: true }, // 2二 歩成
+        explanation: "【正解の手順】▲２二歩成まで。<br>【テーマ】：と金と角の両王手<br>【解説】▲２二歩成まで、歩を成ってと金と角の両王手がかかり、詰みとなります。詰め上がり図では角の王手もあるので、△２二銀と、と金を取ることができません。(詰め上がり図は▲２二歩成まで)"
+    },
+    {
+        id: 1072,
+        title: "問題 72",
+        originalTitle: "No.72 桂馬と香車の両王手",
+        movesToMate: 1,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'keima', owner: PLAYER.SENTE, row: 4, col: 0 }, // 1五 桂
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 5, col: 0 } // 1六 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        solution: { row: 2, col: 1, piece: 'keima', isPromoted: false }, // 2三 桂不成
+        explanation: "【正解の手順】▲2三桂不成まで<br>【テーマ】：桂馬と香車の両王手<br>【解説】桂馬を成る▲2三桂成は△1三歩合で詰みません。ナラズで跳ねる▲2三桂不成が正解です。詰め上がり図では桂馬と香車の両王手がかかっており、受けはありません。"
     }
 ];
+

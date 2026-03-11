@@ -583,5 +583,581 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金打
         ],
         explanation: "【正解の手順】▲３四桂 △１二玉 ▲２二金まで<br>【テーマ】：飛び越えることができる桂馬<br>【解説】初手▲３四桂が、駒を飛び越えて利く桂馬ならではの一手で、△１二玉に▲２二金までとなります。本問のような角と桂馬が協力する形は、美濃囲い攻略の代表的手筋です。"
+    },
+    {
+        id: 3025,
+        title: "問題 25",
+        originalTitle: "No.25 離して打つ角",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 1, col: 4 }, // 5二 飛
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kaku', toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲３一角
+            { isDrop: false, fromRow: 2, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △１二玉
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２二角成
+        ],
+        explanation: "【正解の手順】▲３一角 △１二玉 ▲２二角成まで<br>【テーマ】：離して打つ角<br>【解説】初手▲２二角は △１二玉で届きません。正解は離して打つ▲３一角です。以下は△2二合としても▲同角成までの駒余り。△１二玉には▲２二角成で詰みとなります。"
+    },
+    {
+        id: 3026,
+        title: "問題 26",
+        originalTitle: "No.26 金を使って開き王手",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 1, col: 4 }, // 5二 飛
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 2 }, // 3一 角
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二金
+            { isDrop: false, fromRow: 2, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △１二玉
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２二角成
+        ],
+        explanation: "【正解の手順】▲３二金 △１二玉 ▲２二角成まで<br>【テーマ】：金を使って開き王手<br>【解説】【途中図は▲３二金まで】初めに金を動かして開き王手をしますが、▲２一金は△２二合で続きません。正解は金を寄せる▲３二金（途中図）です。以下は△１二玉に▲２二角成で詰め上がります。"
+    },
+    {
+        id: 3027,
+        title: "問題 27",
+        originalTitle: "No.27 銀ナラズで開き王手",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 飛
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 1 } // 2二 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 2, isPromote: false, player: PLAYER.SENTE }, // ▲３三銀不成
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △１三玉
+            { isDrop: false, fromRow: 1, fromCol: 3, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２二飛成
+        ],
+        explanation: "【正解の手順】▲３三銀不成 △１三玉 ▲２二飛成まで<br>【テーマ】：銀ナラズで開き王手<br>【解説】初手 ▲３三銀成は △１三玉から２四に逃げられてしまいます。正解の ▲３三銀不成が２四に利かせた一手で、△１三玉に ▲２二飛成までとなります。"
+    },
+    {
+        id: 3028,
+        title: "問題 28",
+        originalTitle: "No.28 離して打つ飛車",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 角
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha', 'kyosha']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'hisha', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二飛
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △１三玉
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２二飛成
+        ],
+        explanation: "【正解の手順】▲３二飛 △１三玉 ▲２二飛成まで<br>【テーマ】：離して打つ飛車<br>【解説】近づけて打つ▲２二飛から入るのは△１三玉で詰みません。正解は離して打つ▲３二飛で、△１三玉に▲２二飛成までとなります。３手一組で飛車を龍にする問題でした。"
+    },
+    {
+        id: 3029,
+        title: "問題 29",
+        originalTitle: "No.29 下から迫る",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 飛
+            { piece: 'kin', owner: PLAYER.SENTE, row: 0, col: 1 } // 2一 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 0, toCol: 0, player: PLAYER.SENTE }, // ▲１一金
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二玉
+            { isDrop: false, fromRow: 0, fromCol: 3, toRow: 0, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２一飛成
+        ],
+        explanation: "【正解の手順】▲１一金 △２二玉 ▲２一飛成まで<br>【テーマ】：下から迫る<br>【解説】初手▲４二飛成は△２一玉と金を取られてしまいます。正解手順は▲１一金〜▲２一飛成。下から迫って解決します。実戦でもよく見かける追い方の問題でした。"
+    },
+    {
+        id: 3030,
+        title: "問題 30",
+        originalTitle: "No.30 馬を切る",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 5 }, // 6二 飛
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 5, isPromoted: true }, // 6三 馬
+            { piece: 'fu', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 2, fromCol: 5, toRow: 0, toCol: 3, player: PLAYER.SENTE }, // ▲４一馬
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 3, player: PLAYER.GOTE }, // △同銀
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金
+        ],
+        explanation: "【正解の手順】▲４一馬 △同銀 ▲２二金まで<br>【テーマ】：馬を切る<br>【解説】美濃囲いの４一金は守りの要。それを取る初手▲４一馬が痛快な一手です。以下は△２二玉なら▲３二飛成までの駒余り。△同玉は頭金、△同銀も▲２二金で詰め上がります。"
+    },
+    {
+        id: 3031,
+        title: "問題 31",
+        originalTitle: "No.31 歩を突かせる",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 1, isPromoted: true } // 2一 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 4, toCol: 1, player: PLAYER.SENTE }, // ▲２五桂
+            { isDrop: false, fromRow: 3, fromCol: 1, toRow: 4, toCol: 1, player: PLAYER.GOTE }, // △同歩
+            { isDrop: true, piece: 'gin', toRow: 3, toCol: 1, player: PLAYER.SENTE } // ▲２四銀
+        ],
+        explanation: "【正解の手順】▲２五桂 △同歩 ▲２四銀まで<br>【テーマ】：歩を突かせる<br>【解説】初手▲２二銀は△２三玉で届きません。正解は打ち場所をつくるための▲２五桂です。以下は△同歩の一手に、空いたところへ打つ▲２四銀で詰みとなります。"
+    },
+    {
+        id: 3032,
+        title: "問題 32",
+        originalTitle: "No.32 桂馬の儀打",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true } // 3二 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 3, toCol: 1, player: PLAYER.SENTE }, // ▲2四桂
+            { isDrop: false, fromRow: 2, fromCol: 2, toRow: 3, toCol: 1, player: PLAYER.GOTE }, // △同銀
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲2二金
+        ],
+        explanation: "【正解の手順】▲2四桂 △同銀 ▲2二金まで<br>【テーマ】：桂馬の儀打<br>【解説】3三銀が2二に利いており、初手▲2二金では詰みません。正解の▲2四桂が好手で、△同歩は▲2三金まで。△同銀には▲2二金が実現します。"
+    },
+    {
+        id: 3033,
+        title: "問題 33",
+        originalTitle: "No.33 合駒をさせない",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 3, isPromoted: true } // 4三 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE }, // ▲２二金
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 2, fromCol: 3, toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二龍
+        ],
+        explanation: "【正解の手順】▲２二金 △同 玉 ▲３二龍まで<br>【テーマ】：合駒をさせない<br>【解説】いきなり▲３二龍とするのは△２二香合で続きません。正解の▲２二金が「危険地帯に誘え」の好手です。以下は△同玉に▲３二龍で詰めとなります。"
+    },
+    {
+        id: 3034,
+        title: "問題 34",
+        originalTitle: "No.34 玉を引っ張り出す",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 銀
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 1, col: 2, isPromoted: true }, // 3二 と
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 3 }, // 4三 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 4, col: 1, isPromoted: true } // 2五 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三金
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 4, fromCol: 1, toRow: 3, toCol: 2, player: PLAYER.SENTE } // ▲３四馬
+        ],
+        explanation: "【正解の手順】▲２三金 △同 玉 ▲３四馬まで<br>【テーマ】：玉を引っ張り出す<br>【解説】初手▲３四馬は△２三歩合で続きません。正解の▲２三金が前問同様、合駒をされないよう玉を呼ぶ好手です。以下は△同玉に▲３四馬で詰め上がります。"
+    },
+    {
+        id: 3035,
+        title: "問題 35",
+        originalTitle: "No.35 合い利かずの詰め",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 竜
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 2 } // 3一 角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 0, toCol: 1, player: PLAYER.SENTE }, // ▲２一銀
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 2, toCol: 0, isPromote: true, player: PLAYER.SENTE } // ▲１三角成
+        ],
+        explanation: "【正解の手順】▲２一銀 △同 玉 ▲１三角成まで<br>【テーマ】：合い利かずの詰め<br>【解説】初手▲２一銀が「危険地帯に誘え」の好手で、△同玉に▲１三角成までとなります。詰め上がり図では合駒が利きません。△３一合としても▲同龍で無効です。"
+    },
+    {
+        id: 3036,
+        title: "問題 36",
+        originalTitle: "No.36 開き王手の前に銀捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 0 }, // 1三角
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 0, player: PLAYER.SENTE }, // ▲１二銀
+            { isDrop: false, fromRow: 0, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 2, fromCol: 0, toRow: 0, toCol: 2, isPromote: true, player: PLAYER.SENTE } // ▲３一角成
+        ],
+        explanation: "【正解の手順】▲１二銀 △同 玉 ▲３一角成まで<br>【テーマ】：開き王手の前に銀捨て<br>【解説】単に▲３一角成は△１二桂合で届きません。まず▲１二銀で玉を呼び、△同玉に▲３一角成が正解手順となります。なお、詰め上がり図での合駒は▲同香不成で無効です。"
+    },
+    {
+        id: 3037,
+        title: "問題 37",
+        originalTitle: "No.37 玉は下段に落とせ",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 3, isPromoted: true } // 4三 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku', 'kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kaku', toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲３一角
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
+        ],
+        explanation: "【正解の手順】▲３一角 △同 玉 ▲３二金まで<br>【テーマ】：玉は下段に落とせ<br>【解説】１三に玉を逃がしてはつかまりません。初手▲３一角が「玉は下段に落とせ」の好手です。以下は△１二玉なら▲３二龍までの駒余り。△同玉には▲３二金で詰め上がります。"
+    },
+    {
+        id: 3038,
+        title: "問題 38",
+        originalTitle: "No.38 下からの角打ち",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku', 'kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kaku', toRow: 0, toCol: 1, player: PLAYER.SENTE }, // ▲２一角
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金
+        ],
+        explanation: "【正解の手順】▲２一角 △同 玉 ▲２二金まで<br>【テーマ】：下からの角打ち<br>【解説】初手▲５四角は玉を４三に逃がさず有力ですが、△４三歩合で届きません。正解の▲２一角が、前問同様「玉は下段に落とせ」の一手で、どう応じても頭金までとなります。"
+    },
+    {
+        id: 3039,
+        title: "問題 39",
+        originalTitle: "No.39 歩頭に金捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'gin', owner: PLAYER.GOTE, row: 4, col: 0 }, // 1五 銀
+            { piece: 'kin', owner: PLAYER.SENTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 2, isPromoted: true } // 3三 竜
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 3, toCol: 1, player: PLAYER.SENTE }, // ▲２四金
+            { isDrop: false, fromRow: 4, fromCol: 0, toRow: 3, toCol: 1, player: PLAYER.GOTE }, // △同銀
+            { isDrop: false, fromRow: 2, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二龍
+        ],
+        explanation: "【正解の手順】▲２四金 △同 銀 ▲２二龍まで<br>【テーマ】：歩頭に金捨て<br>【解説】単に▲２二龍は△２四玉で詰みません。正解の▲２四金が「逃げ道に捨てよ」の好手です。以下は△１二玉なら▲２三龍までの駒余り。△２四同銀には▲２二龍が実現します。"
+    },
+    {
+        id: 3040,
+        title: "問題 40",
+        originalTitle: "No.40 金に動いてもらう",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 銀
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 銀
+            { piece: 'kin', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 金
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三銀
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'hisha', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二飛
+        ],
+        explanation: "【正解の手順】▲２三銀 △同 金 ▲３二飛まで<br>【テーマ】：金に動いてもらう<br>【解説】初手▲３二銀成と金を取るのは△同玉で続きません。正解は金の移動を目指す▲２三銀です。以下は△３一玉なら金を取って駒余り。△２三同金には▲３二飛で詰めとなります。"
+    },
+    {
+        id: 3041,
+        title: "問題 41",
+        originalTitle: "No.41 銀が並んで詰め上がり",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 角
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, isPromote: true, player: PLAYER.SENTE }, // ▲３一角成
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二銀打
+        ],
+        explanation: "【正解の手順】▲３一角成△同　玉　▲３二銀打まで<br>【テーマ】：銀が並んで詰め上がり<br>【解説】初手▲３一角成が「危険地帯に誘え」の好手です。以下は玉が逃げれば▲２二馬までの駒余り。△３一同玉には▲３二銀打で詰めとなります。"
+    },
+    {
+        id: 3042,
+        title: "問題 42",
+        originalTitle: "No.42 ジャマな銀を消す",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 飛
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 銀
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 0, isPromote: true, player: PLAYER.SENTE }, // ▲１一銀成
+            { isDrop: false, fromRow: 0, fromCol: 3, toRow: 0, toCol: 0, player: PLAYER.GOTE }, // △同飛
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金
+        ],
+        explanation: "【正解の手順】▲１一銀成 △同 飛 ▲２二金まで<br>【テーマ】：ジャマな銀を消す<br>【解説】初手▲１一金は△同飛▲同銀成△同玉で届きません。正解はジャマになっている銀を消す▲１一銀成です。以下は△同玉、△同飛いずれも▲２二金までとなります。"
+    },
+    {
+        id: 3043,
+        title: "問題 43",
+        originalTitle: "No.43 捨てるのは角",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 2 } // 3二 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kaku', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kaku', toRow: 0, toCol: 1, player: PLAYER.SENTE }, // ▲２一角
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三銀打
+        ],
+        explanation: "【正解の手順】▲２一角 △同 金 ▲２三銀打まで<br>【テーマ】：捨てるのは角<br>【解説】初手▲２一角が２二金を移動させるための一手で、△同金に▲２三銀打までとなります。なお、角と銀の打ち順を変えて▲２一銀打〜▲２三角は△２二玉で詰めません。"
+    },
+    {
+        id: 3044,
+        title: "問題 44",
+        originalTitle: "No.44 金を打って引く",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 金
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 飛
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 1 } // 2四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE }, // ▲２二金
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 2, toCol: 2, player: PLAYER.GOTE }, // △３三玉
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金
+        ],
+        explanation: "【正解の手順】▲２二金 △３三玉 ▲２三金まで<br>【テーマ】：金を打って引く<br>【解説】金の打ち場所がポイントです。初手▲２三金は玉を引かれて、２二に飛車が利いており続きません。正解手順は▲２二金〜▲２三金。金を打って引いて詰め上がります。"
+    },
+    {
+        id: 3045,
+        title: "問題 45",
+        originalTitle: "No.45 玉を呼ぶ金捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 0, isPromoted: true }, // 1四 竜
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 4, col: 0 } // 1五 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 1, player: PLAYER.SENTE }, // ▲２一金
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 3, fromCol: 0, toRow: 0, toCol: 0, isPromote: true, player: PLAYER.SENTE } // ▲１一龍
+        ],
+        explanation: "【正解の手順】▲２一金 △同 玉 ▲１一龍まで<br>【テーマ】：玉を呼ぶ金捨て<br>【解説】金を持ったままいきなり龍の王手をしてもうまくいきません。初手▲２一金が「危険地帯に誘え」の好手です。以下は1二玉なら3二竜までの駒余り。△2一同玉に▲１一龍で詰めとなります。"
+    },
+    {
+        id: 3046,
+        title: "問題 46",
+        originalTitle: "No.46 金から打つ",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 1, isPromoted: true } // 2四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 3, player: PLAYER.SENTE }, // ▲４二金
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二玉
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 2, player: PLAYER.SENTE } // ▲２三銀
+        ],
+        explanation: "【正解の手順】▲４二金 △２二玉 ▲２三銀まで<br>【テーマ】：金から打つ<br>【解説】持駒の金銀を使う順序がテーマです。初手▲４二銀は△３二玉と逃げられて届きません。正解手順は▲４二金〜▲２三銀。金を先に使うのがポイントでした。"
+    },
+    {
+        id: 3047,
+        title: "問題 47",
+        originalTitle: "No.47 龍を捨てる",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 4, isPromoted: true }, // 5二 竜
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 4 } // 5三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 4, toRow: 0, toCol: 3, isPromote: true, player: PLAYER.SENTE }, // ▲４一龍
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 0, toCol: 3, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 3, player: PLAYER.SENTE } // ▲４二金
+        ],
+        explanation: "【正解の手順】▲４一龍 △同 玉 ▲４二金まで<br>【テーマ】：龍を捨てる<br>【解説】初手▲４二銀成は△２一玉▲３二金△１二玉で失敗。▲５一龍も△３二玉でつかまりません。正解の▲４一龍が玉を呼ぶための好手で、△同玉に頭金までとなります。"
+    },
+    {
+        id: 3048,
+        title: "問題 48",
+        originalTitle: "No.48 金はナナメに誘え",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 竜
+            { piece: 'gin', owner: PLAYER.SENTE, row: 4, col: 2 } // 3五 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 3, player: PLAYER.SENTE }, // ▲４三金
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 2, toCol: 3, player: PLAYER.GOTE }, // △同金
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
+        ],
+        explanation: "【正解の手順】▲４三金 △同　金 ▲３二金まで<br>【テーマ】：金はナナメに誘え<br>【解説】初手▲３四金や▲４四金は△２二玉で詰みません。正解の▲４三金が、３二金を動かす好手です。以下は△２二玉なら▲３二龍までの駒余り. △同金には▲３二金で解決します。"
     }
 ];
+
+
+

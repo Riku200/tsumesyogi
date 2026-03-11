@@ -765,7 +765,7 @@ header p {
 
     /* タイトル画面のボタン位置調整 */
     body.on-home-screen #game-container {
-        padding-bottom: 20px;
+        padding-bottom: 80px;
     }
 
     /* タイトル画面のメインボタンを横並びにする */

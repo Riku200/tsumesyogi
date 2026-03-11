@@ -673,7 +673,7 @@ const PUZZLES_3 = [
             { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
         ],
         hand: {
-            [PLAYER.SENTE]: ['hisha', 'kyosha']
+            [PLAYER.SENTE]: ['hisha']
         },
         isShapePuzzle: false,
         expectedMoves: [
@@ -1105,7 +1105,7 @@ const PUZZLES_3 = [
         expectedMoves: [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 3, player: PLAYER.SENTE }, // ▲４二金
             { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △２二玉
-            { isDrop: true, piece: 'gin', toRow: 2, toCol: 2, player: PLAYER.SENTE } // ▲２三銀
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三銀
         ],
         explanation: "【正解の手順】▲４二金 △２二玉 ▲２三銀まで<br>【テーマ】：金から打つ<br>【解説】持駒の金銀を使う順序がテーマです。初手▲４二銀は△３二玉と逃げられて届きません。正解手順は▲４二金〜▲２三銀。金を先に使うのがポイントでした。"
     },
@@ -1349,8 +1349,203 @@ const PUZZLES_3 = [
             { isDrop: false, fromRow: 3, fromCol: 3, toRow: 1, toCol: 3, isPromote: true, player: PLAYER.SENTE } // ▲４二飛成
         ],
         explanation: "【正解の手順】▲２二銀 △同 玉 ▲４二飛成まで<br>【テーマ】：銀の打ち場所がポイント<br>【解説】初手▲４二銀や▲３二銀打は△２二玉で、飛車成りの王手をすることができません。銀は２二から打つのが良く、△同玉に▲４二飛成まで、合い利かずの詰みとなります。"
+    },
+    {
+        id: 3057,
+        title: "問題 57",
+        originalTitle: "No.57 馬が飛び込む",
+        movesToMate: 3,
+        board: [
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 飛
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 3, col: 2 }, // 3四 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 1, isPromoted: true } // 2四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 3, fromCol: 1, toRow: 2, toCol: 0, isPromote: true, player: PLAYER.SENTE }, // ▲１三馬
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金
+        ],
+        explanation: "【正解の手順】▲１三馬 △同 玉 ▲２三金まで<br>【テーマ】：馬が飛び込む<br>【解説】一見主役にも見える馬を初めに▲１三馬(途中図)と捨ててしまうのが正解です。以下は△２一玉なら▲３一金、△同玉も▲２三金で詰め上がります。"
+    },
+    {
+        id: 3058,
+        title: "問題 58",
+        originalTitle: "No.58 風穴を開ける",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 玉
+            { piece: 'gin', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 2, isPromoted: true }, // 3一 竜
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 1, col: 3, isPromoted: true } // 4二 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三桂
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 1, player: PLAYER.GOTE }, // △同銀
+            { isDrop: false, fromRow: 1, fromCol: 3, toRow: 2, toCol: 2, isPromote: true, player: PLAYER.SENTE } // ▲３三馬
+        ],
+        explanation: "【正解の手順】▲２三桂 △同 銀 ▲３三馬まで<br>【テーマ】：風穴を開ける<br>【解説】初手▲２二龍は△同玉▲３四桂△２三玉で届きません。正解手順は▲２三桂〜▲３三馬です。詰め上がり図では龍の利きで桂馬が動けず、馬を取ることができません。"
+    },
+    {
+        id: 3059,
+        title: "問題 59",
+        originalTitle: "No.59 最後に飛車打ち",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 桂
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 0 } // 1三角
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE }, // ▲２二銀成
+            { isDrop: false, fromRow: 2, fromCol: 1, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △１三玉
+            { isDrop: true, piece: 'hisha', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三飛
+        ],
+        explanation: "【正解の手順】▲２二銀成 △１三玉 ▲２三飛まで<br>【テーマ】：最後に飛車打ち<br>【解説】初手▲２二飛は△１三玉で失敗。▲２四飛や▲２一飛も△３二玉でつかまりません。正解手順は▲２二銀成〜▲２三飛。３二に逃がさない銀成りがポイントでした。"
+    },
+    {
+        id: 3060,
+        title: "問題 60",
+        originalTitle: "No.60 金を移動させる銀捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 金
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 銀
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 3, col: 1 }, // 2四 飛
+            { piece: 'fu', owner: PLAYER.SENTE, row: 0, col: 4, isPromoted: true }, // 5一 と
+            { piece: 'kin', owner: PLAYER.SENTE, row: 2, col: 3 }, // 4三 金
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 3, isPromoted: true } // 4四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 1, player: PLAYER.SENTE }, // ▲２二銀
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △同金
+            { isDrop: false, fromRow: 3, fromCol: 3, toRow: 2, toCol: 4, isPromote: true, player: PLAYER.SENTE } // ▲５三馬
+        ],
+        explanation: "【正解の手順】▲２二銀 △同 金 ▲５三馬まで<br>【テーマ】：金を移動させる銀捨て<br>【解説】初手▲３二金は△同銀で、飛車が２二に利いており詰めません。正解の▲２二銀が「逃げ道に捨てよ」の好手です。以下は△同金に▲５三馬まで、合い利かずの詰めとなります。"
+    },
+    {
+        id: 3061,
+        title: "問題 61",
+        originalTitle: "No.61 下段から逃がさない",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三角
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 4 } // 5二 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲３一金
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
+        ],
+        explanation: "【正解の手順】▲３一金 △同 玉 ▲３二金まで<br>【テーマ】：下段から逃がさない<br>【解説】初手▲３二金は△１二玉▲３三金△１三玉で届きません。正解の▲３一金が「危険地帯に誘え」の好手です。以下は△同玉に頭金で詰めとなります。"
+    },
+    {
+        id: 3062,
+        title: "問題 62",
+        originalTitle: "No.62 逃げ道に銀捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 金
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 0 }, // 1二 飛
+            { piece: 'kyosha', owner: PLAYER.SENTE, row: 3, col: 0 } // 1四 香
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 2, player: PLAYER.SENTE }, // ▲３二銀
+            { isDrop: false, fromRow: 1, fromCol: 3, toRow: 1, toCol: 2, player: PLAYER.GOTE }, // △同金
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 0, toCol: 0, isPromote: true, player: PLAYER.SENTE } // ▲１一飛成
+        ],
+        explanation: "【正解の手順】▲３二銀 △同 金 ▲１一飛成まで<br>【テーマ】：逃げ道に銀捨て<br>【解説】いきなり▲１一飛成は△３二玉でつかまりません。正解の▲３二銀が「逃げ道に捨てよ」の好手です。以下は△同金に▲１一飛成が実現します。"
+    },
+    {
+        id: 3063,
+        title: "問題 63",
+        originalTitle: "No.63 銀の消し方がポイント",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 0, col: 5 }, // 6一 飛
+            { piece: 'kin', owner: PLAYER.GOTE, row: 1, col: 4 }, // 5二 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 歩
+            { piece: 'keima', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 桂
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.SENTE, row: 1, col: 3 }, // 4二 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 1, col: 1 }, // 2二 銀
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, isPromote: true, player: PLAYER.SENTE }, // ▲３一銀成
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 1, player: PLAYER.SENTE } // ▲２二金
+        ],
+        explanation: "【正解の手順】▲３一銀成 △同玉 ▲２二金まで<br>【テーマ】：銀の消し方がポイント<br>【解説】２二銀がジャマ駒になっていますが、初手▲２一銀不成は△同飛で詰めません。銀は３一に捨てるのが良く、△同飛、△同玉いずれも▲２二金までとなります。"
+    },
+    {
+        id: 3064,
+        title: "問題 64",
+        originalTitle: "No.64 引いて成る",
+        movesToMate: 3,
+        board: [
+            { piece: 'gin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 銀
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 玉
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 0, col: 1 }, // 2一 飛
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 2 } // 3三 銀
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 2, fromCol: 2, toRow: 3, toCol: 1, isPromote: true, player: PLAYER.SENTE }, // ▲２四銀成
+            { isDrop: false, fromRow: 2, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △１二玉
+            { isDrop: false, fromRow: 0, fromCol: 1, toRow: 2, toCol: 1, isPromote: true, player: PLAYER.SENTE } // ▲２三飛成
+        ],
+        explanation: "【正解の手順】▲２四銀成 △１二玉 ▲２三飛成まで<br>【テーマ】：引いて成る<br>【解説】初手▲２四飛成は△１二玉で続きません。正解手順は、銀と飛車を引いて成る▲２四銀成〜▲２三飛成。攻め駒二枚のうまいコンビネーションでした。"
     }
 ];
+
 
 
 

@@ -740,7 +740,7 @@ header p {
 
     body.on-home-screen {
         /* スマホ向けホーム画面背景 */
-        background-image: url('../img/title_smartphone.jpg');
+        background-image: url('../img/title_smartphone_text.jpg');
     }
 
     header {

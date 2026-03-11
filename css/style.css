@@ -57,7 +57,7 @@ body {
 
 /* ホーム画面専用のスタイル：背景画像をなるべく隠さないように透明にする */
 body.on-home-screen {
-    background-image: url('../img/title_computer.jpg');
+    background-image: url('../img/title_computer_text.jpg');
 }
 
 body.on-home-screen #game-container {

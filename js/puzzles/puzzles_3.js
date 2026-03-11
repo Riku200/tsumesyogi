@@ -1156,8 +1156,202 @@ const PUZZLES_3 = [
             { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
         ],
         explanation: "【正解の手順】▲４三金 △同　金 ▲３二金まで<br>【テーマ】：金はナナメに誘え<br>【解説】初手▲３四金や▲４四金は△２二玉で詰みません。正解の▲４三金が、３二金を動かす好手です。以下は△２二玉なら▲３二龍までの駒余り. △同金には▲３二金で解決します。"
+    },
+    {
+        id: 3049,
+        title: "問題 49",
+        originalTitle: "No.49 上部へ逃がさない",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 2 }, // 3二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 3 }, // 4三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 2, col: 4 }, // 5三 銀
+            { piece: 'keima', owner: PLAYER.SENTE, row: 3, col: 2 } // 3四 桂
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['hisha']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'hisha', toRow: 0, toCol: 2, player: PLAYER.SENTE }, // ▲３一飛
+            { isDrop: false, fromRow: 1, fromCol: 2, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 2, fromCol: 4, toRow: 1, toCol: 3, isPromote: true, player: PLAYER.SENTE } // ▲４二銀成
+        ],
+        explanation: "【正解の手順】▲３一飛 △同玉 ▲４二銀成まで<br>【テーマ】：上部へ逃がさない<br>【解説】横からの飛車打ちや▲４二銀成で入っては△３三玉でつかまりません。正解の▲３一飛が「玉は下段に落とせ」の好手で、△同玉に▲４二銀成までとなります。"
+    },
+    {
+        id: 3050,
+        title: "問題 50",
+        originalTitle: "No.50 歩の成り捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 0 }, // 1二 玉
+            { piece: 'kaku', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三角
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 馬
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 1 } // 2三 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 2, fromCol: 1, toRow: 1, toCol: 1, isPromote: true, player: PLAYER.SENTE }, // ▲２二歩成
+            { isDrop: false, fromRow: 1, fromCol: 0, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 2, toCol: 1, player: PLAYER.SENTE } // ▲２三金
+        ],
+        explanation: "【正解の手順】▲２二歩成 △同 玉 ▲２三金まで<br>【テーマ】：歩の成り捨て<br>【解説】初手▲２二金は△同角▲同歩成△同玉で、持駒角一枚では詰みません。正解はジャマ駒消去の▲２二歩成です。以下は△同玉、△同角いずれも▲２三金までとなります。"
+    },
+    {
+        id: 3051,
+        title: "問題 51",
+        originalTitle: "No.51 香車を移動させる",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'gin', owner: PLAYER.GOTE, row: 2, col: 2 }, // 3三 銀
+            { piece: 'fu', owner: PLAYER.SENTE, row: 0, col: 3, isPromoted: true }, // 4一 と
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 1, col: 4 } // 5二 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin', 'keima']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'keima', toRow: 2, toCol: 0, player: PLAYER.SENTE }, // ▲１三桂
+            { isDrop: false, fromRow: 0, fromCol: 0, toRow: 2, toCol: 0, player: PLAYER.GOTE }, // △同香
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 0, player: PLAYER.SENTE } // ▲１二銀
+        ],
+        explanation: "【正解の手順】▲１三桂 △同 香 ▲１二銀まで<br>【テーマ】：香車を移動させる<br>【解説】初手▲３一とは有力ですが、△同玉で届きません。正解手順は▲１三桂～▲１二銀。１二に利いている香車を動かすための桂捨てがポイントでした。"
+    },
+    {
+        id: 3052,
+        title: "問題 52",
+        originalTitle: "No.52 龍と馬の協力",
+        movesToMate: 3,
+        board: [
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 2, col: 4, isPromoted: true }, // 5三 竜
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 1, isPromoted: true } // 2四 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: []
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: false, fromRow: 3, fromCol: 1, toRow: 2, toCol: 1, player: PLAYER.SENTE }, // ▲２三馬
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 0, toCol: 2, player: PLAYER.GOTE }, // △３一玉
+            { isDrop: false, fromRow: 2, fromCol: 4, toRow: 0, toCol: 4, player: PLAYER.SENTE } // ▲５一龍
+        ],
+        explanation: "【正解の手順】▲２三馬 △３一玉 ▲５一龍まで<br>【テーマ】：龍と馬の協力<br>【解説】強力な大駒二枚で迫っていますが、使い方を間違えてはいけません。まず▲２三馬で玉を下段に落として▲５一龍まで、合い利かずの詰めとなります。"
+    },
+    {
+        id: 3053,
+        title: "問題 53",
+        originalTitle: "No.53 飛車に動いてもらう",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 1, col: 3 }, // 4二 飛
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 1, isPromoted: true } // 2三 馬
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 1, player: PLAYER.SENTE }, // ▲２二銀
+            { isDrop: false, fromRow: 1, fromCol: 3, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △同飛
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 3, player: PLAYER.SENTE } // ▲４一金
+        ],
+        explanation: "【正解の手順】▲２二銀 △同 飛 ▲４一金まで<br>【テーマ】：飛車に動いてもらう<br>【解説】初手▲２二銀が、縦横に利いている飛車を移動させる好手で、△同飛に▲４一金までとなります。なお、先に▲４一金は△同飛で、空いた４二から逃げられてしまいます。"
+    },
+    {
+        id: 3054,
+        title: "問題 54",
+        originalTitle: "No.54 コビンに銀捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'hisha', owner: PLAYER.GOTE, row: 0, col: 3 }, // 4一 飛
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'ou', owner: PLAYER.GOTE, row: 1, col: 1 }, // 2二 玉
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 2 }, // 3四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 3, col: 4, isPromoted: true }, // 5四 馬
+            { piece: 'fu', owner: PLAYER.SENTE, row: 4, col: 1 } // 2五 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 2, toCol: 2, player: PLAYER.SENTE }, // ▲３三銀
+            { isDrop: false, fromRow: 1, fromCol: 1, toRow: 2, toCol: 2, player: PLAYER.GOTE }, // △同玉
+            { isDrop: true, piece: 'kin', toRow: 1, toCol: 2, player: PLAYER.SENTE } // ▲３二金
+        ],
+        explanation: "【正解の手順】▲３三銀 △同 玉 ▲３二金まで<br>【テーマ】：コビンに銀捨て<br>【解説】玉のコビンに打つ初手▲３三銀（途中図）が好手です。以下は△３一玉なら▲３二馬までの駒余り。△１二玉は▲２二金、△３三同玉も▲３二金で解決します。"
+    },
+    {
+        id: 3055,
+        title: "問題 55",
+        originalTitle: "No.55 香頭に銀捨て",
+        movesToMate: 3,
+        board: [
+            { piece: 'kin', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 金
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 玉
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 3, col: 0 }, // 1四 歩
+            { piece: 'kaku', owner: PLAYER.SENTE, row: 2, col: 2, isPromoted: true }, // 3三 馬
+            { piece: 'fu', owner: PLAYER.SENTE, row: 2, col: 0 } // 1三 歩
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['kin', 'gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 0, player: PLAYER.SENTE }, // ▲１二銀
+            { isDrop: false, fromRow: 0, fromCol: 0, toRow: 1, toCol: 0, player: PLAYER.GOTE }, // △同香
+            { isDrop: true, piece: 'kin', toRow: 0, toCol: 0, player: PLAYER.SENTE } // ▲１一金
+        ],
+        explanation: "【正解の手順】▲１二銀 △同 香 ▲１一金まで<br>【テーマ】：香頭に銀捨て<br>【解説】初手▲１一馬は△同玉なら頭金までですが、△３二玉でつかまりません。正解の▲１二銀が、打ち場所をつくるための一手です。以下は△同香に▲１一金で詰め上がります。"
+    },
+    {
+        id: 3056,
+        title: "問題 56",
+        originalTitle: "No.56 銀の打ち場所がポイント",
+        movesToMate: 3,
+        board: [
+            { piece: 'ou', owner: PLAYER.GOTE, row: 0, col: 2 }, // 3一 玉
+            { piece: 'keima', owner: PLAYER.GOTE, row: 0, col: 1 }, // 2一 桂
+            { piece: 'kyosha', owner: PLAYER.GOTE, row: 0, col: 0 }, // 1一 香
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 1 }, // 2三 歩
+            { piece: 'fu', owner: PLAYER.GOTE, row: 2, col: 0 }, // 1三 歩
+            { piece: 'gin', owner: PLAYER.SENTE, row: 0, col: 3 }, // 4一 銀
+            { piece: 'hisha', owner: PLAYER.SENTE, row: 3, col: 3 } // 4四 飛
+        ],
+        hand: {
+            [PLAYER.SENTE]: ['gin']
+        },
+        isShapePuzzle: false,
+        expectedMoves: [
+            { isDrop: true, piece: 'gin', toRow: 1, toCol: 1, player: PLAYER.SENTE }, // ▲２二銀
+            { isDrop: false, fromRow: 0, fromCol: 2, toRow: 1, toCol: 1, player: PLAYER.GOTE }, // △同玉
+            { isDrop: false, fromRow: 3, fromCol: 3, toRow: 1, toCol: 3, isPromote: true, player: PLAYER.SENTE } // ▲４二飛成
+        ],
+        explanation: "【正解の手順】▲２二銀 △同 玉 ▲４二飛成まで<br>【テーマ】：銀の打ち場所がポイント<br>【解説】初手▲４二銀や▲３二銀打は△２二玉で、飛車成りの王手をすることができません。銀は２二から打つのが良く、△同玉に▲４二飛成まで、合い利かずの詰みとなります。"
     }
 ];
+
 
 
 

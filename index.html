@@ -723,22 +723,41 @@
         function getClearedPuzzles() {
             try {
                 const data = localStorage.getItem(SAVE_KEY);
-                return data ? JSON.parse(data) : [];
+                if (!data) return {};
+
+                const parsed = JSON.parse(data);
+
+                // 後方互換性：古い配列データの場合はオブジェクトに変換する
+                if (Array.isArray(parsed)) {
+                    const migrated = {};
+                    parsed.forEach(id => {
+                        migrated[id] = 1;
+                    });
+                    // 自動で新しい形式を保存し直す
+                    localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
+                    return migrated;
+                }
+
+                return parsed || {};
             } catch (e) {
                 console.error("セーブデータの読み込みに失敗しました", e);
-                return [];
+                return {};
             }
         }
 
         function saveClearedPuzzle(puzzleId) {
             const cleared = getClearedPuzzles();
-            if (!cleared.includes(puzzleId)) {
-                cleared.push(puzzleId);
-                try {
-                    localStorage.setItem(SAVE_KEY, JSON.stringify(cleared));
-                } catch (e) {
-                    console.error("セーブデータの書き込みに失敗しました", e);
-                }
+            // 初クリアの場合は0で初期化
+            if (!cleared[puzzleId]) {
+                cleared[puzzleId] = 0;
+            }
+            // クリア回数を加算
+            cleared[puzzleId]++;
+
+            try {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(cleared));
+            } catch (e) {
+                console.error("セーブデータの書き込みに失敗しました", e);
             }
         }
 
@@ -849,8 +868,12 @@
                 const btn = document.createElement('button');
                 btn.classList.add('puzzle-btn');
 
-                const isCleared = clearedPuzzles.includes(puzzle.id);
-                const clearBadge = isCleared ? `<span class="clear-badge">★ クリア！</span>` : "";
+                const clearCount = clearedPuzzles[puzzle.id] || 0;
+                let clearBadge = "";
+                if (clearCount > 0) {
+                    const stars = "★".repeat(clearCount);
+                    clearBadge = `<span class="clear-badge">${stars} クリア！</span>`;
+                }
 
                 // titleプロパティはヒント抜きの「問題 n」が入るように設定済み
                 btn.innerHTML = `<strong>${puzzle.title}</strong><br><small>${puzzle.movesToMate}手詰め</small>${clearBadge}`;

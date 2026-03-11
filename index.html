@@ -19,6 +19,7 @@
             <div id="controls" class="menu-controls">
                 <button id="btn-start" class="btn">通常対局</button>
                 <button id="btn-puzzle-menu" class="btn">詰将棋道場</button>
+                <button id="btn-settings" class="btn">設定</button>
             </div>
         </div>
 
@@ -49,6 +50,30 @@
             </div>
             <div class="menu-controls">
                 <button id="btn-back-to-home" class="btn back-btn">メニューに戻る</button>
+            </div>
+        </div>
+
+        <!-- 設定画面 -->
+        <div id="settings-screen" class="screen hidden">
+            <header>
+                <h2>設定</h2>
+            </header>
+            <div class="menu-controls"
+                style="flex-direction: column; align-items: center; gap: 20px; width: 100%; margin: 30px 0;">
+                <div
+                    style="width: 80%; max-width: 300px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 2px solid var(--board-line);">
+                    <label for="bgm-toggle" style="font-size: 1.2rem; font-weight: bold;">BGM</label>
+                    <input type="checkbox" id="bgm-toggle" style="transform: scale(2); cursor: pointer;" checked>
+                </div>
+                <div
+                    style="width: 80%; max-width: 300px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 2px solid var(--board-line);">
+                    <label for="bgm-volume" style="font-size: 1.2rem; font-weight: bold;">音量</label>
+                    <input type="range" id="bgm-volume" min="0" max="1" step="0.05" value="0.5"
+                        style="width: 100%; cursor: pointer;">
+                </div>
+            </div>
+            <div class="menu-controls">
+                <button id="btn-back-to-home-from-settings" class="btn back-btn">メニューに戻る</button>
             </div>
         </div>
 
@@ -155,6 +180,7 @@
 
 
     </script>
+    <script src="js/audio.js"></script>
     <script src="js/puzzles/puzzles_1.js"></script>
     <script src="js/puzzles/puzzles_3.js"></script>
     <script>
@@ -529,6 +555,14 @@
         let hasViewedHint = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // オーディオ設定の反映（UI初期化）
+            AudioManager.loadSettings();
+
+            // ユーザー操作でBGM再生開始
+            document.addEventListener('click', () => {
+                AudioManager.playBGM();
+            }, { once: true });
+
             // 初期状態はホーム画面なのでクラスを付与
             document.body.classList.add('on-home-screen');
 
@@ -559,6 +593,36 @@
             if (btnPuzzleMenu) {
                 btnPuzzleMenu.addEventListener('click', () => {
                     showScreen('puzzle-difficulty-screen');
+                });
+            }
+
+            const btnSettings = document.getElementById('btn-settings');
+            if (btnSettings) {
+                btnSettings.addEventListener('click', () => {
+                    document.getElementById('bgm-toggle').checked = !AudioManager.isMuted;
+                    document.getElementById('bgm-volume').value = AudioManager.volume;
+                    showScreen('settings-screen');
+                });
+            }
+
+            const btnBackToHomeFromSettings = document.getElementById('btn-back-to-home-from-settings');
+            if (btnBackToHomeFromSettings) {
+                btnBackToHomeFromSettings.addEventListener('click', () => {
+                    showScreen('home-screen');
+                });
+            }
+
+            const bgmToggle = document.getElementById('bgm-toggle');
+            if (bgmToggle) {
+                bgmToggle.addEventListener('change', (e) => {
+                    AudioManager.toggleMute(!e.target.checked);
+                });
+            }
+
+            const bgmVolume = document.getElementById('bgm-volume');
+            if (bgmVolume) {
+                bgmVolume.addEventListener('input', (e) => {
+                    AudioManager.setVolume(parseFloat(e.target.value));
                 });
             }
 
@@ -756,7 +820,7 @@
             document.body.classList.remove('on-home-screen', 'on-normal-match', 'on-puzzle-menu', 'on-puzzle-match');
             if (screenId === 'home-screen') {
                 document.body.classList.add('on-home-screen');
-            } else if (screenId === 'puzzle-difficulty-screen' || screenId === 'puzzle-select-screen') {
+            } else if (screenId === 'puzzle-difficulty-screen' || screenId === 'puzzle-select-screen' || screenId === 'settings-screen') {
                 document.body.classList.add('on-puzzle-menu');
             } else if (screenId === 'game-screen') {
                 if (isPuzzleMode) {

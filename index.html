@@ -21,8 +21,9 @@
         <div id="home-screen" class="screen">
             <div id="controls" class="menu-controls">
                 <button id="btn-start" class="btn">通常対局</button>
-                <button id="btn-puzzle-menu" class="btn">詰将棋道場</button>
+                <button id="btn-ai-match" class="btn">AIと対局</button>
                 <button id="btn-import-kifu" class="btn">棋譜を読込</button>
+                <button id="btn-puzzle-menu" class="btn">詰将棋道場</button>
                 <button id="btn-settings" class="btn">設定</button>
             </div>
         </div>
@@ -74,6 +75,16 @@
                     <label for="bgm-volume" style="font-size: 1.2rem; font-weight: bold;">音量</label>
                     <input type="range" id="bgm-volume" min="0" max="1" step="0.05" value="0.5"
                         style="width: 100%; cursor: pointer;">
+                </div>
+                <div
+                    style="width: 80%; max-width: 300px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 2px solid var(--board-line); margin-top: 10px;">
+                    <label for="ai-depth" style="font-size: 1.2rem; font-weight: bold;">AIの強さ (1〜15)</label>
+                    <div style="display:flex; width:100%; align-items:center; gap:10px;">
+                        <input type="range" id="ai-depth" min="1" max="15" step="1" value="10"
+                            style="flex:1; cursor: pointer;">
+                        <span id="ai-depth-value" style="font-weight:bold; width:30px;">10</span>
+                    </div>
+                    <small style="color:#666;">※数字が大きいほど強く、考える時間が長くなります。</small>
                 </div>
             </div>
             <div class="menu-controls">

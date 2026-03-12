@@ -12,6 +12,7 @@ let currentPuzzle = null;
 let currentPuzzleStep = 0;
 let aiManager = null;
 let hasViewedHint = false;
+let isAIMatchMode = false; // ★AI対局モードかどうかのフラグ
 
 document.addEventListener('DOMContentLoaded', () => {
     // オーディオ設定の反映（UI初期化）
@@ -77,12 +78,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        //人間が指した後にAIにバトンタッチし、AIの手を盤面で自動実行するロジックを追加
+        document.getElementById('btn-ai-match').addEventListener('click', () => {
+            isPuzzleMode = false;
+            isReplayMode = false;
+            isAIMatchMode = true; // AI対局モードON
+            document.getElementById('game-title').textContent = "AI対局 (後手AI)";
+
+            initGame(); // 初期盤面セット
+            showScreen('game-screen');
+
+            // AI検討を強制的にONにしてスタート
+            if (aiManager && !aiManager.isAnalyzing) {
+                aiManager.startAnalysis();
+            }
+        });
+
         // 戻るボタンの処理を少し修正（検討モードの解除）
         const btnBackToMenu = document.getElementById('btn-back-to-menu');
         if (btnBackToMenu) {
             // 既存のイベントリスナーを上書きするため、元のリスナーは消しておくか、中にifを追加します
             btnBackToMenu.addEventListener('click', () => {
                 isReplayMode = false; // ★追加：検討モード解除
+                isAIMatchMode = false; // ★追加：AI対局モード解除
                 document.getElementById('btn-replay-prev').classList.add('hidden');
                 document.getElementById('btn-replay-next').classList.add('hidden');
 
@@ -227,6 +245,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCloseModal) {
         btnCloseModal.addEventListener('click', () => {
             document.getElementById('result-modal').classList.add('hidden');
+        });
+    }
+
+    const aiDepthSlider = document.getElementById('ai-depth');
+    const aiDepthValue = document.getElementById('ai-depth-value');
+
+    if (aiDepthSlider) {
+        aiDepthSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            aiDepthValue.textContent = val;
+            if (aiManager) aiManager.depth = parseInt(val);
         });
     }
 
@@ -632,6 +661,14 @@ function handleCellClick(row, col) {
 
             // ターンの交代
             currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+
+            // --- AI対局モードの処理 ---
+            if (isAIMatchMode && currentPlayer !== humanRole) {
+                if (aiManager) {
+                    aiManager.updateStatus("AIが考えています...");
+                    aiManager.sendSFEN(gameBoard.getSFEN(currentPlayer, 1));
+                }
+            }
 
             // AI連携
             if (aiManager && !isPuzzleMode) {
@@ -1049,3 +1086,80 @@ function updateReplayBoard() {
         aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, currentReplayStep + 1));
     }
 }
+
+/**
+ * AIが返してきた "7g7f" などの手を盤面に反映する
+ */
+window.onAIMoveDecided = function (bestMove) {
+    // 対局モードでない、または自分のターンなら何もしない
+    if (!isAIMatchMode || currentPlayer === humanRole) return;
+
+    try {
+        let toR, toC; // 座標保存用（ハイライト用）
+        const aiColor = (humanRole === PLAYER.SENTE) ? PLAYER.GOTE : PLAYER.SENTE;
+
+        if (bestMove.includes('*')) {
+            // --- 駒打ちの場合 (例: P*5e) ---
+            const pieceChar = bestMove[0];
+            const colNum = parseInt(bestMove[2]); // 1-9
+            const rowChar = bestMove[3]; // a-i
+
+            toR = "abcdefghi".indexOf(rowChar);
+            // ★修正: AIからの数字を左右反転させてアプリの盤面に戻す
+            toC = 9 - colNum;
+
+            const pieceId = { 'P': 'fu', 'L': 'kyosha', 'N': 'keima', 'S': 'gin', 'G': 'kin', 'B': 'kaku', 'R': 'hisha' }[pieceChar.toUpperCase()];
+            const pType = Object.values(PIECE_TYPES).find(t => t.id === pieceId);
+
+            gameBoard.dropPiece(aiColor, pType, toR, toC);
+        } else {
+            // --- 移動の場合 (例: 7g7f) ---
+            // ★修正: 左右反転を元に戻すために 9 から引く
+            const fromC = 9 - parseInt(bestMove[0]);
+            const fromR = "abcdefghi".indexOf(bestMove[1]);
+
+            toC = 9 - parseInt(bestMove[2]);
+            toR = "abcdefghi".indexOf(bestMove[3]);
+
+            const promote = bestMove.includes('+');
+
+            gameBoard.movePiece(fromR, fromC, toR, toC);
+            if (promote) {
+                const p = gameBoard.getPiece(toR, toC);
+                if (p) p.isPromoted = true;
+            }
+        }
+
+        // ★ 最後に動かした駒をハイライト（緑色）にする
+        lastMovedCell = { row: toR, col: toC };
+
+        // 手番を人間に戻す
+        currentPlayer = humanRole;
+        renderBoard();
+
+    } catch (e) {
+        console.error("AIの手の実行に失敗:", e);
+    }
+};
+
+let humanRole = PLAYER.SENTE; // 人間がどちらか
+
+document.getElementById('btn-ai-match').addEventListener('click', () => {
+    // シンプルに「後手(AI)で始めますか？」と聞く例
+    const playAsGote = confirm("あなたが「後手」で始めますか？\n（キャンセルを押すとあなたが「先手」になります）");
+    humanRole = playAsGote ? PLAYER.GOTE : PLAYER.SENTE;
+
+    isAIMatchMode = true;
+    document.getElementById('game-title').textContent = playAsGote ? "AI対局 (先手AI)" : "AI対局 (後手AI)";
+
+    initGame();
+    showScreen('game-screen');
+
+    if (aiManager && !aiManager.isAnalyzing) aiManager.startAnalysis();
+
+    // ★ もし人間が後手なら、開始と同時にAI（先手）に指させる
+    if (humanRole === PLAYER.GOTE) {
+        currentPlayer = PLAYER.SENTE; // AIの手番
+        aiManager.sendSFEN(gameBoard.getSFEN(PLAYER.SENTE, 1));
+    }
+});

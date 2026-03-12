@@ -13,6 +13,8 @@ let currentPuzzleStep = 0;
 let aiManager = null;
 let hasViewedHint = false;
 let isAIMatchMode = false; // ★AI対局モードかどうかのフラグ
+let gameHistory = [];      // ★追加：指し手の履歴（Undo用）
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // オーディオ設定の反映（UI初期化）
@@ -112,6 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        const btnUndo = document.getElementById('btn-undo');
+        if (btnUndo) {
+            btnUndo.addEventListener('click', () => {
+                handleUndo();
+            });
+        }
+
         // ===================================================
 
         // ヒントボタンや次へボタンを隠す
@@ -571,6 +581,9 @@ function initGame() {
     if (aiManager && !isPuzzleMode) {
         aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, 1));
     }
+
+    gameHistory = [];
+    updateUndoButtonVisibility();
 }
 
 function initPuzzle(puzzle) {
@@ -602,6 +615,9 @@ function initPuzzle(puzzle) {
     if (explArea) explArea.classList.remove('is-visible');
     const explText = document.getElementById('puzzle-explanation-text');
     if (explText) explText.innerHTML = "";
+
+    gameHistory = [];
+    updateUndoButtonVisibility();
 
     renderBoard();
 }
@@ -642,7 +658,9 @@ function handleCellClick(row, col) {
         const isValidDrop = validDrops.some(m => m.row === row && m.col === col);
 
         if (isValidDrop) {
+            pushToHistory(); // 指す前に状態を保存
             gameBoard.dropPiece(player, pieceType, row, col);
+
 
             lastMovedCell = { row, col };
             clearSelection();
@@ -736,7 +754,9 @@ function handleCellClick(row, col) {
             }
 
             // 移動処理
+            pushToHistory(); // 指す前に状態を保存
             gameBoard.movePiece(selRow, selCol, row, col);
+
 
             // 成りを適用
             if (promote) {
@@ -1098,7 +1118,10 @@ window.onAIMoveDecided = function (bestMove) {
         let toR, toC; // 座標保存用（ハイライト用）
         const aiColor = (humanRole === PLAYER.SENTE) ? PLAYER.GOTE : PLAYER.SENTE;
 
+        pushToHistory(); // AIが指す前に状態を保存
+
         if (bestMove.includes('*')) {
+
             // --- 駒打ちの場合 (例: P*5e) ---
             const pieceChar = bestMove[0];
             const colNum = parseInt(bestMove[2]); // 1-9
@@ -1163,3 +1186,87 @@ document.getElementById('btn-ai-match').addEventListener('click', () => {
         aiManager.sendSFEN(gameBoard.getSFEN(PLAYER.SENTE, 1));
     }
 });
+
+/**
+ * 履歴に現在の状態を保存する
+ */
+function pushToHistory() {
+    gameHistory.push({
+        state: gameBoard.captureState(),
+        currentPlayer: currentPlayer,
+        lastMovedCell: lastMovedCell ? { ...lastMovedCell } : null
+    });
+    updateUndoButtonVisibility();
+}
+
+/**
+ * 待った（Undo）の実行
+ */
+function handleUndo() {
+    if (gameHistory.length === 0) return;
+
+    if (isAIMatchMode) {
+        // AI対局時：もしAIが思考中なら一度止める
+        if (aiManager) aiManager.stopAnalysis();
+
+        if (currentPlayer === humanRole) {
+            // ① 自分の番（AIが指し終わった後）に「待った」を押した場合
+            // AIの手(1つ前)と、自分の手(2つ前)の両方を取り消して、自分の番に戻す
+            if (gameHistory.length >= 2) {
+                gameHistory.pop(); // AIが指す前の状態を捨てる
+                const previousState = gameHistory.pop(); // 自分が指す前の状態を取り出す
+                restoreGameFromHistory(previousState);
+            }
+        } else {
+            // ② AIの番（自分が指して、AIが考え中）に「待った」を押した場合
+            // 自分の手(1つ前)だけを取り消して、自分の番に戻す
+            if (gameHistory.length >= 1) {
+                const previousState = gameHistory.pop(); // 自分が指す前の状態を取り出す
+                restoreGameFromHistory(previousState);
+            }
+        }
+    } else {
+        // 通常対局時：単純に1手（相手の番）に戻す
+        const previousState = gameHistory.pop();
+        restoreGameFromHistory(previousState);
+    }
+
+    renderBoard();
+    updateUndoButtonVisibility();
+
+    // AI連携の更新（盤面が変わったので再評価）
+    if (aiManager && !isPuzzleMode) {
+        aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, 1));
+        if (isAIMatchMode) {
+            aiManager.startAnalysis(); // 検討（評価値表示）を再開
+        }
+    }
+}
+
+/**
+ * 保存された履歴データから復元する
+ */
+function restoreGameFromHistory(historyItem) {
+    if (!historyItem) return;
+    gameBoard.restoreState(historyItem.state);
+    currentPlayer = historyItem.currentPlayer;
+    lastMovedCell = historyItem.lastMovedCell;
+}
+
+/**
+ * 待ったボタンの表示制御
+ */
+function updateUndoButtonVisibility() {
+    const btnUndo = document.getElementById('btn-undo');
+    if (!btnUndo) return;
+
+    if (isPuzzleMode || isReplayMode) {
+        btnUndo.classList.add('hidden');
+    } else {
+        if (gameHistory.length > 0) {
+            btnUndo.classList.remove('hidden');
+        } else {
+            btnUndo.classList.add('hidden');
+        }
+    }
+}

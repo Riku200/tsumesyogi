@@ -440,4 +440,23 @@
         // 4. 手数
         return `${sfenBoard} ${sfenTurn} ${sfenHand} ${moveCount}`;
     }
+
+    /**
+     * 盤面の状態をキャプチャする（Undo用）
+     */
+    captureState() {
+        return {
+            grid: JSON.parse(JSON.stringify(this.grid)),
+            capturedPieces: JSON.parse(JSON.stringify(this.capturedPieces))
+        };
+    }
+
+    /**
+     * 盤面の状態を復元する
+     */
+    restoreState(state) {
+        if (!state) return;
+        this.grid = JSON.parse(JSON.stringify(state.grid));
+        this.capturedPieces = JSON.parse(JSON.stringify(state.capturedPieces));
+    }
 }

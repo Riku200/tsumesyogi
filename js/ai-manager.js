@@ -95,27 +95,27 @@ class AIManager {
         this.worker.postMessage({ type: 'command', command: 'go depth 10' });
     }
 
-    // --- USIを完全な日本語に翻訳する関数 ---
+    // ai-manager.js 内の translateUsiToJapanese をこれに差し替えてください
     translateUsiToJapanese(usi) {
         if (usi === "resign") return "投了";
         if (usi === "win") return "宣言勝ち";
 
-        const cols = { '1': '１', '2': '２', '3': '３', '4': '４', '5': '５', '6': '６', '7': '７', '8': '８', '9': '９' };
+        const cols = { 1: '１', 2: '２', 3: '３', 4: '４', 5: '５', 6: '６', 7: '７', 8: '８', 9: '９' };
         const rows = { 'a': '一', 'b': '二', 'c': '三', 'd': '四', 'e': '五', 'f': '六', 'g': '七', 'h': '八', 'i': '九' };
         const pieces = { 'P': '歩', 'L': '香', 'N': '桂', 'S': '銀', 'G': '金', 'B': '角', 'R': '飛', 'K': '玉' };
 
         try {
             if (usi.includes('*')) {
-                // 持ち駒を打つ場合（例：P*5e → ５五歩打）
                 const p = pieces[usi[0].toUpperCase()] || usi[0];
-                const toX = cols[10 - usi[2]];
+                // AIの左右逆の認識を、10から引いて正しいラベルに戻す
+                const toX = cols[10 - parseInt(usi[2])];
                 const toY = rows[usi[3]];
                 return `${toX}${toY}${p}打`;
             } else {
-                // 盤上の移動の場合（例：7g7f → ７六(７七)）
-                const fromX = cols[10 - usi[0]];
+                // 移動元・移動先ともに 10から引いて反転させる
+                const fromX = cols[10 - parseInt(usi[0])];
                 const fromY = rows[usi[1]];
-                const toX = cols[10 - usi[2]];
+                const toX = cols[10 - parseInt(usi[2])];
                 const toY = rows[usi[3]];
                 const promote = usi.includes('+') ? '成' : '';
                 return `${toX}${toY}(${fromX}${fromY})${promote}`;

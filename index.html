@@ -22,6 +22,7 @@
             <div id="controls" class="menu-controls">
                 <button id="btn-start" class="btn">通常対局</button>
                 <button id="btn-puzzle-menu" class="btn">詰将棋道場</button>
+                <button id="btn-import-kifu" class="btn">棋譜を読込</button>
                 <button id="btn-settings" class="btn">設定</button>
             </div>
         </div>
@@ -150,12 +151,14 @@
                 style="margin-top: 5px; flex-direction: row; justify-content: center; align-items: center; gap: 5px; width: 100%;">
                 <h2 id="game-title"
                     style="margin: 0; font-size: 1.1rem; white-space: nowrap; color: var(--text-color);">通常対局</h2>
-                <button id="btn-show-hint" class="btn hidden"
-                    style="background-color: #ffd166; color: #333; font-size: 0.9rem; padding: 6px 8px; flex: 1; max-width: 120px; border: 3px solid #f39c12; box-shadow: 0 4px 0 #f39c12; white-space: nowrap;">解答解説</button>
-                <button id="btn-back-to-menu" class="btn back-btn"
-                    style="margin-top: 0; padding: 6px 8px; font-size: 0.9rem; flex: 1; max-width: 120px;">戻る</button>
-                <button id="btn-next-puzzle" class="btn hidden"
-                    style="background-color: #4CAF50; color: white; font-size: 0.9rem; padding: 8px 10px; flex: 1; max-width: 120px; border: 3px solid #388E3C; box-shadow: 0 4px 0 #388E3C; white-space: nowrap;">次へ</button>
+                <button id="btn-show-hint" class="btn hidden" style="...">解答解説</button>
+
+                <button id="btn-replay-prev" class="btn hidden" style="padding: 6px 8px; font-size: 0.9rem; flex: 1;">◀
+                    前</button>
+                <button id="btn-replay-next" class="btn hidden" style="padding: 6px 8px; font-size: 0.9rem; flex: 1;">次
+                    ▶</button>
+                <button id="btn-back-to-menu" class="btn back-btn" style="...">戻る</button>
+                <button id="btn-next-puzzle" class="btn hidden" style="...">次へ</button>
             </div>
 
         </div>
@@ -186,6 +189,18 @@
     <div id="success-popup" class="success-popup">
         <img src="img/correct_answer.jpg" alt="大正解！"
             style="width: 100%; height: auto; border-radius: 20px; display: block;">
+    </div>
+
+    <div id="kifu-modal" class="modal hidden">
+        <div class="modal-content" style="pointer-events: auto; max-width: 500px;">
+            <h3 style="margin-bottom:10px;">将棋クエスト(CSA形式)を貼付</h3>
+            <textarea id="kifu-input" placeholder="+2726FU..."
+                style="width:100%; height:200px; padding:10px; font-size:1rem; border-radius:5px;"></textarea>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                <button id="btn-kifu-cancel" class="btn">キャンセル</button>
+                <button id="btn-kifu-start" class="btn primary-btn">検討開始</button>
+            </div>
+        </div>
     </div>
 
 </body>

@@ -770,18 +770,35 @@ header p {
 
     /* タイトル画面のメインボタンを横並びにする */
     #controls {
+        display: flex;
         flex-direction: row;
+        /* 横並びベース */
+        flex-wrap: wrap;
+        /* ★ここが重要：入りきらない分を折り返す */
+        justify-content: center;
+        /* 中央寄せ */
         width: 100%;
-        gap: 10px;
-        padding: 0 10px;
+        gap: 12px 10px;
+        /* 縦の隙間12px、横の隙間10px */
+        padding: 0 15px;
     }
 
     #controls .btn {
-        flex: 1;
-        width: auto;
-        padding: 10px 5px;
-        font-size: 0.9rem;
+        /* flex: 1 1 calc(33% - 10px); 
+           → 3列を基本にする設定。5つのボタンなら「3つ + 2つ」の二段になります。
+        */
+        flex: 1 1 calc(33% - 10px);
+        min-width: 100px;
+        /* ボタンが小さくなりすぎない限界 */
+        max-width: 140px;
+        /* ボタンが広がりすぎない限界 */
+        padding: 12px 2px;
+        font-size: 0.85rem;
+        /* 文字サイズを少し調整 */
         white-space: nowrap;
+        /* 改行させない */
+        box-shadow: 0 4px 0 #b38336;
+        /* 押し下げ効果を少し控えめに調整 */
     }
 
     /* 問題番号の背景を追加し、同化を防ぐ */

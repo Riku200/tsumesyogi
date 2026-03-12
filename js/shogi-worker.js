@@ -1,33 +1,47 @@
 /**
- * js/shogi-worker.js (SuishoPetite 軽量版)
+ * js/shogi-worker.js (SuishoPetite 軽量版・シングルスレッド対応)
  */
 console.log("[Worker] ワーカースクリプト起動。軽量AI(Petite)を起動します...");
 
+function getAbsoluteUrl(relativePath) {
+    return new URL(relativePath, location.href).href;
+}
+
 self.Module = {
-    INITIAL_MEMORY: 33554432, // 32MB
+    INITIAL_MEMORY: 134217728, // 128MB
     ALLOW_MEMORY_GROWTH: true,
+    mainScriptUrlOrBlob: getAbsoluteUrl('../ai/YaneuraOu/yaneuraou.k-p.js'),
+
     locateFile: function (path) {
-        console.log("[Worker] AIがファイルを探しています:", path);
-        // shogi-worker.jsから見た相対パスを指定
-        return '../ai/YaneuraOu/' + path;
+        const url = getAbsoluteUrl('../ai/YaneuraOu/' + path);
+        return url;
     },
     preRun: [],
-    print: function (text) {
-        console.log("[AI Output]:", text);
-        postMessage({ type: 'stdout', message: text });
-    },
+    // ここは空でOK（直接console.logされるため）
+    print: function (text) { },
     printErr: function (text) {
         console.warn("[AI Error]:", text);
     },
     onRuntimeInitialized: function () {
         console.log("[Worker] ★★★ Petite版が目覚めました！ ★★★");
 
-        // 【重要】Threadsを1に設定して、SharedArrayBufferへの依存を最小限にする
-        self.sendCommandToEngine("setoption name Threads value 1");
+        // Petite版はシングルスレッド専用なので Threads 指定は削除
         self.sendCommandToEngine("setoption name Hash value 16");
 
         postMessage({ type: 'status', message: '将棋AI(軽量版) 準備完了' });
         postMessage({ type: 'ready' });
+    }
+};
+
+// ★★★ ここを追加！：コンソールへの出力を横取りして、画面(ai-manager.js)に転送する ★★★
+const originalConsoleLog = console.log;
+console.log = function (...args) {
+    originalConsoleLog(...args); // 本来のコンソール出力も残す
+    const text = args.join(' ');
+
+    // AIの思考結果（info）や最善手（bestmove）から始まるテキストなら、画面側に送信する
+    if (text.startsWith('info ') || text.startsWith('bestmove ') || text.startsWith('readyok') || text.startsWith('id ')) {
+        postMessage({ type: 'stdout', message: text });
     }
 };
 

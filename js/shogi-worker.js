@@ -8,6 +8,7 @@ self.Module = {
     ALLOW_MEMORY_GROWTH: true,
     locateFile: function (path) {
         console.log("[Worker] AIがファイルを探しています:", path);
+        // shogi-worker.jsから見た相対パスを指定
         return '../ai/YaneuraOu/' + path;
     },
     preRun: [],
@@ -19,9 +20,12 @@ self.Module = {
         console.warn("[AI Error]:", text);
     },
     onRuntimeInitialized: function () {
-        console.log("[Worker] ★★★ 軽量AIが目覚めました！ ★★★");
-        self.sendCommandToEngine("setoption name Hash value 16");
+        console.log("[Worker] ★★★ Petite版が目覚めました！ ★★★");
+
+        // 【重要】Threadsを1に設定して、SharedArrayBufferへの依存を最小限にする
         self.sendCommandToEngine("setoption name Threads value 1");
+        self.sendCommandToEngine("setoption name Hash value 16");
+
         postMessage({ type: 'status', message: '将棋AI(軽量版) 準備完了' });
         postMessage({ type: 'ready' });
     }

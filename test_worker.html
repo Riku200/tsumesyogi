@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Worker</title></head>
+<body>
+    <h1>Worker Test</h1>
+    <script>
+        const worker = new Worker('js/shogi-worker.js');
+        worker.onmessage = (e) => {
+            console.log("From worker:", e.data);
+            if (e.data && e.data.type === 'ready') {
+                console.log("Worker ready, sending isready");
+                worker.postMessage({ type: 'command', command: 'isready' });
+            }
+        };
+        worker.postMessage({ type: 'init' });
+    </script>
+</body>
+</html>

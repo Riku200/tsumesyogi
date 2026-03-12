@@ -1,442 +1,896 @@
-let gameBoard;
-let selectedPieceCell = null; // 現在選択されている駒のセル座標 {row, col}
-let selectedCapturedPiece = null; // 現在選択されている持ち駒 {player, pieceType}
-let lastMovedCell = null; // 最後に駒が動いた、または打たれたセル座標 {row, col}
-let currentPlayer = PLAYER.SENTE; // 現在のターン (初期は先手)
-let isPuzzleMode = false;         // 詰将棋モードかどうか
-let currentPuzzle = null;         // 現在のパズルデータ
+// --- main.js ---
+        let gameBoard;
+        let selectedPieceCell = null;
+        let selectedCapturedPiece = null;
+        let lastMovedCell = null;
+        let currentPlayer = PLAYER.SENTE;
+        let isPuzzleMode = false;
+        let currentPuzzle = null;
+        let currentPuzzleStep = 0;
+        let aiManager = null;
+        let hasViewedHint = false;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 盤面データを初期化
-    gameBoard = new Board();
-    gameBoard.setupInitialPosition();
+        document.addEventListener('DOMContentLoaded', () => {
+            // オーディオ設定の反映（UI初期化）
+            AudioManager.loadSettings();
 
-    // DOMへ描画
-    renderBoard();
+            // ユーザー操作でBGM再生開始
+            document.addEventListener('click', () => {
+                AudioManager.playBGM();
+            }, { once: true });
 
-    // イベントリスナーの登録
-    document.getElementById('btn-start').addEventListener('click', () => {
-        isPuzzleMode = false;
-        currentPuzzle = null;
-        document.getElementById('game-title').textContent = "通常対局";
-        initGame();
-        showScreen('game-screen');
-    });
+            // 初期状態はホーム画面なのでクラスを付与
+            document.body.classList.add('on-home-screen');
 
-    const btnPuzzleMenu = document.getElementById('btn-puzzle-menu');
-    if (btnPuzzleMenu) {
-        btnPuzzleMenu.addEventListener('click', () => {
-            renderPuzzleList();
-            showScreen('puzzle-select-screen');
-        });
-    }
+            // 盤面データを初期化
+            gameBoard = new Board();
+            gameBoard.setupInitialPosition();
 
-    document.getElementById('btn-back-to-home').addEventListener('click', () => {
-        showScreen('home-screen');
-    });
-
-    document.getElementById('btn-back-to-menu').addEventListener('click', () => {
-        showScreen('home-screen');
-    });
-
-    // 初期状態はホーム画面を表示
-    showScreen('home-screen');
-});
-
-/**
- * 画面の切り替えを行う
- */
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.add('hidden');
-    });
-    document.getElementById(screenId).classList.remove('hidden');
-}
-
-/**
- * 詰将棋のリストを描画する
- */
-function renderPuzzleList() {
-    const listContainer = document.getElementById('puzzle-list');
-    listContainer.innerHTML = '';
-
-    PUZZLES.forEach(puzzle => {
-        const btn = document.createElement('button');
-        btn.classList.add('puzzle-btn');
-        btn.innerHTML = `<strong>${puzzle.title}</strong><br><small>${puzzle.movesToMate}手詰め</small>`;
-
-        btn.addEventListener('click', () => {
-            isPuzzleMode = true;
-            currentPuzzle = puzzle;
-            document.getElementById('game-title').textContent = puzzle.title;
-            initPuzzle(puzzle);
-            showScreen('game-screen');
-        });
-
-        listContainer.appendChild(btn);
-    });
-}
-
-/**
- * 将棋盤のDOM要素を現在のgameBoardの状態で再描画する関数
- */
-function renderBoard() {
-    const boardElement = document.getElementById('shogi-board');
-    boardElement.innerHTML = '';
-
-    // 9x9の盤面を描画 (内部配列と同じ0-indexedで回す)
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.row = row;
-            cell.dataset.col = col;
-
-            // セルクリック時のイベントを追加
-            cell.addEventListener('click', () => handleCellClick(row, col));
-
-            const piece = gameBoard.getPiece(row, col);
-            if (piece) {
-                // 駒の形を作るための内部要素を作成
-                const pieceShape = document.createElement('div');
-                pieceShape.classList.add('piece-shape');
-
-                const pieceText = document.createElement('span');
-                pieceText.textContent = piece.displayName;
-                pieceShape.appendChild(pieceText);
-
-                // 持ち主によるスタイリング（後手は文字をひっくり返すなど）を追加
-                if (piece.owner === PLAYER.GOTE) {
-                    pieceShape.classList.add('gote-piece');
-                } else {
-                    pieceShape.classList.add('sente-piece');
-                }
-
-                cell.appendChild(pieceShape);
-            }
-
-            // 選択中のセルや移動可能範囲のハイライトを復元
-            if (selectedPieceCell && selectedPieceCell.row === row && selectedPieceCell.col === col) {
-                cell.classList.add('selected');
-            }
-
-            // 最後に動かした駒のハイライト
-            if (lastMovedCell && lastMovedCell.row === row && lastMovedCell.col === col) {
-                cell.classList.add('last-moved');
-            }
-
-            boardElement.appendChild(cell);
-        }
-    }
-
-    // 駒台の描画
-    renderHand(PLAYER.SENTE, 'player-hand');
-    renderHand(PLAYER.GOTE, 'opponent-hand');
-}
-
-function renderHand(player, elementId) {
-    const container = document.querySelector(`#${elementId} .pieces-container`);
-    container.innerHTML = '';
-
-    const hand = gameBoard.capturedPieces[player];
-    if (!hand || hand.length === 0) return;
-
-    // 駒の種類ごとにまとめる
-    const counts = {};
-    const piecesByType = {};
-    hand.forEach(p => {
-        if (!counts[p.type.id]) {
-            counts[p.type.id] = 0;
-            piecesByType[p.type.id] = p;
-        }
-        counts[p.type.id]++;
-    });
-
-    for (const typeId in counts) {
-        const p = piecesByType[typeId];
-        const pieceEl = document.createElement('div');
-        pieceEl.classList.add('hand-piece');
-        pieceEl.textContent = `${p.displayName} x${counts[typeId]}`;
-
-        // 後手の持ち駒は文字を反転させる
-        if (player === PLAYER.GOTE) {
-            pieceEl.classList.add('gote-piece');
-        }
-
-        // 選択された持ち駒のハイライト復元
-        if (selectedCapturedPiece && selectedCapturedPiece.player === player && selectedCapturedPiece.pieceType.id === p.type.id) {
-            pieceEl.classList.add('selected');
-        }
-
-        pieceEl.addEventListener('click', () => handleHandPieceClick(player, p.type));
-
-        container.appendChild(pieceEl);
-    }
-}
-
-function initGame() {
-    gameBoard.setupInitialPosition();
-    currentPlayer = PLAYER.SENTE;
-    lastMovedCell = null;
-    clearSelection();
-    renderBoard();
-}
-
-/**
- * 詰将棋を初期化する
- */
-function initPuzzle(puzzle) {
-    gameBoard.loadPuzzle(puzzle);
-    currentPlayer = PLAYER.SENTE;
-    lastMovedCell = null;
-    clearSelection();
-    renderBoard();
-}
-
-/**
- * 持ち駒がクリックされたときの処理
- */
-function handleHandPieceClick(player, pieceType) {
-    if (player !== currentPlayer) return; // 相手の手番の持ち駒は選べない
-
-    clearSelection();
-    selectedCapturedPiece = { player, pieceType };
-
-    renderBoard();
-
-    // 盤面の打てる場所をハイライト
-    const validDrops = gameBoard.getValidDrops(player, pieceType);
-    validDrops.forEach(m => {
-        const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
-        if (moveElement) {
-            moveElement.classList.add('valid-move');
-        }
-    });
-}
-
-/**
- * 盤面のマスがクリックされたときの処理
- */
-function handleCellClick(row, col) {
-    // 持ち駒が選択されている場合 -> 打つ
-    if (selectedCapturedPiece) {
-        const { player, pieceType } = selectedCapturedPiece;
-
-        const validDrops = gameBoard.getValidDrops(player, pieceType);
-        const isValidDrop = validDrops.some(m => m.row === row && m.col === col);
-
-        if (isValidDrop) {
-            gameBoard.dropPiece(player, pieceType, row, col);
-
-            lastMovedCell = { row, col };
-            clearSelection();
-
-            // 詰将棋モードの判定を差し込む
-            if (isPuzzleMode && player === PLAYER.SENTE) {
-                if (!checkPuzzleCondition()) {
-                    return; // 失敗してリセットされる場合はここで打ち切り
-                }
-            }
-
-            // ターンの交代
-            currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+            // DOMへ描画
             renderBoard();
-            return;
-        } else {
-            // 打てない場所がクリックされた場合は選択を解除し、マスの駒を選択し直すか判定
-            clearSelection();
-            const clickedPiece = gameBoard.getPiece(row, col);
-            if (clickedPiece && clickedPiece.owner === currentPlayer) {
-                selectPiece(row, col);
+
+            // AIマネージャ初期化
+            if (typeof AIManager !== 'undefined') {
+                aiManager = new AIManager();
             }
-            return;
-        }
-    }
 
-    // 既に盤面の駒が選択されている場合 -> 移動もしくは選択解除
-    if (selectedPieceCell) {
-        const { row: selRow, col: selCol } = selectedPieceCell;
+            // イベントリスナーの登録
+            document.getElementById('btn-start').addEventListener('click', () => {
+                isPuzzleMode = false;
+                currentPuzzle = null;
+                document.getElementById('game-title').textContent = "通常対局";
 
-        // 同じマスをクリックした場合は選択解除
-        if (selRow === row && selCol === col) {
-            clearSelection();
-            return;
-        }
+                // ヒントボタンや次へボタンを隠す
+                const btnHint = document.getElementById('btn-show-hint');
+                if (btnHint) btnHint.classList.add('hidden');
+                const btnNext = document.getElementById('btn-next-puzzle');
+                if (btnNext) btnNext.classList.add('hidden');
 
-        // 移動できるかどうかの判定
-        const validMoves = gameBoard.getValidMoves(selRow, selCol);
-        const isValidMove = validMoves.some(m => m.row === row && m.col === col);
+                initGame();
+                showScreen('game-screen');
+            });
 
-        if (isValidMove) {
-            const movingPiece = gameBoard.getPiece(selRow, selCol);
-            let promote = false;
+            const btnPuzzleMenu = document.getElementById('btn-puzzle-menu');
+            if (btnPuzzleMenu) {
+                btnPuzzleMenu.addEventListener('click', () => {
+                    showScreen('puzzle-difficulty-screen');
+                });
+            }
 
-            // 成りの判定 (相手陣地に入った、または相手陣地から出た)
-            if (movingPiece.type.canPromote && !movingPiece.isPromoted) {
-                const isEnterSenteEnemyZone = currentPlayer === PLAYER.SENTE && (row <= 2 || selRow <= 2);
-                const isEnterGoteEnemyZone = currentPlayer === PLAYER.GOTE && (row >= 6 || selRow >= 6);
+            const btnSettings = document.getElementById('btn-settings');
+            if (btnSettings) {
+                btnSettings.addEventListener('click', () => {
+                    document.getElementById('bgm-toggle').checked = !AudioManager.isMuted;
+                    document.getElementById('bgm-volume').value = AudioManager.volume;
+                    showScreen('settings-screen');
+                });
+            }
 
-                if (isEnterSenteEnemyZone || isEnterGoteEnemyZone) {
-                    // 強制成りの判定（歩、香車の1段目、桂馬の1,2段目）
-                    let mustPromote = false;
-                    if (currentPlayer === PLAYER.SENTE) {
-                        if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 0) mustPromote = true;
-                        if (movingPiece.type.id === 'keima' && row <= 1) mustPromote = true;
-                    } else {
-                        if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 8) mustPromote = true;
-                        if (movingPiece.type.id === 'keima' && row >= 7) mustPromote = true;
+            const btnBackToHomeFromSettings = document.getElementById('btn-back-to-home-from-settings');
+            if (btnBackToHomeFromSettings) {
+                btnBackToHomeFromSettings.addEventListener('click', () => {
+                    showScreen('home-screen');
+                });
+            }
+
+            const bgmToggle = document.getElementById('bgm-toggle');
+            if (bgmToggle) {
+                bgmToggle.addEventListener('change', (e) => {
+                    AudioManager.toggleMute(!e.target.checked);
+                });
+            }
+
+            const bgmVolume = document.getElementById('bgm-volume');
+            if (bgmVolume) {
+                bgmVolume.addEventListener('input', (e) => {
+                    AudioManager.setVolume(parseFloat(e.target.value));
+                });
+            }
+
+            const btnDiff1 = document.getElementById('btn-diff-1');
+            if (btnDiff1) {
+                btnDiff1.addEventListener('click', () => {
+                    selectedDifficulty = 1;
+                    renderPuzzleList();
+                    showScreen('puzzle-select-screen');
+                });
+            }
+
+            const btnDiff3 = document.getElementById('btn-diff-3');
+            if (btnDiff3) {
+                btnDiff3.addEventListener('click', () => {
+                    selectedDifficulty = 3;
+                    renderPuzzleList();
+                    showScreen('puzzle-select-screen');
+                });
+            }
+
+            const btnBackToHomeFromDiff = document.getElementById('btn-back-to-home-from-diff');
+            if (btnBackToHomeFromDiff) {
+                btnBackToHomeFromDiff.addEventListener('click', () => {
+                    showScreen('home-screen');
+                });
+            }
+
+            // 解答解説を見るボタン
+            const btnShowHint = document.getElementById('btn-show-hint');
+            if (btnShowHint) {
+                btnShowHint.addEventListener('click', () => {
+                    if (isPuzzleMode && currentPuzzle) {
+                        hasViewedHint = true; // 解答を見たフラグだけ立てる
+                        const explText = currentPuzzle.explanation ? currentPuzzle.explanation : "";
+                        // 新しい解説エリアに表示
+                        document.getElementById('puzzle-explanation-text').innerHTML = explText;
+                        document.getElementById('puzzle-explanation-area').classList.add('is-visible');
                     }
+                });
+            }
 
-                    if (mustPromote) {
-                        promote = true;
-                    } else {
-                        promote = confirm("成りますか？");
+            // 次へボタン
+            const btnNextPuzzle = document.getElementById('btn-next-puzzle');
+            if (btnNextPuzzle) {
+                btnNextPuzzle.addEventListener('click', () => {
+                    if (isPuzzleMode && currentPuzzle) {
+                        const puzzleList = selectedDifficulty === 3 ? PUZZLES_3 : PUZZLES_1;
+                        puzzleList.sort((a, b) => a.id - b.id);
+                        const currentIndex = puzzleList.findIndex(p => p.id === currentPuzzle.id);
+                        if (currentIndex !== -1 && currentIndex < puzzleList.length - 1) {
+                            const nextPuzzle = puzzleList[currentIndex + 1];
+                            currentPuzzle = nextPuzzle;
+                            currentPuzzleStep = 0;
+                            document.getElementById('game-title').textContent = nextPuzzle.title;
+                            initPuzzle(nextPuzzle);
+                        } else {
+                            alert("最後の問題です！");
+                        }
                     }
+                });
+            }
+
+            const btnBackToHome = document.getElementById('btn-back-to-home');
+            if (btnBackToHome) {
+                btnBackToHome.addEventListener('click', () => {
+                    showScreen('puzzle-difficulty-screen');
+                });
+            }
+
+            const btnBackToMenu = document.getElementById('btn-back-to-menu');
+            if (btnBackToMenu) {
+                btnBackToMenu.addEventListener('click', () => {
+                    if (isPuzzleMode) {
+                        renderPuzzleList(); // リストを再描画してクリア状況を反映
+                        showScreen('puzzle-select-screen');
+                    } else {
+                        showScreen('home-screen');
+                    }
+                });
+            }
+
+            // モーダル閉じるボタン
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            if (btnCloseModal) {
+                btnCloseModal.addEventListener('click', () => {
+                    document.getElementById('result-modal').classList.add('hidden');
+                });
+            }
+
+            // 初期状態はホーム画面を表示
+            showScreen('home-screen');
+        });
+
+        // --- セーブ機能 (localStorage) ---
+        const SAVE_KEY = 'tsumesyogi_cleared_puzzles';
+
+        function getClearedPuzzles() {
+            try {
+                const data = localStorage.getItem(SAVE_KEY);
+                if (!data) return {};
+
+                const parsed = JSON.parse(data);
+
+                // 後方互換性：古い配列データの場合はオブジェクトに変換する
+                if (Array.isArray(parsed)) {
+                    const migrated = {};
+                    parsed.forEach(id => {
+                        migrated[id] = 1;
+                    });
+                    // 自動で新しい形式を保存し直す
+                    localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
+                    return migrated;
+                }
+
+                return parsed || {};
+            } catch (e) {
+                console.error("セーブデータの読み込みに失敗しました", e);
+                return {};
+            }
+        }
+
+        function saveClearedPuzzle(puzzleId) {
+            const cleared = getClearedPuzzles();
+            // 初クリアの場合は0で初期化
+            if (!cleared[puzzleId]) {
+                cleared[puzzleId] = 0;
+            }
+            // クリア回数を加算
+            cleared[puzzleId]++;
+
+            try {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(cleared));
+            } catch (e) {
+                console.error("セーブデータの書き込みに失敗しました", e);
+            }
+        }
+
+        let resultModalTimeout = null;
+
+        /**
+         * 結果モーダルを表示する
+         * @param {boolean} autoHide - trueの場合はボタンが無くても5秒で自動消去する
+         */
+        function showResultModal(message, buttonsData, explanation = "", autoHide = true) {
+            const modal = document.getElementById('result-modal');
+            const messageEl = document.getElementById('result-message');
+            const explanationEl = document.getElementById('result-explanation');
+            const buttonsContainer = document.getElementById('modal-buttons');
+
+            if (resultModalTimeout) {
+                clearTimeout(resultModalTimeout);
+                resultModalTimeout = null;
+            }
+
+            messageEl.textContent = message;
+
+            if (explanationEl) {
+                if (explanation) {
+                    explanationEl.innerHTML = explanation;
+                    explanationEl.classList.remove('hidden');
+                } else {
+                    explanationEl.classList.add('hidden');
                 }
             }
 
-            // 移動処理
-            gameBoard.movePiece(selRow, selCol, row, col);
+            modal.classList.remove('hidden');
 
-            // 成りを適用
-            if (promote) {
-                const movedPiece = gameBoard.getPiece(row, col);
-                movedPiece.isPromoted = true;
+            buttonsContainer.innerHTML = '';
+
+            // autoHideがtrue かつ ボタンの指定がなければ5秒後に自動消去
+            if (autoHide && (!buttonsData || !Array.isArray(buttonsData) || buttonsData.length === 0)) {
+                resultModalTimeout = setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 5000);
+            } else if (buttonsData && Array.isArray(buttonsData)) {
+                buttonsData.forEach(btnInfo => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    if (btnInfo.className) {
+                        btn.classList.add(btnInfo.className);
+                    }
+                    btn.textContent = btnInfo.text;
+
+                    btn.addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                        if (btnInfo.onClick) {
+                            btnInfo.onClick();
+                        }
+                    });
+                    buttonsContainer.appendChild(btn);
+                });
+            }
+        }
+
+
+        /**
+         * 画面の切り替えを行う
+         */
+        function showScreen(screenId) {
+            // 画面遷移時に正解ポップアップを非表示にする
+            const successPopup = document.getElementById('success-popup');
+            if (successPopup) {
+                successPopup.classList.remove('show');
             }
 
-            lastMovedCell = { row, col };
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+
+
+            // タイトル画面の時は背面コンテナを透明化して画像を見せるため
+            document.body.classList.remove('on-home-screen', 'on-normal-match', 'on-puzzle-menu', 'on-puzzle-match');
+            if (screenId === 'home-screen') {
+                document.body.classList.add('on-home-screen');
+            } else if (screenId === 'puzzle-difficulty-screen' || screenId === 'puzzle-select-screen' || screenId === 'settings-screen') {
+                document.body.classList.add('on-puzzle-menu');
+            } else if (screenId === 'game-screen') {
+                if (isPuzzleMode) {
+                    document.body.classList.add('on-puzzle-match');
+                } else {
+                    document.body.classList.add('on-normal-match');
+                }
+            }
+        }
+
+        /**
+         * 詰将棋のリストを描画する
+         */
+        function renderPuzzleList() {
+            const listContainer = document.getElementById('puzzle-list');
+            listContainer.innerHTML = '';
+
+            const clearedPuzzles = getClearedPuzzles();
+
+            const puzzlesToRender = selectedDifficulty === 3 ? PUZZLES_3 : PUZZLES_1;
+
+            // ID順にソートするよう修正
+            puzzlesToRender.sort((a, b) => a.id - b.id);
+
+            puzzlesToRender.forEach(puzzle => {
+                const btn = document.createElement('button');
+                btn.classList.add('puzzle-btn');
+
+                const clearCount = clearedPuzzles[puzzle.id] || 0;
+                let clearBadge = "";
+                if (clearCount > 0) {
+                    const stars = "★".repeat(clearCount);
+                    clearBadge = `<span class="clear-badge">${stars} クリア！</span>`;
+                }
+
+                // titleプロパティはヒント抜きの「問題 n」が入るように設定済み
+                btn.innerHTML = `<strong>${puzzle.title}</strong><br><small>${puzzle.movesToMate}手詰め</small>${clearBadge}`;
+
+                btn.addEventListener('click', () => {
+                    isPuzzleMode = true;
+                    currentPuzzle = puzzle;
+                    currentPuzzleStep = 0; // 3手詰め用のステップ初期化
+                    document.getElementById('game-title').textContent = puzzle.title; // ヘッダーもヒント抜き
+
+                    // パズルモード時はヒントボタンと次へボタンを表示
+                    const btnHint = document.getElementById('btn-show-hint');
+                    if (btnHint) btnHint.classList.remove('hidden');
+                    const btnNext = document.getElementById('btn-next-puzzle');
+                    if (btnNext) btnNext.classList.remove('hidden');
+
+                    initPuzzle(puzzle);
+                    showScreen('game-screen');
+                });
+
+                listContainer.appendChild(btn);
+            });
+        }
+
+        /**
+         * 将棋盤のDOM要素を現在のgameBoardの状態で再描画する関数
+         */
+        function renderBoard() {
+            const boardElement = document.getElementById('shogi-board');
+            if (!boardElement) return;
+            boardElement.innerHTML = '';
+
+            // 9x9の盤面を描画 (右から1筋〜9筋とするため、colは8から0へ減らす方向で描画)
+            for (let row = 0; row < 9; row++) {
+                for (let col = 8; col >= 0; col--) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+
+                    // セルクリック時のイベントを追加
+                    cell.addEventListener('click', () => handleCellClick(row, col));
+
+                    const piece = gameBoard.getPiece(row, col);
+                    if (piece) {
+                        // 駒の形を作るための内部要素を作成
+                        const pieceShape = document.createElement('div');
+                        pieceShape.classList.add('piece-shape');
+
+                        const pieceText = document.createElement('span');
+                        pieceText.textContent = piece.displayName;
+                        pieceShape.appendChild(pieceText);
+
+                        // 持ち主によるスタイリング（後手は文字をひっくり返すなど）を追加
+                        if (piece.owner === PLAYER.GOTE) {
+                            pieceShape.classList.add('gote-piece');
+                        } else {
+                            pieceShape.classList.add('sente-piece');
+                        }
+
+                        cell.appendChild(pieceShape);
+                    }
+
+                    // 選択中のセルや移動可能範囲のハイライトを復元
+                    if (selectedPieceCell && selectedPieceCell.row === row && selectedPieceCell.col === col) {
+                        cell.classList.add('selected');
+                    }
+
+                    // 最後に動かした駒のハイライト
+                    if (lastMovedCell && lastMovedCell.row === row && lastMovedCell.col === col) {
+                        cell.classList.add('last-moved');
+                    }
+
+                    boardElement.appendChild(cell);
+                }
+            }
+
+            // 駒台の描画
+            renderHand(PLAYER.SENTE, 'player-hand');
+            renderHand(PLAYER.GOTE, 'opponent-hand');
+        }
+
+        function renderHand(player, elementId) {
+            const container = document.querySelector(`#${elementId} .pieces-container`);
+            container.innerHTML = '';
+
+            const hand = gameBoard.capturedPieces[player];
+            if (!hand || hand.length === 0) return;
+
+            // 駒の種類ごとにまとめる
+            const counts = {};
+            const piecesByType = {};
+            hand.forEach(p => {
+                if (!counts[p.type.id]) {
+                    counts[p.type.id] = 0;
+                    piecesByType[p.type.id] = p;
+                }
+                counts[p.type.id]++;
+            });
+
+            for (const typeId in counts) {
+                const p = piecesByType[typeId];
+
+                const wrapperEl = document.createElement('div');
+                wrapperEl.classList.add('hand-piece-wrapper');
+
+                const pieceEl = document.createElement('div');
+                pieceEl.classList.add('hand-piece');
+                pieceEl.textContent = p.displayName;
+
+                const countEl = document.createElement('span');
+                countEl.classList.add('piece-count');
+                countEl.textContent = `x${counts[typeId]}`;
+
+                // 後手の持ち駒は文字を反転させる
+                if (player === PLAYER.GOTE) {
+                    pieceEl.classList.add('gote-piece');
+                }
+
+                // 選択された持ち駒のハイライト復元
+                if (selectedCapturedPiece && selectedCapturedPiece.player === player && selectedCapturedPiece.pieceType.id === p.type.id) {
+                    pieceEl.classList.add('selected');
+                }
+
+                wrapperEl.appendChild(pieceEl);
+                wrapperEl.appendChild(countEl);
+                wrapperEl.addEventListener('click', () => handleHandPieceClick(player, p.type));
+
+                container.appendChild(wrapperEl);
+            }
+        }
+
+        function initGame() {
+            gameBoard.setupInitialPosition();
+            currentPlayer = PLAYER.SENTE;
+            lastMovedCell = null;
             clearSelection();
 
-            // 詰将棋モードの判定を差し込む
-            if (isPuzzleMode && currentPlayer === PLAYER.SENTE) { // 移動前はcurrentPlayer
-                if (!checkPuzzleCondition()) {
+            // 駒台のタイトルを通常対局用に戻す
+            document.getElementById('player-hand-title').textContent = "先手";
+            document.getElementById('opponent-hand-title').textContent = "後手";
+
+            const aiArea = document.getElementById('ai-evaluation-area');
+            if (aiArea) aiArea.classList.remove('hidden');
+
+            renderBoard();
+            
+            // AIへ新規盤面イベントの連携
+            if (aiManager && !isPuzzleMode) {
+                aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, 1));
+            }
+        }
+
+        function initPuzzle(puzzle) {
+            // パズル初期化時に正解ポップアップを非表示にする
+            const successPopup = document.getElementById('success-popup');
+            if (successPopup) {
+                successPopup.classList.remove('show');
+            }
+
+            gameBoard.loadPuzzle(puzzle);
+            currentPlayer = PLAYER.SENTE;
+            lastMovedCell = null;
+            hasViewedHint = false;
+            currentPuzzleStep = 0;
+            clearSelection();
+
+            // 詰将棋モードでは自分の駒台のタイトルを「持駒」にする
+            document.getElementById('player-hand-title').textContent = "持駒";
+
+            // AI検討エリアを非表示にして分析を停止
+            const aiArea = document.getElementById('ai-evaluation-area');
+            if (aiArea) aiArea.classList.add('hidden');
+            if (typeof aiManager !== 'undefined' && aiManager && aiManager.isAnalyzing) {
+                aiManager.stopAnalysis();
+            }
+
+            // ★ 解説エリアを非表示にリセットする
+            const explArea = document.getElementById('puzzle-explanation-area');
+            if (explArea) explArea.classList.remove('is-visible');
+            const explText = document.getElementById('puzzle-explanation-text');
+            if (explText) explText.innerHTML = "";
+
+            renderBoard();
+        }
+
+        /**
+         * 持ち駒がクリックされたときの処理
+         */
+        function handleHandPieceClick(player, pieceType) {
+            if (player !== currentPlayer) return; // 相手の手番の持ち駒は選べない
+
+            clearSelection();
+            selectedCapturedPiece = { player, pieceType };
+
+            renderBoard();
+
+            // 盤面の打てる場所をハイライト
+            const validDrops = gameBoard.getValidDrops(player, pieceType);
+            validDrops.forEach(m => {
+                const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
+                if (moveElement) {
+                    moveElement.classList.add('valid-move');
+                }
+            });
+        }
+
+        /**
+         * 盤面のマスがクリックされたときの処理
+         */
+        function handleCellClick(row, col) {
+
+            // 持ち駒が選択されている場合 -> 打つ
+            if (selectedCapturedPiece) {
+                const { player, pieceType } = selectedCapturedPiece;
+
+                const validDrops = gameBoard.getValidDrops(player, pieceType);
+                const isValidDrop = validDrops.some(m => m.row === row && m.col === col);
+
+                if (isValidDrop) {
+                    gameBoard.dropPiece(player, pieceType, row, col);
+
+                    lastMovedCell = { row, col };
+                    clearSelection();
+
+                    // 詰将棋モードの判定を差し込む
+                    if (isPuzzleMode && player === PLAYER.SENTE) {
+                        const puzzleResult = checkPuzzleCondition(row, col, pieceType, true);
+                        if (!puzzleResult) {
+                            return; // 失敗してリセットされる場合はここで打ち切り
+                        } else if (puzzleResult === 'continue') {
+                            // 3手詰めの途中（CPUの手番へ）
+                        } else {
+                            // クリア
+                        }
+                    }
+
+                    // ターンの交代
+                    currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+
+                    // AI連携
+                    if (aiManager && !isPuzzleMode) {
+                        aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, 1));
+                    }
+
+                    if (!isPuzzleMode && gameBoard.isCheck(currentPlayer) && !checkPlayerHasEscapeMove(currentPlayer)) {
+                        const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                        setTimeout(() => alert(`詰みです！ ${winner}の勝ち！`), 300);
+                    }
+
+                    renderBoard();
+                    return;
+                } else {
+                    // 打てない場所がクリックされた場合は選択を解除し、マスの駒を選択し直すか判定
+                    clearSelection();
+                    const clickedPiece = gameBoard.getPiece(row, col);
+                    if (clickedPiece && clickedPiece.owner === currentPlayer) {
+                        selectPiece(row, col);
+                    }
                     return;
                 }
             }
 
-            // ターンの交代
-            currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+            // 既に盤面の駒が選択されている場合 -> 移動もしくは選択解除
+            if (selectedPieceCell) {
+                const { row: selRow, col: selCol } = selectedPieceCell;
 
-            renderBoard();
-        } else {
-            // 移動できないマスがクリックされたが、それが自分の別の駒なら選択し直す
-            const clickedPiece = gameBoard.getPiece(row, col);
-            if (clickedPiece && clickedPiece.owner === currentPlayer) {
-                selectPiece(row, col);
-            } else {
-                clearSelection();
+                // 同じマスをクリックした場合は選択解除
+                if (selRow === row && selCol === col) {
+                    clearSelection();
+                    return;
+                }
+
+                // 移動できるかどうかの判定
+                const validMoves = gameBoard.getValidMoves(selRow, selCol);
+                const isValidMove = validMoves.some(m => m.row === row && m.col === col);
+
+                if (isValidMove) {
+                    const movingPiece = gameBoard.getPiece(selRow, selCol);
+                    let promote = false;
+
+                    // 成りの判定 (相手陣地に入った、または相手陣地から出た)
+                    if (movingPiece.type.canPromote && !movingPiece.isPromoted) {
+                        const isEnterSenteEnemyZone = currentPlayer === PLAYER.SENTE && (row <= 2 || selRow <= 2);
+                        const isEnterGoteEnemyZone = currentPlayer === PLAYER.GOTE && (row >= 6 || selRow >= 6);
+
+                        if (isEnterSenteEnemyZone || isEnterGoteEnemyZone) {
+                            // 強制成りの判定（歩、香車の1段目、桂馬の1,2段目）
+                            let mustPromote = false;
+                            if (currentPlayer === PLAYER.SENTE) {
+                                if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 0) mustPromote = true;
+                                if (movingPiece.type.id === 'keima' && row <= 1) mustPromote = true;
+                            } else {
+                                if ((movingPiece.type.id === 'fu' || movingPiece.type.id === 'kyosha') && row === 8) mustPromote = true;
+                                if (movingPiece.type.id === 'keima' && row >= 7) mustPromote = true;
+                            }
+
+                            if (mustPromote) {
+                                promote = true;
+                            } else {
+                                promote = confirm("成りますか？");
+                            }
+                        }
+                    }
+
+                    // 移動処理
+                    gameBoard.movePiece(selRow, selCol, row, col);
+
+                    // 成りを適用
+                    if (promote) {
+                        const movedPiece = gameBoard.getPiece(row, col);
+                        movedPiece.isPromoted = true;
+                    }
+
+                    lastMovedCell = { row, col };
+                    clearSelection();
+
+                    // 詰将棋モードの判定を差し込む
+                    if (isPuzzleMode && currentPlayer === PLAYER.SENTE) { // 移動前はcurrentPlayer
+                        const puzzleResult = checkPuzzleCondition(row, col, gameBoard.getPiece(row, col).type, false, selRow, selCol);
+                        if (!puzzleResult) {
+                            return;
+                        } else if (puzzleResult === 'continue') {
+                            // 3手詰めの途中
+                        } else {
+                            // クリア
+                        }
+                    }
+
+                    // ターンの交代
+                    currentPlayer = currentPlayer === PLAYER.SENTE ? PLAYER.GOTE : PLAYER.SENTE;
+
+                    // AI連携
+                    if (aiManager && !isPuzzleMode) {
+                        aiManager.updateSFEN(gameBoard.getSFEN(currentPlayer, 1));
+                    }
+
+                    if (!isPuzzleMode && gameBoard.isCheck(currentPlayer) && !checkPlayerHasEscapeMove(currentPlayer)) {
+                        const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                        setTimeout(() => showResultModal(`詰みです！\n${winner}の勝ち！`, [
+                            { text: 'メニューに戻る', onClick: () => showScreen('home-screen'), className: 'primary-btn' }
+                        ]), 300);
+                    }
+
+                    renderBoard();
+                } else {
+                    // 移動できないマスがクリックされたが、それが自分の別の駒なら選択し直す
+                    const clickedPiece = gameBoard.getPiece(row, col);
+                    if (clickedPiece && clickedPiece.owner === currentPlayer) {
+                        selectPiece(row, col);
+                    } else {
+                        clearSelection();
+                    }
+                }
             }
-        }
-    }
-    // 駒が選択されていない場合 -> 自分の駒なら選択
-    else {
-        const piece = gameBoard.getPiece(row, col);
-        if (piece && piece.owner === currentPlayer) {
-            selectPiece(row, col);
-        }
-    }
-}
-
-/**
- * 駒を選択状態にする
- */
-function selectPiece(row, col) {
-    clearSelection(); // 一旦既存の選択をクリア
-    selectedPieceCell = { row, col };
-
-    // 選択されたセルにハイライトを付与
-    const selectedElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
-    if (selectedElement) {
-        selectedElement.classList.add('selected');
-    }
-
-    // 移動可能範囲をハイライト
-    const validMoves = gameBoard.getValidMoves(row, col);
-    validMoves.forEach(m => {
-        const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
-        if (moveElement) {
-            moveElement.classList.add('valid-move');
-        }
-    });
-}
-
-/**
- * 選択状態を解除する
- */
-/**
- * 詰将棋のクリア・失敗判定（先手の手番終了直後に呼ばれる）
- */
-function checkPuzzleCondition() {
-    // 1. 王手がかかっているか？
-    if (!gameBoard.isCheck(PLAYER.GOTE)) {
-        setTimeout(() => {
-            alert("不正解！王手をかけてください。");
-            initPuzzle(currentPuzzle);
-        }, 300);
-        return false;
-    }
-
-    // 2. 玉方（後手）に、王手を回避できる合法手（逃げる、合駒、駒を取る）があるか？
-    const hasValidEscapeMove = checkGoteHasEscapeMove();
-
-    if (!hasValidEscapeMove) {
-        // 詰み！
-        setTimeout(() => {
-            alert("正解！詰みです！");
-            // 次の問題へ進むなどの処理をここに追加
-        }, 300);
-        return true;
-    }
-
-    // 回避可能ならゲーム続行（本来はここでCPUが最適な逃げ方をするが今回は一旦何もしないか固定の手を指す）
-    setTimeout(() => {
-        alert("玉に逃げ道があります（未詰み）。");
-        initPuzzle(currentPuzzle);
-    }, 500);
-    return false;
-}
-
-/**
- * 後手（玉方）に、王手を外す合法手が存在するかどうかを調べる
- */
-function checkGoteHasEscapeMove() {
-    // 盤上の駒の移動による回避
-    for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-            const p = gameBoard.grid[r][c];
-            if (p && p.owner === PLAYER.GOTE) {
-                const validMoves = gameBoard.getValidMoves(r, c);
-                if (validMoves.length > 0) {
-                    return true; // 1つでも王手放置にならない手があれば回避可能
+            // 駒が選択されていない場合 -> 自分の駒なら選択
+            else {
+                const piece = gameBoard.getPiece(row, col);
+                if (piece && piece.owner === currentPlayer) {
+                    selectPiece(row, col);
                 }
             }
         }
-    }
 
-    // 持ち駒を打つこと（合駒）による回避
-    const goteHand = gameBoard.capturedPieces[PLAYER.GOTE];
-    if (goteHand.length > 0) {
-        // 全ての空きマスに対して、持ち駒を打つ合法手があるか確認
-        // (getValidDrops には自玉の王手放置チェックが含まれている)
-        for (let i = 0; i < goteHand.length; i++) {
-            const pieceType = goteHand[i];
-            const validDrops = gameBoard.getValidDrops(PLAYER.GOTE, pieceType);
-            if (validDrops.length > 0) {
-                return true; // 1つでも打てるマス（合駒で王手を防げるマス）があれば回避可能
+        /**
+         * 駒を選択状態にする
+         */
+        function selectPiece(row, col) {
+            clearSelection(); // 一旦既存の選択をクリア
+            selectedPieceCell = { row, col };
+
+            // 選択されたセルにハイライトを付与
+            const selectedElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
             }
+
+            // 移動可能範囲をハイライト
+            const validMoves = gameBoard.getValidMoves(row, col);
+            validMoves.forEach(m => {
+                const moveElement = document.querySelector(`.cell[data-row="${m.row}"][data-col="${m.col}"]`);
+                if (moveElement) {
+                    moveElement.classList.add('valid-move');
+                }
+            });
         }
-    }
 
-    // 何も手がなければ詰み
-    return false;
-}
+        /**
+         * 選択状態を解除する
+         */
+        /**
+         * 詰将棋のクリア・失敗判定（先手の手番終了直後に呼ばれる）
+         * Returns: true (クリア), false (失敗), 'continue' (3手詰めの途中)
+         */
+        function checkPuzzleCondition(toRow = -1, toCol = -1, pieceType = null, isDrop = false, fromRow = -1, fromCol = -1) {
+            // 3手詰めなど、手順が指定されている場合
+            if (currentPuzzle.expectedMoves) {
+                const expected = currentPuzzle.expectedMoves[currentPuzzleStep];
+                let isCorrectMove = false;
 
-function clearSelection() {
-    selectedPieceCell = null;
-    selectedCapturedPiece = null;
-    document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
-    document.querySelectorAll('.cell.valid-move').forEach(el => el.classList.remove('valid-move'));
-    // 持ち駒の選択状態も解除
-    document.querySelectorAll('.hand-piece.selected').forEach(el => el.classList.remove('selected'));
-}
+                if (expected.isDrop === isDrop && expected.toRow === toRow && expected.toCol === toCol) {
+                    if (isDrop && expected.piece === pieceType.id) {
+                        isCorrectMove = true;
+                    } else if (!isDrop && expected.fromRow === fromRow && expected.fromCol === fromCol) {
+                        isCorrectMove = true;
+                    }
+                }
 
+                if (!isCorrectMove) {
+                    setTimeout(() => {
+                        showResultModal("不正解！\n手順が違います。", [
+                            { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                        ]);
+                    }, 500);
+                    return false;
+                }
+
+                // 正解の手だった場合
+                if (currentPuzzleStep === 0) {
+                    // 1手目成功 -> CPUの応答手(2手目)を自動で指す
+                    currentPuzzleStep++;
+                    setTimeout(() => {
+                        const cpuMove = currentPuzzle.expectedMoves[currentPuzzleStep];
+                        if (cpuMove.isDrop) {
+                            const pType = PIECE_TYPES[cpuMove.piece.toUpperCase()];
+                            gameBoard.dropPiece(PLAYER.GOTE, pType, cpuMove.toRow, cpuMove.toCol);
+                        } else {
+                            gameBoard.movePiece(cpuMove.fromRow, cpuMove.fromCol, cpuMove.toRow, cpuMove.toCol);
+                        }
+
+                        // 効果音等ならここで再生
+                        renderBoard();
+                        currentPuzzleStep++; // 次はプレイヤーの最終手(3手目)
+                        currentPlayer = PLAYER.SENTE; // 手番をプレイヤーに戻す
+                    }, 800);
+                    return 'continue';
+
+                } else if (currentPuzzleStep === 2) {
+                    // 3手目成功 -> 最終的なクリア処理へ
+                    return handlePuzzleClear();
+                }
+            }
+
+            // --- 従来の一手詰め処理 ---
+            if (currentPuzzle.isShapePuzzle) {
+                const sol = currentPuzzle.solution;
+                const p = gameBoard.getPiece(sol.row, sol.col);
+                if (p && p.type.id === sol.piece && p.owner === PLAYER.SENTE) {
+                    return handlePuzzleClear();
+                } else {
+                    setTimeout(() => {
+                        showResultModal("不正解！", [
+                            { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                        ]);
+                    }, 500);
+                    return false;
+                }
+            }
+
+            // 1. 王手がかかっているか？
+            if (!gameBoard.isCheck(PLAYER.GOTE)) {
+                setTimeout(() => {
+                    showResultModal("失敗！\n王手をかけてください。", [
+                        { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                    ]);
+                }, 300);
+                return false;
+            }
+
+            // 2. 玉方に合法手があるか？
+            const hasValidEscapeMove = checkPlayerHasEscapeMove(PLAYER.GOTE);
+
+            if (!hasValidEscapeMove) {
+                return handlePuzzleClear();
+            }
+
+            // 回避可能なら失敗
+            setTimeout(() => {
+                showResultModal("玉に逃げ道があります\nやり直し", [
+                    { text: 'やり直す', onClick: () => initPuzzle(currentPuzzle) }
+                ]);
+            }, 500);
+            return false;
+        }
+
+        function handlePuzzleClear() {
+            if (isPuzzleMode && currentPuzzle && !hasViewedHint) {
+                saveClearedPuzzle(currentPuzzle.id);
+            }
+
+            setTimeout(() => {
+                const explText = currentPuzzle && currentPuzzle.explanation ? currentPuzzle.explanation : "";
+
+                if (isPuzzleMode) {
+                    if (!hasViewedHint) {
+                        // 3秒間大正解ポップアップを表示
+                        const successPopup = document.getElementById('success-popup');
+                        successPopup.classList.add('show');
+                        setTimeout(() => {
+                            successPopup.classList.remove('show');
+                        }, 3000);
+                    }
+
+                    // 解説エリアを表示
+                    document.getElementById('puzzle-explanation-text').innerHTML = explText;
+                    document.getElementById('puzzle-explanation-area').classList.add('is-visible');
+                    // 自動で一覧へ戻るタイマーを削除し、プレイヤーが自発的に「メニューに戻る」を押すまで待機する
+                } else {
+                    const winner = currentPlayer === PLAYER.SENTE ? "後手" : "先手";
+                    showResultModal(`詰みです！\n${winner}の勝ち！`, [
+                        { text: 'メニューに戻る', onClick: () => showScreen('home-screen'), className: 'primary-btn' }
+                    ]);
+                }
+            }, 300);
+            return true;
+        }
+
+        /**
+         * プレイヤー側の王を探し、王手を外す合法手が存在するかどうかを調べる
+         */
+        function checkPlayerHasEscapeMove(player) {
+            // 盤上の駒の移動による回避
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    const p = gameBoard.grid[r][c];
+                    if (p && p.owner === player) {
+                        const validMoves = gameBoard.getValidMoves(r, c);
+                        if (validMoves.length > 0) {
+                            return true; // 1つでも王手放置にならない手があれば回避可能
+                        }
+                    }
+                }
+            }
+
+            // 持ち駒を打つこと（合駒）による回避
+            const hand = gameBoard.capturedPieces[player];
+            if (hand.length > 0) {
+                // 全ての空きマスに対して、持ち駒を打つ合法手があるか確認
+                for (let i = 0; i < hand.length; i++) {
+                    const pieceType = hand[i].type;
+                    const validDrops = gameBoard.getValidDrops(player, pieceType);
+                    if (validDrops.length > 0) {
+                        return true; // 1つでも打てるマス（合駒で王手を防げるマス）があれば回避可能
+                    }
+                }
+            }
+
+            // 何も手がなければ詰み
+            return false;
+        }
+
+        function clearSelection() {
+            selectedPieceCell = null;
+            selectedCapturedPiece = null;
+            document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.cell.valid-move').forEach(el => el.classList.remove('valid-move'));
+            // 持ち駒の選択状態も解除
+            document.querySelectorAll('.hand-piece.selected').forEach(el => el.classList.remove('selected'));
+        }

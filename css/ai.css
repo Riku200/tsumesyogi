@@ -1,0 +1,26 @@
+.ai-panel {
+    background-color: var(--board-bg);
+    /* Fallback */
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid var(--board-border);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .ai-panel {
+        width: 320px;
+        margin-top: 0;
+        margin-left: 15px;
+    }
+
+    #game-layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}

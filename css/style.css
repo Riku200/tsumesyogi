@@ -512,6 +512,17 @@ header p {
     box-shadow: 0 0 0 transparent;
 }
 
+/* ゲーム操作用ボタンスタイル（サイズ統一用） */
+.game-control-btn {
+    padding: 10px 15px !important;
+    font-size: 1rem !important;
+    flex: 1;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* SPA スクリーン切り替え */
 .screen {
     width: 100%;
@@ -958,6 +969,11 @@ header p {
         padding: 8px 16px;
         /* ちょっと小さく */
         font-size: 0.95rem;
+    }
+
+    .game-control-btn {
+        padding: 8px 6px !important;
+        font-size: 0.85rem !important;
     }
 
     .menu-controls {

@@ -12,6 +12,7 @@
     <link rel="icon" href="img/icon.jpg">
     <link rel="stylesheet" href="css/style.css?v=3">
     <link rel="stylesheet" href="css/ai.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
@@ -153,6 +154,10 @@
                             <div id="ai-pv"
                                 style="margin-top: 5px; font-size: 0.85rem; color: #333; min-height: 40px; word-break: break-all;">
                                 -</div>
+                        </div>
+                        <div id="ai-graph-container"
+                            style="margin-top: 10px; background: rgba(255,255,255,0.9); border-radius: 5px; border: 1px solid var(--board-line); padding: 5px; height: 120px; display: none;">
+                            <canvas id="evalChart"></canvas>
                         </div>
                     </div>
                 </div>

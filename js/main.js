@@ -1,4 +1,6 @@
 // --- main.js ---
+let evalChart = null;
+let gameScores = [];  // 評価値の履歴を保存する配列
 let gameBoard;
 let selectedPieceCell = null;
 let selectedCapturedPiece = null;
@@ -40,100 +42,132 @@ document.addEventListener('DOMContentLoaded', () => {
         aiManager = new AIManager();
     }
 
-    // イベントリスナーの登録
-    document.getElementById('btn-start').addEventListener('click', () => {
+    // ==========================================
+    // ★追加：すべてのモードとAIを「強制リセット」する強力な関数
+    // ==========================================
+    function resetAllModes() {
         isPuzzleMode = false;
+        isReplayMode = false;
+        isAIMatchMode = false;
         currentPuzzle = null;
+        gameHistory = []; // 待ったの履歴も消去
+
+        // 1. AIが動いていたら絶対に止める
+        if (aiManager) {
+            aiManager.stopAnalysis();
+            if (aiManager.worker) {
+                aiManager.worker.postMessage({ type: 'command', command: 'stop' });
+            }
+        }
+
+        // 2. 対局用の余計なボタンやグラフを全部隠す
+        const graphContainer = document.getElementById('ai-graph-container');
+        if (graphContainer) graphContainer.style.display = 'none';
+
+        document.getElementById('btn-replay-prev').classList.add('hidden');
+        document.getElementById('btn-replay-next').classList.add('hidden');
+        document.getElementById('btn-show-hint').classList.add('hidden');
+        document.getElementById('btn-next-puzzle').classList.add('hidden');
+        document.getElementById('btn-undo').classList.add('hidden');
+    }
+
+
+    // ==========================================
+    // 各種ボタンのイベントリスナー（整理しました）
+    // ==========================================
+
+    // 通常対局ボタン
+    document.getElementById('btn-start').addEventListener('click', () => {
+        resetAllModes(); // ★まず真っさらにする
         document.getElementById('game-title').textContent = "通常対局";
-
-        // ========== 棋譜読み込み・検討モード処理 ==========
-        document.getElementById('btn-import-kifu').addEventListener('click', () => {
-            document.getElementById('kifu-input').value = '';
-            document.getElementById('kifu-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('btn-kifu-cancel').addEventListener('click', () => {
-            document.getElementById('kifu-modal').classList.add('hidden');
-        });
-
-        document.getElementById('btn-kifu-start').addEventListener('click', () => {
-            const text = document.getElementById('kifu-input').value;
-            if (parseKifu(text)) {
-                document.getElementById('kifu-modal').classList.add('hidden');
-                startReplayMode();
-            } else {
-                alert('有効な指し手が見つかりませんでした。将棋クエストの棋譜をコピーしてください。');
-            }
-        });
-
-        document.getElementById('btn-replay-prev').addEventListener('click', () => {
-            if (currentReplayStep > 0) {
-                currentReplayStep--;
-                updateReplayBoard();
-            }
-        });
-
-        document.getElementById('btn-replay-next').addEventListener('click', () => {
-            if (currentReplayStep < replayMoves.length) {
-                currentReplayStep++;
-                updateReplayBoard();
-            }
-        });
-
-        //人間が指した後にAIにバトンタッチし、AIの手を盤面で自動実行するロジックを追加
-        document.getElementById('btn-ai-match').addEventListener('click', () => {
-            isPuzzleMode = false;
-            isReplayMode = false;
-            isAIMatchMode = true; // AI対局モードON
-            document.getElementById('game-title').textContent = "AI対局 (後手AI)";
-
-            initGame(); // 初期盤面セット
-            showScreen('game-screen');
-
-            // AI検討を強制的にONにしてスタート
-            if (aiManager && !aiManager.isAnalyzing) {
-                aiManager.startAnalysis();
-            }
-        });
-
-        // 戻るボタンの処理を少し修正（検討モードの解除）
-        const btnBackToMenu = document.getElementById('btn-back-to-menu');
-        if (btnBackToMenu) {
-            // 既存のイベントリスナーを上書きするため、元のリスナーは消しておくか、中にifを追加します
-            btnBackToMenu.addEventListener('click', () => {
-                isReplayMode = false; // ★追加：検討モード解除
-                isAIMatchMode = false; // ★追加：AI対局モード解除
-                document.getElementById('btn-replay-prev').classList.add('hidden');
-                document.getElementById('btn-replay-next').classList.add('hidden');
-
-                if (isPuzzleMode) {
-                    renderPuzzleList();
-                    showScreen('puzzle-select-screen');
-                } else {
-                    showScreen('home-screen');
-                }
-            });
-        }
-
-        const btnUndo = document.getElementById('btn-undo');
-        if (btnUndo) {
-            btnUndo.addEventListener('click', () => {
-                handleUndo();
-            });
-        }
-
-        // ===================================================
-
-        // ヒントボタンや次へボタンを隠す
-        const btnHint = document.getElementById('btn-show-hint');
-        if (btnHint) btnHint.classList.add('hidden');
-        const btnNext = document.getElementById('btn-next-puzzle');
-        if (btnNext) btnNext.classList.add('hidden');
-
         initGame();
         showScreen('game-screen');
     });
 
+    // AIと対局ボタン
+    document.getElementById('btn-ai-match').addEventListener('click', () => {
+        resetAllModes(); // ★まず真っさらにする
+
+        const playAsGote = confirm("あなたが「後手」で始めますか？\n（キャンセルを押すとあなたが「先手」になります）");
+        humanRole = playAsGote ? PLAYER.GOTE : PLAYER.SENTE;
+
+        isAIMatchMode = true; // AIモードON
+        document.getElementById('game-title').textContent = playAsGote ? "AI対局 (先手AI)" : "AI対局 (後手AI)";
+
+        initGame();
+        showScreen('game-screen');
+
+        if (aiManager && !aiManager.isAnalyzing) aiManager.startAnalysis();
+
+        // もし人間が後手なら、開始と同時にAIに指させる
+        if (humanRole === PLAYER.GOTE) {
+            currentPlayer = PLAYER.SENTE;
+            aiManager.sendSFEN(gameBoard.getSFEN(PLAYER.SENTE, 1));
+        }
+    });
+
+    // ========== 棋譜読み込み・検討モード処理 ==========
+    document.getElementById('btn-import-kifu').addEventListener('click', () => {
+        document.getElementById('kifu-input').value = '';
+        document.getElementById('kifu-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-kifu-cancel').addEventListener('click', () => {
+        document.getElementById('kifu-modal').classList.add('hidden');
+    });
+
+    document.getElementById('btn-kifu-start').addEventListener('click', () => {
+        const text = document.getElementById('kifu-input').value;
+        if (parseKifu(text)) {
+            document.getElementById('kifu-modal').classList.add('hidden');
+            resetAllModes(); // ★まず真っさらにする
+            startReplayMode();
+        } else {
+            alert('有効な指し手が見つかりませんでした。将棋クエストの棋譜をコピーしてください。');
+        }
+    });
+
+    // 検討モードの「前」「次」ボタン
+    document.getElementById('btn-replay-prev').addEventListener('click', () => {
+        if (currentReplayStep > 0) {
+            currentReplayStep--;
+            updateReplayBoard();
+        }
+    });
+
+    document.getElementById('btn-replay-next').addEventListener('click', () => {
+        if (currentReplayStep < replayMoves.length) {
+            currentReplayStep++;
+            updateReplayBoard();
+        }
+    });
+
+    // 待ったボタン
+    const btnUndo = document.getElementById('btn-undo');
+    if (btnUndo) {
+        btnUndo.addEventListener('click', () => {
+            handleUndo();
+        });
+    }
+
+    // 戻るボタン（対局画面からメニューへ）
+    const btnBackToMenu = document.getElementById('btn-back-to-menu');
+    if (btnBackToMenu) {
+        btnBackToMenu.addEventListener('click', () => {
+            resetAllModes(); // ★戻る時も真っさらにする（これが一番大事！）
+
+            if (isPuzzleMode) {
+                renderPuzzleList();
+                showScreen('puzzle-select-screen');
+            } else {
+                showScreen('home-screen');
+            }
+        });
+    }
+
+    // ==========================================
+    // その他の設定やメニューのボタン類
+    // ==========================================
     const btnPuzzleMenu = document.getElementById('btn-puzzle-menu');
     if (btnPuzzleMenu) {
         btnPuzzleMenu.addEventListener('click', () => {
@@ -196,21 +230,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 解答解説を見るボタン
     const btnShowHint = document.getElementById('btn-show-hint');
     if (btnShowHint) {
         btnShowHint.addEventListener('click', () => {
             if (isPuzzleMode && currentPuzzle) {
-                hasViewedHint = true; // 解答を見たフラグだけ立てる
+                hasViewedHint = true;
                 const explText = currentPuzzle.explanation ? currentPuzzle.explanation : "";
-                // 新しい解説エリアに表示
                 document.getElementById('puzzle-explanation-text').innerHTML = explText;
                 document.getElementById('puzzle-explanation-area').classList.add('is-visible');
             }
         });
     }
 
-    // 次へボタン
     const btnNextPuzzle = document.getElementById('btn-next-puzzle');
     if (btnNextPuzzle) {
         btnNextPuzzle.addEventListener('click', () => {
@@ -238,19 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const btnBackToMenu = document.getElementById('btn-back-to-menu');
-    if (btnBackToMenu) {
-        btnBackToMenu.addEventListener('click', () => {
-            if (isPuzzleMode) {
-                renderPuzzleList(); // リストを再描画してクリア状況を反映
-                showScreen('puzzle-select-screen');
-            } else {
-                showScreen('home-screen');
-            }
-        });
-    }
-
-    // モーダル閉じるボタン
     const btnCloseModal = document.getElementById('btn-close-modal');
     if (btnCloseModal) {
         btnCloseModal.addEventListener('click', () => {
@@ -260,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const aiDepthSlider = document.getElementById('ai-depth');
     const aiDepthValue = document.getElementById('ai-depth-value');
-
     if (aiDepthSlider) {
         aiDepthSlider.addEventListener('input', (e) => {
             const val = e.target.value;
@@ -1069,6 +1086,9 @@ function startReplayMode() {
         aiManager.startAnalysis();
     }
 
+    document.getElementById('ai-graph-container').style.display = 'block'; // グラフを表示
+    window.resetEvalChart(replayMoves.length); // 手数分の空グラフを作る
+
     updateReplayBoard();
     showScreen('game-screen');
 }
@@ -1270,3 +1290,86 @@ function updateUndoButtonVisibility() {
         }
     }
 }
+
+/**
+ * グラフを初期化する
+ */
+function initEvalChart() {
+    const ctx = document.getElementById('evalChart').getContext('2d');
+    evalChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [], // X軸（手数）
+            datasets: [{
+                label: '評価値',
+                data: [], // Y軸（評価値）
+                borderColor: '#3e2723', // 線の色
+                borderWidth: 2,
+                pointRadius: 0, // ★ 0 から 2 に変更（単独の点でも見えるようにする）
+                spanGaps: true, // ★ 追加（間のデータが空っぽでも線を繋ぐ！）
+                fill: {
+                    target: 'origin', // 0の線を基準に塗りつぶす
+                    above: 'rgba(209, 73, 91, 0.4)', // ＋（先手有利）の時の色（紅色）
+                    below: 'rgba(74, 144, 226, 0.4)'  // －（後手有利）の時の色（青色）
+                },
+                tension: 0.2 // 少しだけ線を滑らかにする
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 300 }, // アニメーションを少し速く
+            scales: {
+                x: {
+                    ticks: { maxTicksLimit: 10 } // 目盛りが詰まりすぎないように調整
+                },
+                y: {
+                    min: -2000, // 下限を-2000に固定
+                    max: 2000,  // 上限を+2000に固定
+                    grid: {
+                        color: (ctx) => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)', // 0の線を少し濃くする
+                        lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+                    }
+                }
+            },
+            plugins: { legend: { display: false } } // 凡例を非表示
+        }
+    });
+}
+
+/**
+ * 棋譜読み込み時にグラフのX軸を手数分だけ用意する
+ */
+window.resetEvalChart = function (totalMoves) {
+    if (!evalChart) initEvalChart();
+
+    // 全ての手数をnullで初期化
+    gameScores = new Array(totalMoves + 1).fill(null);
+
+    // 0手目から最終手までのラベルを作成
+    const labels = [];
+    for (let i = 0; i <= totalMoves; i++) {
+        labels.push(i);
+    }
+
+    evalChart.data.labels = labels;
+    evalChart.data.datasets[0].data = gameScores;
+    evalChart.update();
+};
+
+/**
+ * AIから受け取った評価値をグラフに反映する
+ */
+window.updateChartData = function (moveIndex, score) {
+    if (!evalChart) return;
+
+    // グラフを振り切らないように、±2500くらいで丸める
+    let plotScore = score;
+    if (plotScore > 2500) plotScore = 2500;
+    if (plotScore < -2500) plotScore = -2500;
+
+    // 指定の手数の評価値を更新
+    gameScores[moveIndex] = plotScore;
+
+    evalChart.update();
+};

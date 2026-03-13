@@ -119,16 +119,20 @@ class AIManager {
 
             let evalText = "";
             let pvText = "";
+            let numericScore = null; // ★追加: グラフ用の数値
             const isWhiteTurn = this.currentSFEN.includes(" w ");
 
             if (mateMatch) {
                 let mateMoves = parseInt(mateMatch[1], 10);
                 if (isWhiteTurn) mateMoves *= -1;
                 evalText = mateMoves > 0 ? `+詰${mateMoves}` : `-詰${Math.abs(mateMoves)}`;
+                // 詰みの場合はグラフが振り切れるように大きな値を設定
+                numericScore = mate > 0 ? 3000 : -3000;
             } else if (cpMatch) {
                 let cp = parseInt(cpMatch[1], 10);
                 if (isWhiteTurn) cp *= -1;
                 evalText = cp > 0 ? `+${cp}` : `${cp}`;
+                numericScore = cp;
             }
 
             if (pvMatch) {
@@ -139,6 +143,20 @@ class AIManager {
 
             if (evalText || pvText) {
                 this.updateEval(evalText || this.evalEl.textContent, pvText);
+                // ★ここから追加：評価値が出たらグラフを更新する
+                if (numericScore !== null && typeof window.updateChartData === 'function') {
+                    // 何手目のデータかを判定する（window. を外しました）
+                    let currentStep = 0;
+                    if (typeof isReplayMode !== 'undefined' && isReplayMode) {
+                        currentStep = typeof currentReplayStep !== 'undefined' ? currentReplayStep : 0;
+                    } else if (typeof gameHistory !== 'undefined') {
+                        currentStep = gameHistory.length;
+                    }
+
+                    // main.js のグラフ更新関数に、「手数」と「評価値」を渡す
+                    window.updateChartData(currentStep, numericScore);
+                }
+                // ★ここまで追加
             }
         }
         // ★ここを info の外に出しました
